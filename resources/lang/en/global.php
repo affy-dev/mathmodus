@@ -311,7 +311,7 @@ return [
     'deselect_all'                         => 'Deselect all',
     'team-management'                      => 'Teams',
     'team-management-singular'             => 'Team',
-    'site_title'                           => 'Laravel + CoreUI',
+    'site_title'                           => 'Mathmodus',
     'userManagement'                       => [
         'title'          => 'User Management',
         'title_singular' => 'User Management',
@@ -352,5 +352,26 @@ return [
             'deleted_at'         => 'Deleted at',
             'deleted_at_helper'  => '',
         ],
+    ],
+    'school'                              => [
+        'title'          => 'Schools',
+        'title_singular' => 'School',
+        'fields'         => [
+            'id'                 => 'ID',
+            'id_helper'          => '',
+            'school_name'        => 'School Name',
+            'school_name_helper' => '',
+            'school_address'        => 'Address',
+            'school_address_helper' => '',
+            'school_pincode'        => 'Pincode',
+            'school_pincode_helper' => '',
+            'school_phone'          => 'Phone',
+            'school_phone_helper'   => '',
+            'created_at'            => 'Created At',
+            'created_at_helper'     => '',
+            'updated_at'            => 'Updated At',
+            'updated_at_helper'     => '',
+        ],
+        'assign_principal_text' => 'Assign Principal'
     ],
 ];

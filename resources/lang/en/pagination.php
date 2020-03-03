@@ -3,7 +3,7 @@
 return [
     'previous'       => '&laquo; Previous',
     'next'           => 'Next &raquo;',
-    'site_title'     => 'Laravel + CoreUI',
+    'site_title'     => 'Mathmodus',
     'userManagement' => [
         'title'          => 'User Management',
         'title_singular' => 'User Management',

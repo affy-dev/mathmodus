@@ -106,7 +106,7 @@ return [
         ],
     ],
     'attributes'           => [],
-    'site_title'           => 'Laravel + CoreUI',
+    'site_title'           => 'Mathmodus',
     'userManagement'       => [
         'title'          => 'User Management',
         'title_singular' => 'User Management',

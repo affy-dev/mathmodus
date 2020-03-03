@@ -30,7 +30,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <a class="navbar-brand" href="#">
-            <span class="navbar-brand-full">Project</span>
+            <span class="navbar-brand-full" style="font-weight:bold; font-size: 22px">Mathmodus</span>
             <span class="navbar-brand-minimized">P</span>
         </a>
         <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button" data-toggle="sidebar-lg-show">
