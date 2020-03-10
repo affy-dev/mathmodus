@@ -25,4 +25,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('schools', 'SchoolsController');
     Route::get('schools/assign-teacher/{id}',['as'=>'schools.assignTeachers','uses'=>'SchoolsController@assign']);
     Route::post('schools/assign-teacher',['as'=>'schools.assignTeachersPost','uses'=>'SchoolsController@assignTeacher']);
+    Route::delete('students/destroy', 'StudentController@massDestroy')->name('students.massDestroy');
+    Route::resource('students', 'StudentController');
 });

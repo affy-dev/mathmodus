@@ -61,6 +61,14 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a href="{{ route("admin.students.index") }}" class="nav-link {{ request()->is('admin/students') || request()->is('admin/students/*') ? 'active' : '' }}">
+                    <i class="fas fa-cogs nav-icon">
+
+                    </i>
+                    {{ trans('global.student.title') }}
+                </a>
+            </li>
+            <li class="nav-item">
                 <a href="#" class="nav-link" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">
                     <i class="nav-icon fas fa-sign-out-alt">
 
