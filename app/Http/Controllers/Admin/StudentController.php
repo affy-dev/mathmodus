@@ -30,7 +30,7 @@ class StudentController extends Controller
         8 => 'AB-',
     ];
 
-    const TEACHER_ROLE = 3;
+    const STUDENT_ROLE = 3;
 
     public function index()
     {
@@ -38,7 +38,7 @@ class StudentController extends Controller
         $students = \DB::table('users')
             ->join('role_user', function($join) {
                 $join->on('users.id', '=', 'role_user.user_id');
-                $join->where('role_user.role_id', self::TEACHER_ROLE);
+                $join->where('role_user.role_id', self::STUDENT_ROLE);
             })
             ->join('students', 'users.id', '=', 'students.user_id')
             ->get(['users.id as userId','users.name as userName', 'users.email as emailId', 'students.dob as studentDOB', 'students.father_name as fatherName', 'students.father_phone_no as fatherPhone', 'students.id as studentId']);
@@ -48,13 +48,13 @@ class StudentController extends Controller
 
     public function create()
     {
-        abort_unless(\Gate::allows('school_create'), 403);
+        abort_unless(\Gate::allows('student_create'), 403);
         $gender = self::GENDER;
         $blood_group = self::BLOOD_GROUP;
         $users = \DB::table('users')
             ->join('role_user', function($join) {
                 $join->on('users.id', '=', 'role_user.user_id');
-                $join->where('role_user.role_id', self::TEACHER_ROLE);
+                $join->where('role_user.role_id', self::STUDENT_ROLE);
             })
             ->whereNull('users.deleted_at')
             ->get();
@@ -136,7 +136,7 @@ class StudentController extends Controller
 
     public function update(Request $request, $studentId)
     {
-        abort_unless(\Gate::allows('school_edit'), 403);
+        abort_unless(\Gate::allows('student_edit'), 403);
         
         $rules = [
             'name' => 'required|unique:users,id',

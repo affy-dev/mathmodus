@@ -10,7 +10,7 @@
     </div>
 @endcan
 <div class="card">
-    <div class="card-header">
+    <div class="card-header tbl-header">
         {{ trans('global.role.title_singular') }} {{ trans('global.list') }}
     </div>
 

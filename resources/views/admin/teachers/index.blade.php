@@ -1,10 +1,10 @@
 @extends('layouts.admin')
 @section('content')
-@can('student_create')
+@can('teachers_create')
     <div style="margin-bottom: 10px;" class="row">
         <div class="col-lg-12">
-            <a class="btn btn-success" href="{{ route("admin.students.create") }}">
-                {{ trans('global.add') }} Student Details
+            <a class="btn btn-success" href="{{ route("admin.teachers.create") }}">
+                {{ trans('global.add') }} Teachers Details
             </a>
         </div>
     </div>
@@ -16,7 +16,7 @@
     @endif
 <div class="card">
     <div class="card-header tbl-header">
-        {{ trans('global.student.title_singular') }} {{ trans('global.list') }}
+        Teachers List
     </div>
 
     <div class="card-body">
@@ -28,7 +28,7 @@
 
                         </th>
                         <th>
-                            User Id
+                            Teacher Id
                         </th>
                         <th>
                             Name
@@ -40,10 +40,10 @@
                             DOB
                         </th>
                         <th>
-                            Father Name
+                            Designation
                         </th>
                         <th>
-                            Father Phone
+                            Phone No.
                         </th>
                         <th>
                             &nbsp;
@@ -51,42 +51,42 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($students as $key => $student)
-                        <tr data-entry-id="{{ $student->studentId }}">
+                    @foreach($teachers as $key => $teacher)
+                        <tr data-entry-id="{{ $teacher->teacherId }}">
                             <td>
 
                             </td>
                             <td>
-                                {{ $student->userId ?? '' }}
+                                {{ $teacher->userId ?? '' }}
                             </td>
                             <td>
-                                {{ $student->userName ?? '' }}
+                                {{ $teacher->name ?? '' }}
                             </td>
                             <td>
-                                {{ $student->emailId ?? '' }}
+                                {{ $teacher->email ?? '' }}
                             </td>
                             <td>
-                                {{ $student->studentDOB ?? '' }}
+                                {{ $teacher->dob ?? '' }}
                             </td>
                             <td>
-                                {{ $student->fatherName ?? '' }}
+                                {{ $teacher->designation ?? '' }}
                             </td>
                             <td>
-                                {{ $student->fatherPhone ?? '' }}
+                                {{ $teacher->phone_no ?? '' }}
                             </td>
                             <td>
-                                @can('student_show')
-                                    <a class="btn btn-xs btn-primary" href="{{ route('admin.students.show', $student->userId) }}">
+                                @can('teachers_show')
+                                    <a class="btn btn-xs btn-primary" href="{{ route('admin.teachers.show', $teacher->userId) }}">
                                         {{ trans('global.view') }}
                                     </a>
                                 @endcan
-                                @can('student_edit')
-                                    <a class="btn btn-xs btn-info" href="{{ route('admin.students.edit', $student->userId) }}">
+                                @can('teachers_edit')
+                                    <a class="btn btn-xs btn-info" href="{{ route('admin.teachers.edit', $teacher->userId) }}">
                                         {{ trans('global.edit') }}
                                     </a>
                                 @endcan
-                                @can('student_delete')
-                                    <form action="{{ route('admin.students.destroy', $student->studentId) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
+                                @can('teachers_delete')
+                                    <form action="{{ route('admin.teachers.destroy', $teacher->teacherId) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
                                         <input type="hidden" name="_method" value="DELETE">
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                         <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
@@ -108,7 +108,7 @@
   let deleteButtonTrans = '{{ trans('global.datatables.delete') }}'
   let deleteButton = {
     text: deleteButtonTrans,
-    url: "{{ route('admin.students.massDestroy') }}",
+    url: "{{ route('admin.teachers.massDestroy') }}",
     className: 'btn-danger',
     action: function (e, dt, node, config) {
       var ids = $.map(dt.rows({ selected: true }).nodes(), function (entry) {
@@ -132,7 +132,7 @@
     }
   }
   let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
-@can('student_delete')
+@can('teachers_delete')
   dtButtons.push(deleteButton)
 @endcan
 

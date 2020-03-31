@@ -25,6 +25,19 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('schools', 'SchoolsController');
     Route::get('schools/assign-teacher/{id}',['as'=>'schools.assignTeachers','uses'=>'SchoolsController@assign']);
     Route::post('schools/assign-teacher',['as'=>'schools.assignTeachersPost','uses'=>'SchoolsController@assignTeacher']);
+    
     Route::delete('students/destroy', 'StudentController@massDestroy')->name('students.massDestroy');
     Route::resource('students', 'StudentController');
+
+    Route::delete('teachers/destroy', 'TeacherController@massDestroy')->name('teachers.massDestroy');
+    Route::resource('teachers', 'TeacherController');
+
+    Route::get('exams/lessons-videos/{courseId}/{testId?}',['as'=>'exams.lessonVideos','uses'=>'ExamController@lessonVideos']);
+    Route::get('exams/history',['as'=>'exams.history','uses'=>'ExamController@getHistory']);
+    Route::get('exams/exam-result/{testId?}',['as'=>'exams.examresult','uses'=>'ExamController@examResults']);
+    Route::resource('exams', 'ExamController');
+    Route::get('exams/take-exam/{courseId}/{lessonId?}',['as'=>'exams.takeexam','uses'=>'ExamController@takeExam']);
+    Route::post('exams/submit-exams',['as'=>'exams.submitExam','uses'=>'ExamController@submitExam']);
+    
+    
 });

@@ -414,4 +414,30 @@ return [
             'permanent_address_helper'  =>  ''
         ],
     ],
+    'teacher'            => [
+        'title'          => 'Teachers',
+        'title_singular' => 'Teacher',
+        'fields'         => [
+            'id'                        => 'ID',
+            'id_helper'                 => '',
+            'name'                      => 'Name',
+            'name_helper'               => '',
+            'gender'                    => 'Gender',
+            'gender_helper'             => '',
+            'address'                   => 'Address',
+            'address_helper'            => '',
+            'dob'                       => 'Date of Birth',
+            'dob_helper'                => '',
+            'phone_no'                  => 'Phone',
+            'phone_no_helper'           => '',
+            'designation'               => 'Designation',
+            'designation_helper'        => '',
+            'qualification'             => 'Qualification',
+            'qualification_helper'      => '',
+            'joining_date'              => 'Joining Date',
+            'joining_date_helper'       => '',
+            'email'                     => 'Email',
+            'email_helper'              => ''
+        ],
+    ],
 ];

@@ -44,29 +44,55 @@
                     </li>
                 </ul>
             </li>
-            <!-- <li class="nav-item">
-                <a href="{{ route("admin.products.index") }}" class="nav-link {{ request()->is('admin/products') || request()->is('admin/products/*') ? 'active' : '' }}">
-                    <i class="fas fa-cogs nav-icon">
-
-                    </i>
-                    {{ trans('global.product.title') }}
-                </a>
-            </li> -->
             <li class="nav-item">
                 <a href="{{ route("admin.schools.index") }}" class="nav-link {{ request()->is('admin/schools') || request()->is('admin/schools/*') ? 'active' : '' }}">
-                    <i class="fas fa-cogs nav-icon">
-
+                    <i class="fas fa-school nav-icon">
+                    
                     </i>
                     {{ trans('global.school.title') }}
                 </a>
             </li>
             <li class="nav-item">
                 <a href="{{ route("admin.students.index") }}" class="nav-link {{ request()->is('admin/students') || request()->is('admin/students/*') ? 'active' : '' }}">
-                    <i class="fas fa-cogs nav-icon">
+                    <i class="fa fa-graduation-cap nav-icon">
 
                     </i>
                     {{ trans('global.student.title') }}
                 </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route("admin.teachers.index") }}" class="nav-link {{ request()->is('admin/teachers') || request()->is('admin/teachers/*') ? 'active' : '' }}">
+                    <i class="fas fa-chalkboard-teacher nav-icon">
+
+                    </i>
+                    Teachers
+                </a>
+            </li>
+            <li class="nav-item nav-dropdown">
+                <a class="nav-link  nav-dropdown-toggle">
+                    <i class="fas fa-users nav-icon">
+
+                    </i>
+                    Exams
+                </a>
+                <ul class="nav-dropdown-items">
+                    <li class="nav-item">
+                        <a href="{{ route("admin.exams.index") }}" class="nav-link {{ request()->is('admin/exams') || request()->is('admin/exams/*') ? 'active' : '' }}">
+                            <i class="fas fa-unlock-alt nav-icon">
+
+                            </i>
+                            Take Exam
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route("admin.exams.history") }}" class="nav-link {{ request()->is('admin/exams') || request()->is('admin/exams/*') ? 'active' : '' }}">
+                            <i class="fas fa-briefcase nav-icon">
+
+                            </i>
+                            Exams History
+                        </a>
+                    </li>
+                </ul>
             </li>
             <li class="nav-item">
                 <a href="#" class="nav-link" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">
@@ -76,6 +102,7 @@
                     {{ trans('global.logout') }}
                 </a>
             </li>
+            
         </ul>
 
         <div class="ps__rail-x" style="left: 0px; bottom: 0px;">

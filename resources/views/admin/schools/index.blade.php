@@ -15,7 +15,7 @@
         </div>
     @endif
 <div class="card">
-    <div class="card-header">
+    <div class="card-header tbl-header">
         {{ trans('global.school.title_singular') }} {{ trans('global.list') }}
     </div>
 
