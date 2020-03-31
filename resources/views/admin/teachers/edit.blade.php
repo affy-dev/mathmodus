@@ -3,63 +3,134 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('global.edit') }} {{ trans('global.school.title_singular') }}
+        {{ trans('global.edit') }} {{ trans('global.teacher.title_singular') }} Details
     </div>
-
     <div class="card-body">
-        <form action="{{ route("admin.schools.update", [$school->id]) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route("admin.teachers.update", [$teacherId]) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
-            <div class="form-group {{ $errors->has('school_name') ? 'has-error' : '' }}">
-                <label for="school_name">{{ trans('global.school.fields.school_name') }}*</label>
-                <input type="text" id="school_name" name="school_name" class="form-control" value="{{ old('school_name', isset($school) ? $school->school_name : '') }}">
-                @if($errors->has('school_name'))
-                    <em class="invalid-feedback">
-                        {{ $errors->first('school_name') }}
-                    </em>
-                @endif
-                <p class="helper-block">
-                    {{ trans('global.school.fields.school_name_helper') }}
-                </p>
-            </div>
-            <div class="form-group {{ $errors->has('school_address') ? 'has-error' : '' }}">
-                <label for="school_address">{{ trans('global.school.fields.school_address') }}</label>
-                <textarea id="school_address" name="school_address" class="form-control ">{{ old('school_address', isset($school) ? $school->school_address : '') }}</textarea>
-                @if($errors->has('school_address'))
-                    <em class="invalid-feedback">
-                        {{ $errors->first('school_address') }}
-                    </em>
-                @endif
-                <p class="helper-block">
-                    {{ trans('global.school.fields.school_address_helper') }}
-                </p>
-            </div>
-            <div class="form-group {{ $errors->has('school_pincode') ? 'has-error' : '' }}">
-                <label for="school_pincode">{{ trans('global.school.fields.school_pincode') }}</label>
-                <input type="text" id="school_pincode" name="school_pincode" class="form-control" value="{{ old('school_pincode', isset($school) ? $school->school_pincode : '') }}" >
-                @if($errors->has('school_pincode'))
-                    <em class="invalid-feedback">
-                        {{ $errors->first('school_pincode') }}
-                    </em>
-                @endif
-                <p class="helper-block">
-                    {{ trans('global.school.fields.school_pincode_helper') }}
-                </p>
-            </div>
-            <div>
             
-            <div class="form-group {{ $errors->has('school_phone') ? 'has-error' : '' }}">
-                <label for="school_phone">{{ trans('global.school.fields.school_phone') }}</label>
-                <input type="text" id="school_phone" name="school_phone" class="form-control" value="{{ old('school_phone', isset($school) ? $school->school_phone : '') }}" >
-                @if($errors->has('school_phone'))
+            <div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
+                <label for="name">{{ trans('global.teacher.fields.name') }}*</label>
+                <input type="text" id="name" name="name" class="form-control" value="{{ old('name', isset($name) ? $name : '') }}">
+                @if($errors->has('name'))
                     <em class="invalid-feedback">
-                        {{ $errors->first('school_phone') }}
+                        {{ $errors->first('name') }}
                     </em>
                 @endif
                 <p class="helper-block">
-                    {{ trans('global.school.fields.school_phone_helper') }}
+                    {{ trans('global.teacher.fields.name_helper') }}
                 </p>
             </div>
+
+            <div class="form-group {{ $errors->has('dob') ? 'has-error' : '' }}">
+                <label for="dob">{{ trans('global.teacher.fields.dob') }}*</label>
+                <input type="text" id="dob" name="dob" class="form-control date" value="{{ old('dob', isset($dob) ? $dob : '') }}">
+                @if($errors->has('dob'))
+                    <em class="invalid-feedback" style="display:block">
+                        {{ $errors->first('dob') }}
+                    </em>
+                @endif
+                <p class="helper-block">
+                    {{ trans('global.teacher.fields.dob_helper') }}
+                </p>
+            </div>
+
+            <div class="form-group {{ $errors->has('gender') ? 'has-error' : '' }}">
+                <label for="gender">{{ trans('global.teacher.fields.gender') }}*</label>
+                <select id="gender" name="gender" class="form-control">
+                    <option value="">--- Select Gender ---</option>
+                    @foreach ($gender as $key => $value)
+                        <option value="{{ $key }}" {{ (old('gender') == $key) || ($genderValue == $key) ? 'selected' : ''}}>{{ $value }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('gender'))
+                    <em class="invalid-feedback" style="display:block">
+                        {{ $errors->first('gender') }}
+                    </em>
+                @endif
+                <p class="helper-block">
+                    {{ trans('global.teacher.fields.gender_helper') }}
+                </p>
+            </div>
+            <div class="form-group {{ $errors->has('email') ? 'has-error' : '' }}">
+                <label for="email">{{ trans('global.teacher.fields.email') }}*</label>
+                <input type="text" id="email" name="email" class="form-control" value="{{ old('email', isset($email) ? $email : '') }}">
+                @if($errors->has('email'))
+                    <em class="invalid-feedback" style="display:block">
+                        {{ $errors->first('email') }}
+                    </em>
+                @endif
+                <p class="helper-block">
+                    {{ trans('global.teacher.fields.email_helper') }}
+                </p>
+            </div>
+
+            <div class="form-group {{ $errors->has('phone_no') ? 'has-error' : '' }}">
+                <label for="phone_no">{{ trans('global.teacher.fields.phone_no') }}</label>
+                <input type="text" id="phone_no" name="phone_no" class="form-control" value="{{ old('phone_no', isset($phone_no) ? $phone_no : '') }}">
+                @if($errors->has('phone_no'))
+                    <em class="invalid-feedback" style="display:block">
+                        {{ $errors->first('phone_no') }}
+                    </em>
+                @endif
+                <p class="helper-block">
+                    {{ trans('global.teacher.fields.phone_no_helper') }}
+                </p>
+            </div>
+
+            <div class="form-group {{ $errors->has('address') ? 'has-error' : '' }}">
+                <label for="address">{{ trans('global.teacher.fields.address') }}*</label>
+                <textarea id="address" name="address" class="form-control "><?php echo e(old('address', isset($address) ? $address : '')); ?></textarea>
+                @if($errors->has('address'))
+                    <em class="invalid-feedback" style="display:block">
+                        {{ $errors->first('address') }}
+                    </em>
+                @endif
+                <p class="helper-block">
+                    {{ trans('global.teacher.fields.address_helper') }}
+                </p>
+            </div>
+
+            <div class="form-group {{ $errors->has('designation') ? 'has-error' : '' }}">
+                <label for="designation">{{ trans('global.teacher.fields.designation') }}</label>
+                <input type="text" id="designation" name="designation" class="form-control" value="{{ old('designation', isset($designation) ? $designation : '') }}">
+                @if($errors->has('designation'))
+                    <em class="invalid-feedback" style="display:block">
+                        {{ $errors->first('designation') }}
+                    </em>
+                @endif
+                <p class="helper-block">
+                    {{ trans('global.teacher.fields.designation_helper') }}
+                </p>
+            </div>
+
+            <div class="form-group {{ $errors->has('qualification') ? 'has-error' : '' }}">
+                <label for="qualification">{{ trans('global.teacher.fields.qualification') }}</label>
+                <input type="text" id="qualification" name="qualification" class="form-control" value="{{ old('qualification', isset($qualification) ? $qualification : '') }}">
+                @if($errors->has('qualification'))
+                    <em class="invalid-feedback" style="display:block">
+                        {{ $errors->first('qualification') }}
+                    </em>
+                @endif
+                <p class="helper-block">
+                    {{ trans('global.teacher.fields.qualification_helper') }}
+                </p>
+            </div>
+
+            <div class="form-group {{ $errors->has('joining_date') ? 'has-error' : '' }}">
+                <label for="joining_date">{{ trans('global.teacher.fields.joining_date') }}</label>
+                <input type="text" id="joining_date" name="joining_date" class="form-control date" value="{{ old('joining_date', isset($joining_date) ? $joining_date : '') }}">
+                @if($errors->has('joining_date'))
+                    <em class="invalid-feedback" style="display:block">
+                        {{ $errors->first('joining_date') }}
+                    </em>
+                @endif
+                <p class="helper-block">
+                    {{ trans('global.teacher.fields.joining_date_helper') }}
+                </p>
+            </div>
+            <input type="hidden" name="userId" value={{$userId}}>
             <div>
                 <input class="btn btn-danger" type="submit" value="{{ trans('global.save') }}">
             </div>

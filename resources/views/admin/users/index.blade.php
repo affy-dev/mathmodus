@@ -10,7 +10,7 @@
     </div>
 @endcan
 <div class="card">
-    <div class="card-header">
+    <div class="card-header tbl-header">
         {{ trans('global.user.title_singular') }} {{ trans('global.list') }}
     </div>
 
@@ -27,9 +27,6 @@
                         </th>
                         <th>
                             {{ trans('global.user.fields.email') }}
-                        </th>
-                        <th>
-                            {{ trans('global.user.fields.email_verified_at') }}
                         </th>
                         <th>
                             {{ trans('global.user.fields.roles') }}
@@ -50,9 +47,6 @@
                             </td>
                             <td>
                                 {{ $user->email ?? '' }}
-                            </td>
-                            <td>
-                                {{ $user->email_verified_at ?? '' }}
                             </td>
                             <td>
                                 @foreach($user->roles as $key => $item)

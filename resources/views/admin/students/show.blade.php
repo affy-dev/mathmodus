@@ -3,7 +3,7 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('global.show') }} Teachers Details
+        {{ trans('global.show') }} Student Details
     </div>
     
     <div class="card-body">
@@ -14,7 +14,7 @@
                         Name
                     </th>
                     <td>
-                        {{ $name }}
+                        {{ $userName }}
                     </td>
                 </tr>
                 <tr>
@@ -22,7 +22,7 @@
                         Email
                     </th>
                     <td>
-                        {{$email}}
+                        {{$emailId}}
                     </td>
                 </tr>
                 <tr>
@@ -30,7 +30,7 @@
                         DOB
                     </th>
                     <td>
-                        {{ $dob }}
+                        {{ $studentDOB }}
                     </td>
                 </tr>
                 <tr>
@@ -43,10 +43,18 @@
                 </tr>
                 <tr>
                     <th>
-                        Address
+                        Father Name
                     </th>
                     <td>
-                        {{ $address }}
+                        {{ $fatherName }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Father Phone
+                    </th>
+                    <td>
+                        {{ $fatherPhone }}
                     </td>
                 </tr>
                 <tr>
@@ -54,31 +62,47 @@
                         Gender
                     </th>
                     <td>
-                        {{ $gender }}
+                        {{ $studentGender }}
                     </td>
                 </tr>
                 <tr>
                     <th>
-                        Joining Date
+                        Blood Group
                     </th>
                     <td>
-                        {{ $joining_date }}
+                        {{ $studentBloodGroup }}
                     </td>
                 </tr>
                 <tr>
                     <th>
-                        Designation
+                        Mother Name
                     </th>
                     <td>
-                        {{ $designation }}
+                        {{ $studentMothenName }}
                     </td>
                 </tr>
                 <tr>
                     <th>
-                        Qualification
+                        Mother Phone No.
                     </th>
                     <td>
-                        {{ $qualification }}
+                        {{ $studentMotherPhoneNo }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Present Address
+                    </th>
+                    <td>
+                        {{ $present_address }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Permanent Address
+                    </th>
+                    <td>
+                        {{ $permanent_address }}
                     </td>
                 </tr>
             </tbody>

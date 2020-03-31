@@ -1,10 +1,10 @@
 @extends('layouts.admin')
 @section('content')
-@can('school_create')
+@can('student_create')
     <div style="margin-bottom: 10px;" class="row">
         <div class="col-lg-12">
-            <a class="btn btn-success" href="{{ route("admin.schools.create") }}">
-                {{ trans('global.add') }} {{ trans('global.school.title_singular') }}
+            <a class="btn btn-success" href="{{ route("admin.students.create") }}">
+                {{ trans('global.add') }} Student Details
             </a>
         </div>
     </div>
@@ -16,7 +16,7 @@
     @endif
 <div class="card">
     <div class="card-header tbl-header">
-        {{ trans('global.school.title_singular') }} {{ trans('global.list') }}
+        {{ trans('global.student.title_singular') }} {{ trans('global.list') }}
     </div>
 
     <div class="card-body">
@@ -28,16 +28,22 @@
 
                         </th>
                         <th>
-                            School Id
+                            User Id
                         </th>
                         <th>
-                            {{ trans('global.school.fields.school_name') }}
+                            Name
                         </th>
                         <th>
-                            {{ trans('global.school.fields.school_phone') }}
+                            Email Id
                         </th>
                         <th>
-                            Assigned Teacher
+                            DOB
+                        </th>
+                        <th>
+                            Father Name
+                        </th>
+                        <th>
+                            Father Phone
                         </th>
                         <th>
                             &nbsp;
@@ -45,41 +51,42 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($schools as $key => $school)
-                        <tr data-entry-id="{{ $school->schoolId }}">
+                    @foreach($students as $key => $student)
+                        <tr data-entry-id="{{ $student->studentId }}">
                             <td>
 
                             </td>
                             <td>
-                                {{ $school->schoolId ?? '' }}
+                                {{ $student->userId ?? '' }}
                             </td>
                             <td>
-                                {{ $school->school_name ?? '' }}
+                                {{ $student->userName ?? '' }}
                             </td>
                             <td>
-                                {{ $school->school_phone ?? '' }}
+                                {{ $student->emailId ?? '' }}
                             </td>
                             <td>
-                                {{ $school->userName ?? 'Not Assigned' }}
+                                {{ $student->studentDOB ?? '' }}
                             </td>
                             <td>
-                                @can('school_show')
-                                    <a class="btn btn-xs btn-primary" href="{{ route('admin.schools.show', $school->schoolId) }}">
+                                {{ $student->fatherName ?? '' }}
+                            </td>
+                            <td>
+                                {{ $student->fatherPhone ?? '' }}
+                            </td>
+                            <td>
+                                @can('student_show')
+                                    <a class="btn btn-xs btn-primary" href="{{ route('admin.students.show', $student->userId) }}">
                                         {{ trans('global.view') }}
                                     </a>
                                 @endcan
-                                @can('school_edit')
-                                    <a class="btn btn-xs btn-info" href="{{ route('admin.schools.edit', $school->schoolId) }}">
+                                @can('student_edit')
+                                    <a class="btn btn-xs btn-info" href="{{ route('admin.students.edit', $student->userId) }}">
                                         {{ trans('global.edit') }}
                                     </a>
                                 @endcan
-                                @can('school_edit')
-                                    <a class="btn btn-xs btn-info" href="{{ route('admin.schools.assignTeachers', $school->schoolId) }}">
-                                        Assign Principal
-                                    </a>
-                                @endcan
-                                @can('school_delete')
-                                    <form action="{{ route('admin.schools.destroy', $school->schoolId) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
+                                @can('student_delete')
+                                    <form action="{{ route('admin.students.destroy', $student->studentId) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
                                         <input type="hidden" name="_method" value="DELETE">
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                         <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
@@ -101,7 +108,7 @@
   let deleteButtonTrans = '{{ trans('global.datatables.delete') }}'
   let deleteButton = {
     text: deleteButtonTrans,
-    url: "{{ route('admin.schools.massDestroy') }}",
+    url: "{{ route('admin.students.massDestroy') }}",
     className: 'btn-danger',
     action: function (e, dt, node, config) {
       var ids = $.map(dt.rows({ selected: true }).nodes(), function (entry) {
@@ -113,7 +120,7 @@
 
         return
       }
-
+      console.log(ids);
       if (confirm('{{ trans('global.areYouSure') }}')) {
         $.ajax({
           headers: {'x-csrf-token': _token},
@@ -125,7 +132,7 @@
     }
   }
   let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
-@can('school_delete')
+@can('student_delete')
   dtButtons.push(deleteButton)
 @endcan
 
