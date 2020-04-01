@@ -3,7 +3,7 @@
 @can('school_create')
     <div style="margin-bottom: 10px;" class="row">
         <div class="col-lg-12">
-            <a class="btn btn-success" href="{{ route("admin.schools.create") }}">
+            <a class="btn btn-default" href="{{ route("admin.schools.create") }}">
                 {{ trans('global.add') }} {{ trans('global.school.title_singular') }}
             </a>
         </div>

@@ -1,0 +1,26 @@
+/*
+Copyright © 2015 Himanshu Softtech.
+------------------------------------------------------------------
+[Master Stylesheet]
+
+Project:	Learning System HTML Template
+Version:	1.0.0
+Assigned to:	Themeforest
+Primary use:	Learning System  
+-------------------------------------------------------------------*/
+@import url("style.css");
+@import url("bootstrap.css");
+@import url("font-awesome.css");
+@import url("animate.css");
+
+
+/*plgin css*/
+@import url("../js/plugin/revslider/css/settings.css");
+@import url("../js/plugin/owl-carousel/owl.carousel.css");
+@import url("../js/plugin/owl-carousel/owl.theme.css");
+
+@import url("../js/plugin/mediaelement/mediaelementplayer.css");
+
+@import url("../js/plugin/prettyphoto/css/prettyPhoto.css");
+
+

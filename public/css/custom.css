@@ -65,9 +65,9 @@ table.dataTable thead .sorting_desc {
 }
 
 .btn-default {
-    color: #23282c;
-    background-color: #f0f3f5;
-    border-color: #f0f3f5;
+    color: #ff9933;
+    background-color: transparent;
+    border-color: #9ea6b0;
 }
 
 .btn-default.focus,
@@ -76,9 +76,9 @@ table.dataTable thead .sorting_desc {
 }
 
 .btn-default:hover {
-    color: #23282c;
-    background-color: #d9e1e6;
-    border-color: #d1dbe1;
+    color: #ff9933;
+    background-color: transparent;
+    border-color: #ff9933;
 }
 
 .btn-group-xs>.btn,
@@ -233,6 +233,27 @@ input[type=radio] {
 }
 
 .tbl-header {
-    background-color: #007fbe;
+    background-color: #D98938;
     color: #fff;
+}
+
+.btn-link {
+    color: #D98938
+}
+
+.btn-link:hover {
+    color: #c3772a !important;
+}
+
+.sidebar .nav-link:hover {
+    color: #fff;
+    background: #D98938;
+}
+
+.sidebar .nav-link.active .nav-icon {
+    color: #c3772a !important;
+}
+
+.bg-default {
+    background: #ef78008c !important;
 }

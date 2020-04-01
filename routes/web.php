@@ -1,6 +1,10 @@
 <?php
 
-Route::redirect('/', '/login');
+// Route::redirect('/', '/login');
+
+Route::get('/', 'Frontend\HomeController@index')->name('frontend.home');
+Route::get('/how-it-works', 'Frontend\HomeController@howItWorks')->name('frontend.howitworks');
+Route::get('/contact-us', 'Frontend\HomeController@contactUs')->name('frontend.contactus');
 
 Route::redirect('/home', '/admin');
 

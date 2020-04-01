@@ -2,7 +2,7 @@
 @section('content')
 
 <div class="card">
-    <div class="card-header">
+    <div class="card-header tbl-header">
         {{ trans('global.edit') }} {{ trans('global.permission.title_singular') }}
     </div>
 
@@ -23,7 +23,7 @@
                 </p>
             </div>
             <div>
-                <input class="btn btn-danger" type="submit" value="{{ trans('global.save') }}">
+                <input class="btn btn-default" type="submit" value="{{ trans('global.save') }}">
             </div>
         </form>
     </div>

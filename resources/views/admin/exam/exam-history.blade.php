@@ -43,7 +43,7 @@
                                 {{ date("F d Y h:i:s",strtotime($test->created_at)) ?? '' }}
                             </td>
                             <td style="text-align:center">
-                                    <a class="btn btn-xs btn-primary" href="{{ route('admin.exams.examresult', $test->id) }}">
+                                    <a class="btn btn-xs btn-default" href="{{ route('admin.exams.examresult', $test->id) }}">
                                         {{ trans('global.view') }} Test Report
                                     </a>
                             </td>  

@@ -18,9 +18,20 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.css" rel="stylesheet" />
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet" />
+    
+    <style>
+        .login-page-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url({{ asset('frontend/images/bg/bg.png') }});
+        }
+    </style>
 </head>
 
-<body class="header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden login-page">
+<body class="header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden login-page login-page-background">
     <div class="app flex-row align-items-center">
         <div class="container">
             @yield("content")
