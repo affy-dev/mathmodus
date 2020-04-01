@@ -3,7 +3,7 @@
 @can('role_create')
     <div style="margin-bottom: 10px;" class="row">
         <div class="col-lg-12">
-            <a class="btn btn-success" href="{{ route("admin.roles.create") }}">
+            <a class="btn btn-default" href="{{ route("admin.roles.create") }}">
                 {{ trans('global.add') }} {{ trans('global.role.title_singular') }}
             </a>
         </div>

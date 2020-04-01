@@ -79,7 +79,7 @@ class SchoolsController extends Controller
 
     public function assign(User $user, $schoolId) 
     {
-        $allPrincipals = User::whereHas('roles', function($q){$q->whereIn('title', [env('USER_ROLES_PRINCIPAL', 'Principal')]);})->get();
+        $allPrincipals = User::whereHas('roles', function($q){$q->whereIn('id', [env('USER_ROLES_PRINCIPAL', '2')]);})->get();
         return view('admin.schools.assign', compact('allPrincipals', 'schoolId'));
     }
 

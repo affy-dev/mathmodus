@@ -2,7 +2,7 @@
 @section('content')
 
 <div class="card">
-    <div class="card-header">
+    <div class="card-header tbl-header">
         {{ trans('global.edit') }} {{ trans('global.student.title_singular') }} Details
     </div>
     <?php 
@@ -181,7 +181,7 @@
             </div>
             <input type="hidden" name="userId" value={{$userId}}>
             <div>
-                <input class="btn btn-danger" type="submit" value="{{ trans('global.save') }}">
+                <input class="btn btn-default" type="submit" value="{{ trans('global.save') }}">
             </div>
         </form>
     </div>

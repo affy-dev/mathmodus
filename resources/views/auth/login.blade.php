@@ -13,8 +13,8 @@
                     <form method="POST" action="{{ route('login') }}">
                         {{ csrf_field() }}
                         <h1>
-                            <div class="login-logo">
-                                <a href="#">
+                            <div class="login-logo" >
+                                <a href="#" class="btn-link">
                                     {{ trans('global.site_title') }}
                                 </a>
                             </div>
@@ -34,13 +34,13 @@
                         </div>
                         <div class="row">
                             <div class="col-6">
-                                <input type="submit" class="btn btn-primary px-4" value='{{ trans('global.login') }}'>
+                                <input type="submit" class="btn btn-default px-4" value='{{ trans('global.login') }}'>
                                 <label class="ml-2">
                                     <input name="remember" type="checkbox" /> {{ trans('global.remember_me') }}
                                 </label>
                             </div>
                             <div class="col-6 text-right">
-                                <a class="btn btn-link px-0" href="{{ route('password.request') }}">
+                                <a class="btn btn-link px-0" style="color:#D98938" href="{{ route('password.request') }}">
                                     {{ trans('global.forgot_password') }}
                                 </a>
                             </div>

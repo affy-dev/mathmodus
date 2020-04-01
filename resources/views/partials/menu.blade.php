@@ -70,23 +70,23 @@
             </li>
             <li class="nav-item nav-dropdown">
                 <a class="nav-link  nav-dropdown-toggle">
-                    <i class="fas fa-users nav-icon">
+                    <i class="fa fa-sitemap nav-icon">
 
                     </i>
                     Exams
                 </a>
                 <ul class="nav-dropdown-items">
                     <li class="nav-item">
-                        <a href="{{ route("admin.exams.index") }}" class="nav-link {{ request()->is('admin/exams') || request()->is('admin/exams/*') ? 'active' : '' }}">
-                            <i class="fas fa-unlock-alt nav-icon">
+                        <a href="{{ route("admin.exams.index") }}" class="nav-link {{ request()->is('admin/exams') ? 'active' : '' }}">
+                            <i class="fa fa-sitemap nav-icon">
 
                             </i>
                             Take Exam
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route("admin.exams.history") }}" class="nav-link {{ request()->is('admin/exams') || request()->is('admin/exams/*') ? 'active' : '' }}">
-                            <i class="fas fa-briefcase nav-icon">
+                        <a href="{{ route("admin.exams.history") }}" class="nav-link {{ request()->is('admin/exams/history') || request()->is('admin/exams/history') ? 'active' : '' }}">
+                            <i class="fa fa-bar-chart nav-icon">
 
                             </i>
                             Exams History

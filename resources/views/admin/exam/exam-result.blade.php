@@ -4,7 +4,7 @@
             <div class="row justify-content-start">
                 <div class="col-12">
                 @if ($showBackBtn)
-                    <a href="{{ url()->previous() }}" class="btn btn-primary">Back</a> 
+                    <a href="{{ url()->previous() }}" class="btn btn-default">Back</a> 
                 @endif
                 @if (!$showBackBtn)
                     <a href="{{ route('admin.exams.index') }}" class="btn btn-primary">Take another Test</a> 
@@ -13,6 +13,32 @@
             </div>
             
             <h1 style="text-align:center">Test Analysis</h1>
+            
+            <div class="row" style="margin-bottom:15px">
+                <div class="col-12">
+                <div class="card-group">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h4 class="mb-0"><strong>{{count($correctQuestionDetails) + count($wrongQuestionDetails)}}</strong></h4>
+                            <small class="text-muted-light">TOTAL</small>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h4 class="text-success mb-0"><strong>{{count($correctQuestionDetails)}}</strong></h4>
+                            <small class="text-muted-light">CORECT</small>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h4 class="text-danger mb-0"><strong>{{count($wrongQuestionDetails)}}</strong></h4>
+                            <small class="text-muted-light">WRONG</small>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+
             @if(count($wrongQuestionDetails) > 0)
             <div class="row">
                 <div class="col-sm" style="background: #cbd2ce;padding: 15px;border-radius: 15px;">
@@ -22,10 +48,10 @@
                             {{$wrongDetails['question_text']}} <span style="float:right"><i class="fa fa-times-circle" aria-hidden="true"></i></span>
                         </div>
                         <div style="width:100%;margin-bottom: 4%;">
-                            <button type="button" class="btn btn-primary video-btn" data-toggle="modal" data-src="{{$wrongDetails['video_url']}}" data-target="#myModal">
+                            <button type="button" class="btn btn-default video-btn" data-toggle="modal" data-src="{{$wrongDetails['video_url']}}" data-target="#myModal">
                                 Topic Video
                             </button>
-                            <button type="button" class="btn btn-primary prerequisiteBtn" data-toggle="modal" data-text="{{$wrongDetails['topic_pre_requisite']}}" data-target="#exampleModal">
+                            <button type="button" class="btn btn-default prerequisiteBtn" data-toggle="modal" data-text="{{$wrongDetails['topic_pre_requisite']}}" data-target="#exampleModal">
                                 Pre-Requisuite Topic
                             </button>
                         </div>
@@ -42,10 +68,10 @@
                             {{$correctDetails['question_text']}} <span style="float:right"><i class="fa fa-check-circle" aria-hidden="true"></i></span>
                         </div>
                         <div style="width:100%;margin-bottom: 4%;">
-                            <button type="button" class="btn btn-primary video-btn" data-toggle="modal" data-src="{{$correctDetails['video_url']}}" data-target="#myModal">
+                            <button type="button" class="btn btn-default video-btn" data-toggle="modal" data-src="{{$correctDetails['video_url']}}" data-target="#myModal">
                             Topic Video
                             </button>
-                            <button type="button" class="btn btn-primary prerequisiteBtn" data-toggle="modal" data-text="{{$correctDetails['topic_pre_requisite']}}" data-target="#exampleModal">
+                            <button type="button" class="btn btn-default prerequisiteBtn" data-toggle="modal" data-text="{{$correctDetails['topic_pre_requisite']}}" data-target="#exampleModal">
                                 Pre-Requisuite Topic
                             </button>
                         </div>
@@ -102,11 +128,16 @@
     let content;
     $('.prerequisiteBtn').click(function() {
         content = $(this).data( "text" );
-        const contentArr = content.split(',');
+        const contentArr = content ? content.split(',') : false;
         let finalContent = '';
-        contentArr.forEach((item, index) => {
-            finalContent+='<p>'+item+'</p>';
-        });
+        if(contentArr) {
+            contentArr.forEach((item, index) => {
+                finalContent+='<p>'+item+'</p>';
+            });
+        } else {
+            finalContent = 'Not available'
+        }
+         
         const modalContent = $('#modalContent');
         modalContent.html(finalContent);
     });

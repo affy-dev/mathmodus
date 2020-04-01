@@ -37,7 +37,7 @@
                 @endforeach
             @endforeach
             <div class="col-sm" style="margin-top: 2%;">
-                <button class="btn btn-success btn-block" id="sbmtBtn" type="button" onClick="submitForm()" style="padding: 10px;font-size: 30px;">Submit Test</button>
+                <button class="btn btn-default btn-block" id="sbmtBtn" type="button" onClick="submitForm()" style="padding: 10px;font-size: 30px;">Submit Test</button>
             </div>
         </form>
     </div>

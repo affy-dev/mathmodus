@@ -21,6 +21,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.css" rel="stylesheet" />
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet" />
+    <script type="text/javascript" src="{{ asset('frontend/js/bootstrap.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('frontend/js/custom.js') }}"></script>
     @yield('styles')
 </head>
 
@@ -29,7 +31,7 @@
         <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand btn-link" href="#">
             <span class="navbar-brand-full" style="font-weight:bold; font-size: 22px">Mathmodus</span>
             <span class="navbar-brand-minimized">P</span>
         </a>

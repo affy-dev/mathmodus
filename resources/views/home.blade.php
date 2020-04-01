@@ -11,7 +11,7 @@
                                 <i class="fa fa-user fa-4x"></i>
                             </div>
                             <h6 class="text-uppercase">Users</h6>
-                            <h1 class="display-4">134</h1>
+                            <h1 class="display-4">{{$countUser}}</h1>
                         </div>
                     </div>
                 </div>
@@ -22,7 +22,7 @@
                                 <i class="fas fa-chalkboard-teacher fa-4x"></i>
                             </div>
                             <h6 class="text-uppercase">Teachers</h6>
-                            <h1 class="display-4">24</h1>
+                            <h1 class="display-4">{{$countTeacher}}</h1>
                         </div>
                     </div>
                 </div>
@@ -33,7 +33,7 @@
                                 <i class="fa fa-graduation-cap fa-4x"></i>
                             </div>
                             <h6 class="text-uppercase">Students</h6>
-                            <h1 class="display-4">125</h1>
+                            <h1 class="display-4">{{$countStudent}}</h1>
                         </div>
                     </div>
                 </div>
@@ -44,7 +44,7 @@
                                 <i class="fas fa-school fa-4x"></i>
                             </div>
                             <h6 class="text-uppercase">School</h6>
-                            <h1 class="display-4">36</h1>
+                            <h1 class="display-4">{{$schoolCount}}</h1>
                         </div>
                     </div>
                 </div>

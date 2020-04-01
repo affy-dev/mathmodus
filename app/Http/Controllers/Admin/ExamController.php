@@ -30,6 +30,7 @@ class ExamController extends Controller
 
     public function index()
     {
+        abort_unless(\Gate::allows('exams_list'), 403);
         \Cache::forget('courseId');
         \Cache::forget('mcqs');
         \Cache::forget('testId');
@@ -38,11 +39,12 @@ class ExamController extends Controller
     }
 
     public function takeExam(Request $request, $courseId, $lessonId = null) {
+        abort_unless(\Gate::allows('take_exam'), 403);
         if(!\Cache::has('courseId') && !\Cache::has('mcqs')) {
             $testFromLessonsTab = $lessonId != null ? true : false;
             if(!$testFromLessonsTab) {
-                // $lessons = Lessons::pluck('id')->random(self::QUESTION_COUNT)->toArray();
-                $lessons = [1,2,4,5];
+                $lessons = Lessons::pluck('id')->random(self::QUESTION_COUNT)->toArray();
+                // $lessons = [1,2,4,5];
             } else {
                 $lessons =[$lessonId];
             }
@@ -61,20 +63,28 @@ class ExamController extends Controller
                 }
                 $mcqs[] = $questionAnswerDetails;
             }
-            
-            $testCreated = StudentTestResults::create([
-                'user_id'=> auth()->user()->id, 
-                'courseId' => $courseId,
-                'test_status' => self::TEST_STATUS['PENDING']
-            ]);
+            $checkIfQuestionsAreEmpty = 0;
+            foreach ($mcqs as $key => $value) {
+                if(count($value) != 0) {
+                    $checkIfQuestionsAreEmpty++;
+                }
+            }
+            $testId=0;
+            if( $checkIfQuestionsAreEmpty != 0 ) {
+                $testCreated = StudentTestResults::create([
+                    'user_id'=> auth()->user()->id, 
+                    'courseId' => $courseId,
+                    'test_status' => self::TEST_STATUS['PENDING']
+                ]);
 
-            $testId = $testCreated->id;
-            session(['testId' => $testId]);
-            
-            $expiresAt = Carbon::now()->addMinutes(10);
-            \Cache::put('courseId', $courseId, $expiresAt);
-            \Cache::put('mcqs', $mcqs, $expiresAt);
-            \Cache::put('testId', $testId, $expiresAt);
+                $testId = $testCreated->id;
+                session(['testId' => $testId]);
+                
+                $expiresAt = Carbon::now()->addMinutes(30);
+                \Cache::put('courseId', $courseId, $expiresAt);
+                \Cache::put('mcqs', $mcqs, $expiresAt);
+                \Cache::put('testId', $testId, $expiresAt);
+            }
         } else {
             $courseId = \Cache::get('courseId');
             $mcqs = \Cache::get('mcqs');
@@ -85,12 +95,13 @@ class ExamController extends Controller
             \Cache::forget('mcqs');
             \Cache::forget('testId');
             session()->forget('testId');
-            return redirect()->route('admin.exams.index');
+            return redirect()->route('admin.exams.index')->withErrors(['There are no questions available in this test']);
         }
         return view('admin.exam.take-exam', compact('courseId', 'mcqs', 'testId'));
     }
 
     public function submitExam(Request $request) {
+        abort_unless(\Gate::allows('submit_exam'), 403);
         $data = $request->all();
         if(!StudentTestResults::where('id', $data['testId'])->exists() || StudentTestResults::where('id', $data['testId'])->where('test_status', self::TEST_STATUS['COMPLETED'])->exists()) {
             return redirect()->route('admin.exams.index')->withErrors(['Last Test had been alreadt completed or skipped by you. Start with another test']);
@@ -139,6 +150,7 @@ class ExamController extends Controller
     }
 
     public function examResults(Request $request, $testId = null) {
+        abort_unless(\Gate::allows('exam_results'), 403);
         if($testId == null && !session()->has('correctAnsIds') && !session()->has('wrongAnsIds') && !session()->has('test_status')) {
             return redirect()->route('admin.exams.history');
         }
@@ -179,11 +191,12 @@ class ExamController extends Controller
         $wrongQuestionDetails = [];
         foreach($correctAnsIds as $correctQuestions) {
             $questDetails = Questions::where('id', $correctQuestions->question_id)->get()->toArray();
+            
             $lessonVideo = Topics::where('id', $questDetails[0]['lesson_id'])->get()->toArray();
-            $questDetails[0]['video_url'] = $lessonVideo['0']['video_url']; // topic video url
+            $questDetails[0]['video_url'] = (count($lessonVideo) != 0) ? $lessonVideo['0']['video_url'] : 'not_available';
             
             // all the prerequisite topics are found here
-            $topicPreRequisite = TopicPreRequisite::where('topic_id', $lessonVideo['0']['id'])->get()->toArray();
+            $topicPreRequisite = (count($lessonVideo) != 0) ? TopicPreRequisite::where('topic_id', $lessonVideo['0']['id'])->get()->toArray() : [];
             $preRequisiteIds = '';
             foreach($topicPreRequisite as $preRequisite) {
                 $topicName = Topics::where('id', $preRequisite['pre_requisite_topic_id'])->get()->toArray();
@@ -193,17 +206,16 @@ class ExamController extends Controller
                 $fullTopicName = $topicName[0]['topic_name'];
                 $preRequisiteIds.=','.$fullTopicName;
             }
-            $questDetails[0]['topic_pre_requisite'] = substr($preRequisiteIds, 1);
+            $questDetails[0]['topic_pre_requisite'] = !empty($preRequisiteIds) ? substr($preRequisiteIds, 1) : '';
 
             $correctQuestionDetails[] = $questDetails[0];
         }
         foreach($wrongAnsIds as $wrongQuestions) {
             $questDetails = Questions::where('id', $wrongQuestions->question_id)->get()->toArray();
             $lessonVideo = Topics::where('id', $questDetails[0]['lesson_id'])->get()->toArray();
-            $questDetails[0]['video_url'] = $lessonVideo['0']['video_url'];
-
+            $questDetails[0]['video_url'] = (count($lessonVideo) != 0) ? $lessonVideo['0']['video_url'] : 'not_available';
             // all the prerequisite topics are found here
-            $topicPreRequisite = TopicPreRequisite::where('topic_id', $lessonVideo['0']['id'])->get()->toArray();
+            $topicPreRequisite = (count($lessonVideo) != 0) ? TopicPreRequisite::where('topic_id', $lessonVideo['0']['id'])->get()->toArray() : [];
             $preRequisiteIds = '';
             foreach($topicPreRequisite as $preRequisite) {
                 $topicName = Topics::where('id', $preRequisite['pre_requisite_topic_id'])->get()->toArray();
@@ -213,9 +225,7 @@ class ExamController extends Controller
                 $fullTopicName = $topicName[0]['topic_name'];
                 $preRequisiteIds.=','.$fullTopicName;
             }
-            $questDetails[0]['topic_pre_requisite'] = substr($preRequisiteIds, 1);
-
-
+            $questDetails[0]['topic_pre_requisite'] = !empty($preRequisiteIds) ? substr($preRequisiteIds, 1) : '';
             $wrongQuestionDetails[] = $questDetails[0];
         }
         return [
@@ -225,6 +235,7 @@ class ExamController extends Controller
     }
 
     public function getHistory() {
+        abort_unless(\Gate::allows('exam_history'), 403);
         $testHistory = StudentTestResults::where('user_id', auth()->user()->id)->where('test_status', self::TEST_STATUS['COMPLETED'])->orderBy('id', 'desc')->get();
         $courses = Courses::all();
         $availableCourses = [];
@@ -236,7 +247,7 @@ class ExamController extends Controller
     }
 
     public function lessonVideos(Request $request, $courseId, $testId = null) {
-
+        abort_unless(\Gate::allows('exam_lesson_videos'), 403);
         if($testId != null && StudentTestResults::where('id', $testId)->exists()) {
             StudentTestResults::where('id', $testId)->delete();
         }

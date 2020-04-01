@@ -23,6 +23,8 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $allPrincipals = User::whereHas('roles', function($q){$q->whereIn('title', [env('USER_ROLES_PRINCIPAL', 'Principal')]);})->get();
+        dd($allPrincipals);
         return view('home');
     }
 }
