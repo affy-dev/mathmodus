@@ -1,6 +1,6 @@
 @extends('frontend.layouts.app')
 @section('content')
-<div class="row">
+<div class="row" style="margin-top:5%">
     <div class="col-lg-8 col-lg-offset-2">
         <div class="lms_title_center">
             <div class="lms_heading_1">

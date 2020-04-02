@@ -23,7 +23,7 @@
 
 <!-- Body Start -->
 <body>
-    @include('frontend.partials.slider')
+    @yield('slider')
     
     @include('frontend.partials.menu')
 

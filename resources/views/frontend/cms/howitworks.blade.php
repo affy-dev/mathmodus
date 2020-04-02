@@ -1,7 +1,7 @@
 @extends('frontend.layouts.app')
 @section('content')
 <!--How it works start-->
-<div class="row">
+<div class="row" style="margin-top:5%">
     <div class="col-lg-12 col-md-12 col-sm-12">
         <div class="lms_title_center">
             <div class="lms_heading_1">
