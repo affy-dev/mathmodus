@@ -12,8 +12,8 @@
     <meta name="keywords" content="">
     <meta name="MobileOptimized" content="320">
     <!-- favicon links -->
-    <link rel="shortcut icon" type="image/ico" href="{{asset('frontend/favicon.ico')}}" />
-    <link rel="icon" type="image/ico" href="{{asset('frontend/favicon.ico')}}" />
+    <link rel="shortcut icon" type="image/ico" href="{{asset('frontend/mathmodus.ico')}}" />
+    <link rel="icon" type="image/ico" href="{{asset('frontend/mathmodus.ico')}}" />
     <!-- main css -->
     <link rel="stylesheet" href="{{ asset('frontend/css/main.css') }}" media="screen" />
     <title>{{ trans('global.site_title') }}</title>
