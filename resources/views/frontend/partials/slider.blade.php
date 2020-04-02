@@ -1,3 +1,5 @@
+@extends('frontend.layouts.app')
+@section('slider')
 <!--slider start-->
 <div class="lms_slider">
     <div class="lms_revslider">
@@ -23,4 +25,5 @@
         <!-- <div class="tp-bannertimer"></div> -->
     </div>
 </div>
+@endsection
 <!--slider end-->
