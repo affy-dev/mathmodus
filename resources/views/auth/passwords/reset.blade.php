@@ -44,7 +44,7 @@
                         </div>
                         <div class="row">
                             <div class="col-12 text-right">
-                                <button type="submit" class="btn btn-primary btn-block btn-flat">
+                                <button type="submit" class="btn btn-default btn-block btn-flat">
                                     {{ trans('global.reset_password') }}
                                 </button>
                             </div>

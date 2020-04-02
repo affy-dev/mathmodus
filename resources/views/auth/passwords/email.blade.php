@@ -8,10 +8,8 @@
                     <form method="POST" action="{{ route('password.email') }}">
                         {{ csrf_field() }}
                         <h1>
-                            <div class="login-logo">
-                                <a href="#">
-                                    {{ trans('global.site_title') }}
-                                </a>
+                            <div class="login-logo" style="text-align:center">
+                                <img alt="Porto" src="{{ asset('frontend/images/new-logo.png') }}">
                             </div>
                         </h1>
                         <p class="text-muted"></p>
@@ -28,7 +26,7 @@
                         </div>
                         <div class="row">
                             <div class="col-12 text-right">
-                                <button type="submit" class="btn btn-primary btn-block btn-flat">
+                                <button type="submit" class="btn btn-default btn-block btn-flat">
                                     {{ trans('global.reset_password') }}
                                 </button>
                             </div>
