@@ -42,7 +42,7 @@ class TeacherController extends Controller
                 $join->where('role_user.role_id', self::TEACHER_ROLE);
             })
             ->join('teachers', 'users.id', '=', 'teachers.user_id')
-            ->join('schools', 'schools.id', '=', 'teachers.school_id')
+            ->leftJoin('schools', 'schools.id', '=', 'teachers.school_id')
             ->get(['users.id as userId', 'schools.school_name as school_name', 'users.name as name', 'users.email as email', 'teachers.dob as dob', 'teachers.designation as designation', 'teachers.id as teacherId', 'teachers.phone_no as phone_no']);
         
         return view('admin.teachers.index', compact('teachers'));
