@@ -123,6 +123,10 @@
     var $videoSrc;  
     $('.video-btn').click(function() {
         $videoSrc = $(this).data( "src" );
+        if($videoSrc == 'not_available') {
+            alert('Video Not Available')
+            return false;
+        }
     });
 
     let content;

@@ -46,6 +46,9 @@
                             Father Phone
                         </th>
                         <th>
+                            School
+                        </th>
+                        <th>
                             &nbsp;
                         </th>
                     </tr>
@@ -73,6 +76,9 @@
                             </td>
                             <td>
                                 {{ $student->fatherPhone ?? '' }}
+                            </td>
+                            <td>
+                                {{ $student->school_name ?? '' }}
                             </td>
                             <td>
                                 @can('student_show')

@@ -23,7 +23,21 @@
                         {{ $errors->first('user_id') }}
                     </em>
                 @endif
-               
+            </div>
+
+            <div class="form-group {{ $errors->has('school_id') ? 'has-error' : '' }}">
+                <label for="school_id">Select School*</label>
+                <select id="school_id" name="school_id" class="form-control">
+                    <option value="">--- Select School ---</option>
+                    @foreach ($allSchools as $key => $value)
+                        <option value="{{ $value->id }}" {{ old('school_id') == $value->id ? 'selected' : ''}}>{{ $value->school_name }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('school_id'))
+                    <em class="invalid-feedback" style="display:block">
+                        {{ $errors->first('school_id') }}
+                    </em>
+                @endif
             </div>
 
             <div class="form-group {{ $errors->has('dob') ? 'has-error' : '' }}">

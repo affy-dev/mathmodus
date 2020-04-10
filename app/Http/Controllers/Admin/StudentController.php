@@ -41,9 +41,15 @@ class StudentController extends Controller
                 $join->where('role_user.role_id', self::STUDENT_ROLE);
             })
             ->join('students', 'users.id', '=', 'students.user_id')
-            ->get(['users.id as userId','users.name as userName', 'users.email as emailId', 'students.dob as studentDOB', 'students.father_name as fatherName', 'students.father_phone_no as fatherPhone', 'students.id as studentId']);
-    
+            ->join('schools', 'schools.id', '=', 'students.school_id')
+            ->get(['users.id as userId', 'students.created_by as created_by_id', 'users.name as userName', 'schools.school_name as school_name', 'users.email as emailId', 'students.dob as studentDOB', 'students.father_name as fatherName', 'students.father_phone_no as fatherPhone', 'students.id as studentId']);
+        
         return view('admin.students.index', compact('students'));
+    }
+
+    public function getUserNameById($userId) {
+        $user = User::where('id', $userId)->first();
+        return $user_name;
     }
 
     public function create()
@@ -58,8 +64,9 @@ class StudentController extends Controller
             })
             ->whereNull('users.deleted_at')
             ->get();
-
-        return view('admin.students.create', compact('gender', 'blood_group', 'users'));
+        
+        $allSchools = School::get();
+        return view('admin.students.create', compact('gender', 'blood_group', 'users', 'allSchools'));
     }
 
     public function store(Request $request)
@@ -67,6 +74,7 @@ class StudentController extends Controller
         abort_unless(\Gate::allows('student_create'), 403);
         $rules = [
             'user_id' => 'required|unique:students,user_id',
+            'school_id' => 'required',
             'dob' => 'required|min:10|max:10',
             'gender' => 'required|integer',
             'blood_group' => 'nullable',
@@ -84,6 +92,8 @@ class StudentController extends Controller
         $userName = User::find($request->input('user_id'));
         $studentsData = $request->all();
         $studentsData['name'] = $userName->name;
+        $studentsData['created_by'] = auth()->user()->id;
+        // dd($studentsData);
         $students = Student::create($studentsData);
 
         return redirect()->route('admin.students.index');

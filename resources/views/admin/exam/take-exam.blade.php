@@ -14,27 +14,30 @@
         <form action="{{ route("admin.exams.submitExam") }}" method="POST" id="testForm" >
             @csrf
             @foreach($mcqs as $ques)
-                @foreach($ques as $quesDetails)
-                <?php 
-                    $questText = $quesDetails['question_text'];
-                    $answerText = $quesDetails['answerText'];
-                    $answerId = $quesDetails['answerId'];
-                    $optAns = explode(',',$answerText);
-                ?>
+                @if(count($ques) > 0)
+                    <?php 
+                        $quesDetails = $ques['questionDetails'];
+                        $ansDetails = $ques['answerDetails'];
+
+                        $questText = $quesDetails['question_text'];
+                        // $answerText = $quesDetails['answerText'];
+                        // $answerId = $quesDetails['answerId'];
+                        // $optAns = explode(',',$answerText);
+                    ?>
                     <div class="questionsBox">
                         <div class="questions">{{$questText}}</div>
-                        <ul class="answerList">
-                            @foreach($optAns as $ans)
+                        <ul class="answerList"> 
+                            @foreach($ansDetails as $ans)
                                 <li>
-                                    <label><input type="radio" name="answerGroup_{{$answerId}}" value="{{$ans}}" >{{$ans}}</label>
+                                    <label><input type="radio" name="answerGroup_{{$quesDetails['id']}}" value="{{$ans->id}}" ><span>{{$ans->answer_text}}</span></label>
                                 </li>
                             @endforeach
-                            <input type="hidden" name="answerId[]" value="{{$answerId}}" />
+                            <input type="hidden" name="questionIds[]" value="{{$quesDetails['id']}}" />
                             <input type="hidden" name="courseId" value="{{$courseId}}" />
                             <input type="hidden" name="testId" value="{{$testId}}" />
                         </ul>
                     </div>
-                @endforeach
+                @endif
             @endforeach
             <div class="col-sm" style="margin-top: 2%;">
                 <button class="btn btn-default btn-block" id="sbmtBtn" type="button" onClick="submitForm()" style="padding: 10px;font-size: 30px;">Submit Test</button>
@@ -49,6 +52,7 @@ function submitForm() {
     let check = true;
     $("input:radio").each(function(){
         const name = $(this).attr("name");
+        console.log(name);
         if($("input:radio[name="+name+"]:checked").length == 0){
             check = false;
         }

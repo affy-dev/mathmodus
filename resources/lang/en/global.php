@@ -417,6 +417,7 @@ return [
     'teacher'            => [
         'title'          => 'Teachers',
         'title_singular' => 'Teacher',
+        'assign_school_text' => 'Assign School',
         'fields'         => [
             'id'                        => 'ID',
             'id_helper'                 => '',

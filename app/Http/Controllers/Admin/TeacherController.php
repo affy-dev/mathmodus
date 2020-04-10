@@ -10,6 +10,7 @@ use App\Http\Requests\AssignPrincipalRequest;
 use App\Teacher;
 use App\User;
 use App\Student;
+use App\School;
 use Illuminate\Http\Request;
 
 class TeacherController extends Controller
@@ -41,8 +42,9 @@ class TeacherController extends Controller
                 $join->where('role_user.role_id', self::TEACHER_ROLE);
             })
             ->join('teachers', 'users.id', '=', 'teachers.user_id')
-            ->get(['users.id as userId','users.name as name', 'users.email as email', 'teachers.dob as dob', 'teachers.designation as designation', 'teachers.id as teacherId', 'teachers.phone_no as phone_no']);
-    
+            ->join('schools', 'schools.id', '=', 'teachers.school_id')
+            ->get(['users.id as userId', 'schools.school_name as school_name', 'users.name as name', 'users.email as email', 'teachers.dob as dob', 'teachers.designation as designation', 'teachers.id as teacherId', 'teachers.phone_no as phone_no']);
+        
         return view('admin.teachers.index', compact('teachers'));
     }
 
@@ -193,4 +195,15 @@ class TeacherController extends Controller
         return response(null, 204);
     }
 
+    public function assign(User $user, $teacherId)
+    {
+        $allSchools = School::get();
+        return view('admin.teachers.assign-school', compact('allSchools', 'teacherId'));
+    }
+
+    public function assignSchool(Request $request) {
+        $inputData = $request->all();
+        Teacher::where('user_id', $inputData['teacherId'])->update(['school_id' => $inputData['school_id']]);
+        return redirect()->route('admin.teachers.index')->with('success', 'School assigned successfully');;;
+    }
 }

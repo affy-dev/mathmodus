@@ -37,13 +37,13 @@
                             Email Id
                         </th>
                         <th>
-                            DOB
-                        </th>
-                        <th>
                             Designation
                         </th>
                         <th>
                             Phone No.
+                        </th>
+                        <th>
+                            School Assigned.
                         </th>
                         <th>
                             &nbsp;
@@ -66,15 +66,18 @@
                                 {{ $teacher->email ?? '' }}
                             </td>
                             <td>
-                                {{ $teacher->dob ?? '' }}
-                            </td>
-                            <td>
                                 {{ $teacher->designation ?? '' }}
                             </td>
                             <td>
                                 {{ $teacher->phone_no ?? '' }}
                             </td>
                             <td>
+                                {{ $teacher->school_name ?? '' }}
+                            </td>
+                            <td>
+                                <a class="btn btn-xs btn-default" href="{{ route('admin.teachers.assign-school', $teacher->userId) }}">
+                                    Assign School
+                                </a>
                                 @can('teachers_show')
                                     <a class="btn btn-xs btn-primary" href="{{ route('admin.teachers.show', $teacher->userId) }}">
                                         {{ trans('global.view') }}
