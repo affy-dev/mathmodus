@@ -21,7 +21,7 @@ use Carbon\Carbon;
 
 class ExamController extends Controller
 {
-    private const QUESTION_COUNT = 4;
+    private const QUESTION_COUNT = 5;
 
     const TEST_STATUS = [
         'PENDING' => 'pending',
@@ -52,14 +52,20 @@ class ExamController extends Controller
             foreach ($lessons as $key => $lessionId) {
                 $questionsLimit = $testFromLessonsTab ? 25 : 1;
                 $quest = Questions::where('lesson_id', $lessionId)->inRandomOrder()->limit($questionsLimit)->get()->toArray();
+                
                 $questionAnswerDetails = [];
                 foreach ($quest as $key => $value) {
                     $answerOptions = \DB::table('question_answer')
                     ->where('question_id', $value['id'])
-                    ->first();
-                    $value['answerText'] = $answerOptions->answer_text;
-                    $value['answerId'] = $answerOptions->id;
-                    $questionAnswerDetails[] = $value;
+                    ->get();
+                    $ansDet = [];
+                    foreach ($answerOptions as $ans) {
+                        $ansDet[] = $ans;
+                        // $value['answerText'] = $ans->answer_text;
+                        // $value['answerId'] = $ans->id;
+                    }
+                    $questionAnswerDetails['questionDetails'] = $value;
+                    $questionAnswerDetails['answerDetails'] = $ansDet;
                 }
                 $mcqs[] = $questionAnswerDetails;
             }
@@ -97,22 +103,25 @@ class ExamController extends Controller
             session()->forget('testId');
             return redirect()->route('admin.exams.index')->withErrors(['There are no questions available in this test']);
         }
+        
         return view('admin.exam.take-exam', compact('courseId', 'mcqs', 'testId'));
     }
 
     public function submitExam(Request $request) {
         abort_unless(\Gate::allows('submit_exam'), 403);
         $data = $request->all();
+        
         if(!StudentTestResults::where('id', $data['testId'])->exists() || StudentTestResults::where('id', $data['testId'])->where('test_status', self::TEST_STATUS['COMPLETED'])->exists()) {
             return redirect()->route('admin.exams.index')->withErrors(['Last Test had been alreadt completed or skipped by you. Start with another test']);
         }
-        $courseId = $data['courseId'];
-        $answerIds = $data['answerId'];
-        $count=0;
         
+        $courseId = $data['courseId'];
+        // $answerIds = $data['answerId'];
+        $allQuestionIds = $data['questionIds'];
+        $count=0;
         // test validation whether user answer every question or not
-        foreach ($answerIds as $ansId) {
-            if(!array_key_exists('answerGroup_'.$ansId, $data)) {
+        foreach ($allQuestionIds as $quesId) {
+            if(!array_key_exists('answerGroup_'.$quesId, $data)) {
                 $count++;
             }
         }
@@ -121,15 +130,14 @@ class ExamController extends Controller
             return redirect()->back()->withErrors(['Please answer all questions before submitting']);
         }
         // validation ends here
-        
         $correctAnsIds = [];
         $wrongAnsIds = [];
-        foreach ($answerIds as $ansId) {
+        foreach ($allQuestionIds as $quesId) {
+            $ansId = $data['answerGroup_'.$quesId];
             $ansDetails = \DB::table('question_answer')
             ->where('id', $ansId)
             ->first();
-            $userAns = $data['answerGroup_'.$ansDetails->id];
-            if($ansDetails->correct_answer == $userAns) {
+            if($ansDetails->correct_answer == 'TRUE') {
                 $correctAnsIds[] = $ansDetails;
             } else {
                 $wrongAnsIds[] = $ansDetails;
