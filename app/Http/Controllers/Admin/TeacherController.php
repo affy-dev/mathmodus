@@ -12,6 +12,7 @@ use App\User;
 use App\Student;
 use App\School;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class TeacherController extends Controller
 {
@@ -204,11 +205,14 @@ class TeacherController extends Controller
     public function assignSchool(Request $request) {
         $inputData = $request->all();
         if(empty($inputData['school_id'])) {
-            return redirect()->route('admin.teachers.assign-school', $inputData['teacherId'])->with('error', 'Please select school first!');
+            Alert::error('Please select school first!', '');
+            return redirect()->route('admin.teachers.assign-school', $inputData['teacherId']);
         } else if( Teacher::where('school_id', '=', $inputData['school_id'])->exists() ) {
-            return redirect()->route('admin.teachers.assign-school', $inputData['teacherId'])->with('error', 'Selected teacher is already assigned to this school');
+            Alert::error('Selected teacher is already assigned to this school', '');
+            return redirect()->route('admin.teachers.assign-school', $inputData['teacherId']);
         }
         Teacher::where('user_id', $inputData['teacherId'])->update(['school_id' => $inputData['school_id']]);
-        return redirect()->route('admin.teachers.index')->with('success', 'School assigned successfully');;;
+        Alert::success('School assigned successfully', '');
+        return redirect()->route('admin.teachers.index');
     }
 }
