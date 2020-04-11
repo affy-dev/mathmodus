@@ -12,7 +12,7 @@
             {{ session('error') }}
         </div>
     @endif
-    <form action="{{ route("admin.teachers.assignSchool") }}" method="PUT" >
+    <form action="{{ route("admin.teachers.assignSchool") }}" method="POST" >
             @csrf
             <div class="form-group {{ $errors->has('roles') ? 'has-error' : '' }}">
             <input name="teacherId" type="hidden" value="{{$teacherId}}" />

@@ -203,6 +203,11 @@ class TeacherController extends Controller
 
     public function assignSchool(Request $request) {
         $inputData = $request->all();
+        if(empty($inputData['school_id'])) {
+            return redirect()->route('admin.teachers.assign-school', $inputData['teacherId'])->with('error', 'Please select school first!');
+        } else if( Teacher::where('school_id', '=', $inputData['school_id'])->exists() ) {
+            return redirect()->route('admin.teachers.assign-school', $inputData['teacherId'])->with('error', 'Selected teacher is already assigned to this school');
+        }
         Teacher::where('user_id', $inputData['teacherId'])->update(['school_id' => $inputData['school_id']]);
         return redirect()->route('admin.teachers.index')->with('success', 'School assigned successfully');;;
     }
