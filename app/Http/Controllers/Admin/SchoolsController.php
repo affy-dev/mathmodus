@@ -10,6 +10,7 @@ use App\Http\Requests\AssignPrincipalRequest;
 use App\School;
 use App\User;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class SchoolsController extends Controller
 {
@@ -85,11 +86,14 @@ class SchoolsController extends Controller
 
     public function assignTeacher(AssignPrincipalRequest $request) {
         if($request->user_id == 0) {
-            return redirect()->route('admin.schools.assignTeachers', $request->schoolId)->with('error', 'Please select Principal first!');
+            Alert::error('Please select Principal first!', '');
+            return redirect()->route('admin.schools.assignTeachers', $request->schoolId);
         } else if(School::where('user_id', '=', $request->user_id)->exists()) {
-            return redirect()->route('admin.schools.assignTeachers', $request->schoolId)->with('error', 'Selected principal is already added to another school');
+            Alert::error('Selected principal is already assigned!', '');
+            return redirect()->route('admin.schools.assignTeachers', $request->schoolId);
         }
         School::where('id', $request->schoolId)->update(['user_id' => $request->user_id]);
-        return redirect()->route('admin.schools.index')->with('success', 'Principal assigned successfully');;;
+        Alert::success('Principal assigned successfully', '');
+        return redirect()->route('admin.schools.index');
     }
 }

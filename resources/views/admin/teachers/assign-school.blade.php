@@ -31,5 +31,9 @@
         </form>
     </div>
 </div>
-
+@section('scripts')
+<script>
+    swal("Good job!", "You clicked the button!", "error");
+</script>
+@endsection
 @endsection
