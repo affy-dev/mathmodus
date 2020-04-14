@@ -10,6 +10,7 @@
                     {{ trans('global.dashboard') }}
                 </a>
             </li>
+            @can('user_management_access')
             <li class="nav-item nav-dropdown">
                 <a class="nav-link  nav-dropdown-toggle">
                     <i class="fas fa-users nav-icon">
@@ -44,6 +45,8 @@
                     </li>
                 </ul>
             </li>
+            @endcan
+            @can('school_access')
             <li class="nav-item">
                 <a href="{{ route("admin.schools.index") }}" class="nav-link {{ request()->is('admin/schools') || request()->is('admin/schools/*') ? 'active' : '' }}">
                     <i class="fas fa-school nav-icon">
@@ -52,6 +55,8 @@
                     {{ trans('global.school.title') }}
                 </a>
             </li>
+            @endcan
+            @can('student_access')
             <li class="nav-item">
                 <a href="{{ route("admin.students.index") }}" class="nav-link {{ request()->is('admin/students') || request()->is('admin/students/*') ? 'active' : '' }}">
                     <i class="fa fa-graduation-cap nav-icon">
@@ -60,6 +65,8 @@
                     {{ trans('global.student.title') }}
                 </a>
             </li>
+            @endcan
+            @can('teachers_access')
             <li class="nav-item">
                 <a href="{{ route("admin.teachers.index") }}" class="nav-link {{ request()->is('admin/teachers') || request()->is('admin/teachers/*') ? 'active' : '' }}">
                     <i class="fas fa-chalkboard-teacher nav-icon">
@@ -68,6 +75,8 @@
                     Teachers
                 </a>
             </li>
+            @endcan
+            @can('exams_list')
             <li class="nav-item nav-dropdown">
                 <a class="nav-link  nav-dropdown-toggle">
                     <i class="fa fa-sitemap nav-icon">
@@ -94,6 +103,7 @@
                     </li>
                 </ul>
             </li>
+            @endcan
             <li class="nav-item">
                 <a href="#" class="nav-link" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">
                     <i class="nav-icon fas fa-sign-out-alt">

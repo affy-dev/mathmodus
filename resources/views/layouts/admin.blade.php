@@ -27,15 +27,15 @@
 
 <body class="app header-fixed sidebar-fixed aside-menu-fixed pace-done sidebar-lg-show">
   
-    <header class="app-header navbar">
+    <header class="app-header navbar" style="background: #D98938" >
         <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand btn-link" href="#">
-            <span class="navbar-brand-full" style="font-weight:bold; font-size: 22px">Mathmodus</span>
+        <a class="navbar-brand" href="#">
+            <span class="navbar-brand-full" style="font-weight:bold; font-size: 22px; color:#fff">Mathmodus</span>
             <span class="navbar-brand-minimized">P</span>
         </a>
-        <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button" data-toggle="sidebar-lg-show">
+        <button class="navbar-toggler sidebar-toggler d-md-down-none" style="background:#fff" type="button" data-toggle="sidebar-lg-show">
             <span class="navbar-toggler-icon"></span>
         </button>
 
