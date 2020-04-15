@@ -21,7 +21,7 @@ use Carbon\Carbon;
 
 class ExamController extends Controller
 {
-    private const QUESTION_COUNT = 5;
+    private const QUESTION_COUNT = 15;
 
     const TEST_STATUS = [
         'PENDING' => 'pending',
@@ -43,7 +43,7 @@ class ExamController extends Controller
         if(!\Cache::has('courseId') && !\Cache::has('mcqs')) {
             $testFromLessonsTab = $lessonId != null ? true : false;
             if(!$testFromLessonsTab) {
-                $lessons = Lessons::pluck('id')->random(self::QUESTION_COUNT)->toArray();
+                $lessons = Lessons::where('course_id', $courseId)->pluck('id')->random(self::QUESTION_COUNT)->toArray();
                 // $lessons = [1,2,4,5];
             } else {
                 $lessons =[$lessonId];
@@ -61,8 +61,6 @@ class ExamController extends Controller
                     $ansDet = [];
                     foreach ($answerOptions as $ans) {
                         $ansDet[] = $ans;
-                        // $value['answerText'] = $ans->answer_text;
-                        // $value['answerId'] = $ans->id;
                     }
                     $questionAnswerDetails['questionDetails'] = $value;
                     $questionAnswerDetails['answerDetails'] = $ansDet;
