@@ -11,15 +11,23 @@
             </div>
             @endif
         </div>
-        <div class="row">
+
+        <div class="card-deck">
             @foreach($courses as $course)
-            <div class="col-sm">
-                <div class="card" style="width: 18rem;background:#ef78008c; color:#fff">
-                    <div class="card-body">
-                        <h5 class="card-title">{{$course->course_name}}</h5>
-                        <a href="{{ route('admin.exams.takeexam', $course->id) }}" class="btn btn-default" style="background:#ead38b;color:#000">Take Test</a>
-                        <a href="{{ route('admin.exams.lessonVideos', $course->id) }}" class="btn btn-default" style="background:#ead38b;color:#000">Course
-                            Videos</a>
+            <div class="card card-custom-css">
+                <div class="card-body">
+                    <h5 class="card-title" style="font-weight: 700;font-size: 18px;color: #D98938;">{{$course->course_name}}</h5>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-5">
+                            <a href="{{ route('admin.exams.takeexam', $course->id) }}"
+                                class="btn btn-default testBtn-blue">Take Test</a>
+                        </div>
+                        <div class="col-5">
+                            <a href="{{ route('admin.exams.lessonVideos', $course->id) }}" class="btn btn-default courseBtn-red" >Course
+                                Videos</a>
+                        </div>
                     </div>
                 </div>
             </div>
