@@ -18,7 +18,14 @@ class HomeController
         $countTeacher = User::whereHas('roles', function($q){$q->whereIn('id', [env('USER_ROLES_TEACHER', '4')]);})->count();
         $schoolCount = School::count();
         $countUser = User::count();
-        $examsTakes = StudentTestResults::where('user_id', auth()->user()->id)->where('test_status', self::TEST_STATUS['COMPLETED'])->count();
-        return view('home', compact('countPrincipal', 'countStudent', 'countTeacher', 'schoolCount', 'countUser', 'examsTakes'));
+        $examsTaken = StudentTestResults::where('user_id', auth()->user()->id)->where('test_status', self::TEST_STATUS['COMPLETED'])->get();
+        $correctAns = [];
+        $wrongAns = [];
+        foreach($examsTaken as $exms) {
+            $correctAns[] = $exms->correct_ans;
+            $wrongAns[] = $exms->wrong_ans;
+        }
+        $totalTestGiven = count($examsTaken);
+        return view('home', compact('countPrincipal', 'countStudent', 'countTeacher', 'schoolCount', 'countUser', 'totalTestGiven', 'correctAns', 'wrongAns'));
     }
 }

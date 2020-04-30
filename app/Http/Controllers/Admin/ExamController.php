@@ -146,16 +146,25 @@ class ExamController extends Controller
                 $wrongAnsIds[] = $ansDetails;
             }
         }
+        
+        $correctQuestionCount = count($correctAnsIds);
+        $wrongQuestionCount = count($wrongAnsIds);
+        $totalQuestionCount = $correctQuestionCount + $wrongQuestionCount;
+
         StudentTestResults::where('id', session('testId'))->update([
             'user_id'=> auth()->user()->id, 
             'courseId' =>$courseId,
             'correctAnsIds' => serialize($correctAnsIds),
             'wrongAnsIds' => serialize($wrongAnsIds),
-            'test_status' => self::TEST_STATUS['COMPLETED']
+            'test_status' => self::TEST_STATUS['COMPLETED'],
+            'total_ans' => $totalQuestionCount,
+            'correct_ans' => $correctQuestionCount,
+            'wrong_ans' => $wrongQuestionCount,
         ]);
         \Cache::forget('courseId');
         \Cache::forget('mcqs');
         \Cache::forget('testId');
+
         session(['correctAnsIds' => $correctAnsIds, 'wrongAnsIds' => $wrongAnsIds, 'test_status' => self::TEST_STATUS['COMPLETED']]);
         return redirect()->route('admin.exams.examresult');
     }

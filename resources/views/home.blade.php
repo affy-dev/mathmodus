@@ -58,13 +58,20 @@
                 @endcan
                 @can('exams_list')
                 <div class="col-xl-3 col-sm-6 py-2">
-                    <div class="card text-white bg-warning h-100">
+                    <div class="card text-white bg-warning">
                         <div class="card-body">
                             <div class="rotate">
                                 <i class="fa fa-sitemap nav-icon fa-4x"></i>
                             </div>
                             <h6 class="text-uppercase">Exams Taken</h6>
-                            <h1 class="display-4">{{$examsTakes}}</h1>
+                            <h1 class="display-4">{{$totalTestGiven}}</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-8 col-sm-8 py-2">
+                    <div class="card text-white bg-success">
+                        <div class="card-body">
+                            <div id="container"></div>
                         </div>
                     </div>
                 </div>
@@ -75,6 +82,73 @@
 </div>
 @endsection
 @section('scripts')
+@section('scripts')
+<script>
+    
+    Highcharts.setOptions({
+     colors: ['#50B432', '#f34807']
+    });
+    
+    Highcharts.chart('container', {
+
+title: {
+    text: 'Correct Answers VS Wrong Answers'
+},
+
+yAxis: {
+    title: {
+        text: 'Total Number of Questions Answered'
+    }
+},
+
+xAxis: {
+    accessibility: {
+        rangeDescription: 'Range: 1 to 1000'
+    }
+},
+
+legend: {
+    layout: 'vertical',
+    align: 'right',
+    verticalAlign: 'middle'
+},
+
+plotOptions: {
+    series: {
+        label: {
+            connectorAllowed: true
+        },
+        pointStart: 1
+    }
+},
+
+series: [{
+    name: 'Correct Answers',
+    data: <?php echo json_encode($correctAns); ?>
+}, {
+    name: 'Wrong Answers',
+    data: <?php echo json_encode($wrongAns); ?>
+}],
+
+responsive: {
+    rules: [{
+        condition: {
+            maxWidth: 500
+        },
+        chartOptions: {
+            legend: {
+                layout: 'horizontal',
+                align: 'center',
+                verticalAlign: 'bottom'
+            }
+        }
+    }]
+}
+
+});
+
+</script>
+@endsection
 @parent
 
 @endsection

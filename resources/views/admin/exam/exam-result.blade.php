@@ -17,7 +17,7 @@
             <h3>Test Analysis</h3>
         </div>
     </div>
-
+    <div id="container"></div>
     <div class="row" style="margin-bottom:15px">
         <div class="col-12">
             <div class="card-group" style="box-shadow: 0px 3px 8px 1px rgba(13, 28, 39, 0.6);">
@@ -180,6 +180,58 @@ $(document).ready(function() {
         $("#video").attr('src', $videoSrc);
     })
 
+
+    // ==============HightChart Implementation===================
+
+    const correctPercentage = ({{count($correctQuestionDetails)}} / {{count($correctQuestionDetails) + count($wrongQuestionDetails)}}) * 100;
+    const wrongPercentage = ({{count($wrongQuestionDetails)}} / {{count($correctQuestionDetails) + count($wrongQuestionDetails)}}) * 100;
+
+    Highcharts.setOptions({
+     colors: ['#f34807', '#50B432']
+    });
+    
+    Highcharts.chart('container', {
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+    },
+    title: {
+        text: 'Test Analysis'
+    },
+    tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+    },
+    accessibility: {
+        point: {
+            valueSuffix: '%'
+        }
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+            }
+        }
+    },
+    series: [{
+        name: 'Test Result',
+        colorByPoint: true,
+        data: [{
+            name: 'Wrong Answers',
+            y: wrongPercentage,
+            sliced: true,
+            selected: true
+        }, {
+            name: 'Correct Answers',
+            y: correctPercentage
+        }]
+    }]
+});
     // document ready  
 });
 </script>
