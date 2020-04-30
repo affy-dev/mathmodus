@@ -12,7 +12,11 @@
         </div>
     </div>
 
-    <h1 style="text-align:center">Test Analysis</h1>
+    <div class="row headingBox" style="margin-top: 10px;">
+        <div class="col-sm-12">
+            <h3>Test Analysis</h3>
+        </div>
+    </div>
 
     <div class="row" style="margin-bottom:15px">
         <div class="col-12">
@@ -42,7 +46,7 @@
 
     @if(count($wrongQuestionDetails) > 0)
     <div class="row">
-        <div class="col-sm" style="box-shadow: 0px 3px 8px 1px rgba(13, 28, 39, 0.6);background: #cbd2ce;padding: 15px;border-radius: 15px;">
+        <div class="col-sm" style="box-shadow: 0px 3px 8px 1px rgba(13, 28, 39, 0.6);padding: 15px;border-radius: 15px;">
             <h4>Wrong Answers</h4>
             @foreach($wrongQuestionDetails as $wrongDetails)
             <div class="wrong-ans" role="alert">
@@ -65,7 +69,7 @@
     @endif
     @if(count($correctQuestionDetails) > 0)
     <div class="row">
-        <div class="col-sm" style="box-shadow: 0px 3px 8px 1px rgba(13, 28, 39, 0.6);background: #cbd2ce;padding: 15px;border-radius: 15px;margin-top: 2%;">
+        <div class="col-sm" style="box-shadow: 0px 3px 8px 1px rgba(13, 28, 39, 0.6);padding: 15px;border-radius: 15px;margin-top: 2%;">
             <h4>Right Answers</h4>
             @foreach($correctQuestionDetails as $correctDetails)
             <div class="correct-ans" role="alert">
@@ -98,8 +102,10 @@
                 </button>
                 <!-- 16:9 aspect ratio -->
                 <div class="embed-responsive embed-responsive-16by9">
-                    <iframe class="embed-responsive-item" src="" id="video" allowscriptaccess="always"
-                        allow="autoplay"></iframe>
+                    <iframe class="embed-responsive-item" src="" id="video" allowscriptaccess="always" allow="autoplay"
+                        allowfullscreen="allowfullscreen" mozallowfullscreen="mozallowfullscreen"
+                        msallowfullscreen="msallowfullscreen" oallowfullscreen="oallowfullscreen"
+                        webkitallowfullscreen="webkitallowfullscreen"></iframe>
                 </div>
             </div>
         </div>

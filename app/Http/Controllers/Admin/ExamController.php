@@ -40,20 +40,23 @@ class ExamController extends Controller
 
     public function takeExam(Request $request, $courseId, $lessonId = null) {
         abort_unless(\Gate::allows('take_exam'), 403);
+        $testName = '';
+        $testFromLessonsTab = $lessonId != null ? true : false;
+        $courseDetails = !$testFromLessonsTab ? Courses::where('id', $courseId)->first() : Lessons::where('id', $lessonId)->first();
+        $testName = !$testFromLessonsTab ? $courseDetails->course_name : $courseDetails->lesson_name;
         if(!\Cache::has('courseId') && !\Cache::has('mcqs')) {
-            $testFromLessonsTab = $lessonId != null ? true : false;
             if(!$testFromLessonsTab) {
                 $lessons = Lessons::where('course_id', $courseId)->pluck('id')->random(self::QUESTION_COUNT)->toArray();
-                // $lessons = [1,2,4,5];
             } else {
                 $lessons =[$lessonId];
             }
             $mcqs = [];
             foreach ($lessons as $key => $lessionId) {
-                $questionsLimit = $testFromLessonsTab ? 25 : 1;
+                $questionsLimit = $testFromLessonsTab ? self::QUESTION_COUNT : 1;
                 $quest = Questions::where('lesson_id', $lessionId)->inRandomOrder()->limit($questionsLimit)->get()->toArray();
                 
                 $questionAnswerDetails = [];
+                $i=0;
                 foreach ($quest as $key => $value) {
                     $answerOptions = \DB::table('question_answer')
                     ->where('question_id', $value['id'])
@@ -62,11 +65,13 @@ class ExamController extends Controller
                     foreach ($answerOptions as $ans) {
                         $ansDet[] = $ans;
                     }
-                    $questionAnswerDetails['questionDetails'] = $value;
-                    $questionAnswerDetails['answerDetails'] = $ansDet;
+                    $questionAnswerDetails[$i]['questionDetails'] = $value;
+                    $questionAnswerDetails[$i]['answerDetails'] = $ansDet;
+                    $i++;
                 }
                 $mcqs[] = $questionAnswerDetails;
             }
+            
             $checkIfQuestionsAreEmpty = 0;
             foreach ($mcqs as $key => $value) {
                 if(count($value) != 0) {
@@ -102,7 +107,7 @@ class ExamController extends Controller
             return redirect()->route('admin.exams.index')->withErrors(['There are no questions available in this test']);
         }
         
-        return view('admin.exam.take-exam', compact('courseId', 'mcqs', 'testId'));
+        return view('admin.exam.take-exam', compact('courseId', 'mcqs', 'testId', 'testName'));
     }
 
     public function submitExam(Request $request) {
@@ -197,8 +202,7 @@ class ExamController extends Controller
         $wrongQuestionDetails = [];
         foreach($correctAnsIds as $correctQuestions) {
             $questDetails = Questions::where('id', $correctQuestions->question_id)->get()->toArray();
-            
-            $lessonVideo = Topics::where('id', $questDetails[0]['lesson_id'])->get()->toArray();
+            $lessonVideo = Topics::where('lession_id', $questDetails[0]['lesson_id'])->get()->toArray();
             $questDetails[0]['video_url'] = (count($lessonVideo) != 0) ? $lessonVideo['0']['video_url'] : 'not_available';
             
             // all the prerequisite topics are found here
@@ -218,7 +222,7 @@ class ExamController extends Controller
         }
         foreach($wrongAnsIds as $wrongQuestions) {
             $questDetails = Questions::where('id', $wrongQuestions->question_id)->get()->toArray();
-            $lessonVideo = Topics::where('id', $questDetails[0]['lesson_id'])->get()->toArray();
+            $lessonVideo = Topics::where('lession_id', $questDetails[0]['lesson_id'])->get()->toArray();
             $questDetails[0]['video_url'] = (count($lessonVideo) != 0) ? $lessonVideo['0']['video_url'] : 'not_available';
             // all the prerequisite topics are found here
             $topicPreRequisite = (count($lessonVideo) != 0) ? TopicPreRequisite::where('topic_id', $lessonVideo['0']['id'])->get()->toArray() : [];
@@ -257,20 +261,18 @@ class ExamController extends Controller
         if($testId != null && StudentTestResults::where('id', $testId)->exists()) {
             StudentTestResults::where('id', $testId)->delete();
         }
-        $topicVideos = $this->getAllTopicsVideosByCourseId($courseId);
+        $lessonVideos = $this->getAllTopicsVideosByCourseId($courseId);
         $showBackBtn = true;
         if((strpos(url()->previous(),'take-exam') !== false)) {
             $showBackBtn = false;
         }
-        return view('admin.exam.lesson-videos', compact('topicVideos', 'showBackBtn', 'courseId'));
+        return view('admin.exam.lesson-videos', compact('lessonVideos', 'showBackBtn', 'courseId'));
     }
 
 
     private function getAllTopicsVideosByCourseId($courseId) {
         if($courseId) {
-            $lessonIds = Lessons::where('course_id', $courseId)->pluck('id')->toArray();
-            $topicsDetails = Topics::whereIn('id', $lessonIds)->paginate(16);
-            return $topicsDetails;
+            return Lessons::where('course_id', $courseId)->paginate(15);
         }
         return [];
     }

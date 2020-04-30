@@ -16,7 +16,8 @@
             @foreach($courses as $course)
             <div class="card card-custom-css">
                 <div class="card-body">
-                    <h5 class="card-title" style="font-weight: 700;font-size: 18px;color: #D98938;">{{$course->course_name}}</h5>
+                    <h5 class="card-title" style="font-weight: 700;font-size: 18px;color: #D98938;">
+                        {{$course->course_name}}</h5>
                 </div>
                 <div class="card-footer">
                     <div class="row">
@@ -25,7 +26,8 @@
                                 class="btn btn-default testBtn-blue">Take Test</a>
                         </div>
                         <div class="col-5">
-                            <a href="{{ route('admin.exams.lessonVideos', $course->id) }}" class="btn btn-default courseBtn-red" >Course
+                            <a href="{{ route('admin.exams.lessonVideos', $course->id) }}"
+                                class="btn btn-default courseBtn-red">Course
                                 Videos</a>
                         </div>
                     </div>

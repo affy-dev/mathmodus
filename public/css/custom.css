@@ -68,6 +68,7 @@ table.dataTable thead .sorting_desc {
     color: #ff9933;
     background-color: transparent;
     border-color: #9ea6b0;
+    font-weight: bold;
 }
 
 .btn-default.focus,
@@ -103,7 +104,7 @@ table.dataTable thead .sorting_desc {
 }
 
 .questions {
-    background: #007fbe;
+    background: #D98938;
     color: #FFF;
     font-size: 22px;
     padding: 8px 30px;
@@ -308,4 +309,15 @@ input[type=radio] {
 
 .card-custom-css {
     box-shadow: 0px 3px 8px 1px rgba(13, 28, 39, 0.6);
+}
+
+.headingBox {
+    background: #d989384a;
+    margin: 0;
+    background: linear-gradient(140deg, #a55401 15%, #f9f2eb);
+    color: #fff;
+    border-radius: 10px;
+    padding: 25px;
+    margin-bottom: 15px;
+    box-shadow: 0px 7px 4px 0px rgba(48, 50, 50, 0.26);
 }

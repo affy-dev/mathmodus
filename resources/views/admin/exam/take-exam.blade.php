@@ -1,12 +1,7 @@
 @extends('layouts.admin')
 @section('content')
 <div class="privew">
-    <div class="col-sm" style="text-align:right">
-        <a class="btn btn-primary"
-            href="{{ route('admin.exams.lessonVideos', ['courseId' => $courseId, 'testId' => $testId]) }}">
-            Skip
-        </a>
-    </div>
+
     @if($errors->any())
     <div class="alert alert-danger">
         <strong>
@@ -14,19 +9,27 @@
         </strong>
     </div>
     @endif
+    <div class="row headingBox">
+        <div class="col-sm-12">
+            <h3>Test Name: [ {{$testName}} ]</h3>
+        </div>
+    </div>
+    <div class="col-sm" style="text-align:right">
+        <a class="btn btn-default"
+            href="{{ route('admin.exams.lessonVideos', ['courseId' => $courseId, 'testId' => $testId]) }}">
+            Skip Test
+        </a>
+    </div>
     <form action="{{ route("admin.exams.submitExam") }}" method="POST" id="testForm">
         @csrf
-        @foreach($mcqs as $ques)
+        @foreach($mcqs as $qDetails)
+        @foreach($qDetails as $ques)
         @if(count($ques) > 0)
         <?php 
-                        $quesDetails = $ques['questionDetails'];
-                        $ansDetails = $ques['answerDetails'];
-
-                        $questText = $quesDetails['question_text'];
-                        // $answerText = $quesDetails['answerText'];
-                        // $answerId = $quesDetails['answerId'];
-                        // $optAns = explode(',',$answerText);
-                    ?>
+                    $quesDetails = $ques['questionDetails'];
+                    $ansDetails = $ques['answerDetails'];
+                    $questText = $quesDetails['question_text'];
+                ?>
         <div class="questionsBox">
             <div class="questions">{{$questText}}</div>
             <ul class="answerList">
@@ -43,6 +46,7 @@
         </div>
         @endif
         @endforeach
+        @endforeach
         <div class="col-sm" style="margin-top: 2%;">
             <button class="btn btn-default btn-block" id="sbmtBtn" type="button" onClick="submitForm()"
                 style="padding: 10px;font-size: 30px;">Submit Test</button>
@@ -57,7 +61,6 @@ function submitForm() {
     let check = true;
     $("input:radio").each(function() {
         const name = $(this).attr("name");
-        console.log(name);
         if ($("input:radio[name=" + name + "]:checked").length == 0) {
             check = false;
         }
