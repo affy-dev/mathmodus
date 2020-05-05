@@ -44,6 +44,7 @@ class ExamController extends Controller
         $testFromLessonsTab = $lessonId != null ? true : false;
         $courseDetails = !$testFromLessonsTab ? Courses::where('id', $courseId)->first() : Lessons::where('id', $lessonId)->first();
         $testName = !$testFromLessonsTab ? $courseDetails->course_name : $courseDetails->lesson_name;
+        $imgSrcPath = !$testFromLessonsTab ? '../../../' : '../../../../../'; 
         if(!\Cache::has('courseId') && !\Cache::has('mcqs')) {
             if(!$testFromLessonsTab) {
                 $lessons = Lessons::where('course_id', $courseId)->pluck('id')->random(self::QUESTION_COUNT)->toArray();
@@ -107,7 +108,7 @@ class ExamController extends Controller
             return redirect()->route('admin.exams.index')->withErrors(['There are no questions available in this test']);
         }
         
-        return view('admin.exam.take-exam', compact('courseId', 'mcqs', 'testId', 'testName'));
+        return view('admin.exam.take-exam', compact('courseId', 'mcqs', 'testId', 'testName', 'imgSrcPath'));
     }
 
     public function submitExam(Request $request) {

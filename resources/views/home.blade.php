@@ -71,11 +71,12 @@
                 <div class="col-xl-8 col-sm-8 py-2">
                     <div class="card text-white bg-success">
                         <div class="card-body">
-                            <div id="container"></div>
+                            <div id="graphContainer"></div>
                         </div>
                     </div>
                 </div>
                 @endcan
+
             </div>
         </div>
     </div>
@@ -89,7 +90,7 @@
      colors: ['#50B432', '#f34807']
     });
     
-    Highcharts.chart('container', {
+    Highcharts.chart('graphContainer', {
 
 title: {
     text: 'Correct Answers VS Wrong Answers'

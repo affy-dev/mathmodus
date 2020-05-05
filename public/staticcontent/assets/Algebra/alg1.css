@@ -1,0 +1,402 @@
+/************************************
+	global
+************************************/
+div#lesson-wrapper {
+	font-size: 62.5%;
+	font-family: Verdana, Geneva, sans-serif;
+}
+
+div#lesson-wrapper p, div#lesson-wrapper ul, 
+div#lesson-wrapper ol, div#lesson-wrapper dl,
+div#lesson-wrapper blockquote, div#lesson-wrapper table {
+	font-size: 1.4em;
+	line-height: 1.5em;
+}
+
+div#lesson-wrapper p {
+	margin-top: 8px;
+	padding-left: 15px;
+	padding-right: 15px;
+}
+div#lesson-wrapper div#cont1 p, div#lesson-wrapper div#cont2 p,
+div#lesson-wrapper div#cont3 p, div#lesson-wrapper div#cont4 p,
+div#lesson-wrapper div#cont5 p {
+	padding-left: 0;
+	padding-right: 0;
+}
+div#lesson-wrapper blockquote {
+	background-color: #FAF0BC;
+	padding: 10px;
+	width: 79%;
+	margin-left: auto;
+	margin-right: auto;
+	border: 1px solid #C7753F;
+	-moz-box-shadow: 1px 1px 4px #888;
+	-webkit-box-shadow: 1px 1px 4px #888;
+	box-shadow: 1px 1px 4px #888;
+}
+div#lesson-wrapper div#obj {
+	font-size: inherit;
+	background-color: #FDFED8;
+	padding: 0 8px 10px;
+	margin: 0;
+	border: 1px solid #978B5E;
+}
+div#lesson-wrapper div#obj p {
+	padding-left: 25px;
+	padding-right: 25px;
+}
+div#lesson-wrapper div#obj ul {
+	margin-left: 0;
+}
+
+div#lesson-wrapper .indent10 {
+	margin-left: 10px;
+}
+div#lesson-wrapper .indent20 {
+	margin-left: 20px;
+}
+div#lesson-wrapper .indent30 {
+	margin-left: 30px;
+}
+div#lesson-wrapper .indent40 {
+	margin-left: 40px;
+}
+div#lesson-wrapper .indent50 {
+	margin-left: 50px;
+}
+div#lesson-wrapper .clear {
+	clear: both;
+}
+div#lesson-wrapper .jright {
+	text-align: right;
+}
+div#lesson-wrapper .phantom {
+	visibility: hidden;
+}
+div#lesson-wrapper .frac-lh {
+	line-height: 2.5em;
+}
+
+/************************************
+	headers
+************************************/
+div#lesson-wrapper h1 {
+	color: #787878;
+	font-size: 2em;
+	text-align: center;
+}
+div#lesson-wrapper h2 {
+	position: relative;
+	color: #3D3718;
+	font-size: 1.6em;
+	line-height: 2.2em;
+	background: #EEE20B url(h2-bg.png) top left repeat;
+	padding-left: 10px;
+	text-align: center;
+	border-left: 1px solid #978B5E;
+	border-top: 1px solid #978B5E;
+	border-right: 1px solid #978B5E;
+	-moz-box-shadow: 2px 2px 5px #888;
+	-webkit-box-shadow: 2px 2px 5px #888;
+	box-shadow: 2px 2px 5px #888;
+	margin-bottom: 0;
+	z-index: 100;
+}
+div#lesson-wrapper div#obj h3{
+	color: #565445;
+	margin-top: 0;
+	background: none;
+	padding: 5px 25px 0;
+	border-top: none;
+	border-bottom: 1px solid #F0EBA6;
+	-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+}
+div#lesson-wrapper h3 {
+	font-size: 1.6em;
+	text-transform: capitalize;
+	line-height: 2.2em;
+	background: #025488 url(h3-bg-blue.jpg) repeat-x top left;
+	margin-top: 40px;
+	padding-left: 45px;
+	color: white;
+	border-top: 2px solid #aaa3a2;
+	border-bottom: 2px solid #3f3836;
+	-moz-box-shadow: 2px 2px 5px #888;
+	-webkit-box-shadow: 2px 2px 5px #888;
+	box-shadow: 2px 2px 5px #888;
+}
+div#lesson-wrapper h4 {
+	font-size: 1.6em;
+	color: #466132;
+	margin-bottom: 0;
+}
+div#lesson-wrapper h5 {
+	font-size: 1.4em;
+	font-weight: normal;
+	border-bottom: 1px solid #AEAEAE;
+	padding-bottom: 8px;
+	margin-left: 15px;
+	margin-right: 15px;
+}
+div#lesson-wrapper .topic {
+	font-size: 1.1em;
+	font-weight: bold;
+	color: #44608A;
+}
+
+/************************************
+	lists
+************************************/
+div#lesson-wrapper ol, div#lesson-wrapper ul {
+	margin-left: 20px;
+	margin-bottom: 7px;
+}
+div#lesson-wrapper ol li {
+	margin-bottom: 7px;
+}
+div#lesson-wrapper ol li ol {
+	margin-top: 7px;
+	padding-left: 5px;
+}
+div#lesson-wrapper ol li ol {
+	margin-bottom: 20px;
+}
+div#lesson-wrapper ol.frac-lh li ol {
+	list-style-type: none;
+}
+div#lesson-wrapper ol li ul, div#lesson-wrapper ol li ol {
+	font-size: inherit;
+}
+ol#listnest-olul li ul {
+	list-style-type: disc;
+	font-size: inherit;
+	line-height: 1.1em;
+	margin-top: 5px;
+}
+div#lesson-wrapper dl {
+	margin-left: 40px;
+}
+div#lesson-wrapper dt {
+	margin-top: 10px;
+}
+div#lesson-wrapper ul#obj {
+	margin-top: 8px;
+}
+
+/************************************
+	tables
+************************************/
+div#lesson-wrapper table {
+	border-collapse: collapse;
+	margin: 35px 15px;
+}
+/* table 1 */
+div#lesson-wrapper .table1 td {
+	border: 1px solid #ccc;
+	padding: 8px;
+}
+/* table 2 */
+div#lesson-wrapper .table2 tr.header {
+	background-color: #518C63;
+	color: white;
+	font-weight: bold;
+}
+div#lesson-wrapper .table2 tr.header td {
+	text-align: center;
+}
+div#lesson-wrapper .table2.center tr td {
+	text-align: center;
+}
+div#lesson-wrapper .table2 td {
+	border: 1px solid #376F50;
+	padding: 8px;
+}
+
+/************************************
+	spacers
+************************************/
+div#lesson-wrapper .space15 {
+	height: 15px;
+}
+div#lesson-wrapper .space25 {
+	height: 25px;
+}
+div#lesson-wrapper .space35 {
+	height: 35px;
+}
+
+/************************************
+	colored text
+************************************/
+div#lesson-wrapper .blue {
+	font-weight: bold;
+	color: #193b6c;
+}
+div#lesson-wrapper .green {
+	color: green;
+}
+
+/************************************
+	containers
+************************************/
+/* container 1 */
+div#lesson-wrapper div#cont1, div#lesson-wrapper div#cont1 .body {
+	font-size: inherit;
+}
+div#lesson-wrapper div#cont1 {
+	border: 1px solid #B03945;
+	margin-top: 25px;
+	margin-left: auto;
+	margin-right: auto;
+	width: 80%;
+	-moz-box-shadow: 1px 1px 4px #888;
+	-webkit-box-shadow: 1px 1px 4px #888;
+	box-shadow: 1px 1px 4px #888;
+}
+div#lesson-wrapper div#cont1 .title {
+	font-size: 1.4em;
+	background-color: #208c5d;
+	color: white;
+	font-weight: bold;
+	padding: 10px;
+}
+div#lesson-wrapper div#cont1 .body {
+	padding: 10px 15px;
+	background-color: #F5FAF7;
+}
+div#lesson-wrapper div#cont1 .body p.directions {
+	font-weight: bold;
+}
+
+/* container 2 - Practice Problems */
+div#lesson-wrapper div#cont2, div#lesson-wrapper div#cont2 .body {
+	font-size: inherit;
+}
+div#lesson-wrapper div#cont2 {
+	border: 1px solid #C44E06;
+	margin-top: 35px;
+	margin-left: auto;
+	margin-right: auto;
+	width: 80%;
+	-moz-box-shadow: 1px 1px 4px #888;
+	-webkit-box-shadow: 1px 1px 4px #888;
+	box-shadow: 1px 1px 4px #888;
+}
+div#lesson-wrapper div#cont2 .title {
+	font-size: 1.4em;
+	background-color: #F1A743;
+	color: white;
+	font-weight: bold;
+	padding: 10px;
+	border-bottom: 1px solid #C44E06;
+}
+div#lesson-wrapper div#cont2 .body {
+	padding: 10px 15px;
+	background-color: #FAF2D3;
+}
+div#lesson-wrapper div#cont2 .body p.directions {
+	font-weight: bold;
+}
+
+/* container 3 - Closing Activity */
+div#lesson-wrapper div#cont3, div#lesson-wrapper div#cont3 .body {
+	font-size: inherit;
+}
+div#lesson-wrapper div#cont3 {
+	border: 1px solid #204316;
+	margin-left: auto;
+	margin-right: auto;
+	width: 80%;
+	-moz-box-shadow: 1px 1px 4px #888;
+	-webkit-box-shadow: 1px 1px 4px #888;
+	box-shadow: 1px 1px 4px #888;
+}
+div#lesson-wrapper div#cont3 .title {
+	font-size: 1.4em;
+	background-color: #193d6c;
+	color: white;
+	font-weight: bold;
+	padding: 10px;
+}
+div#lesson-wrapper div#cont3 .body {
+	padding: 10px 15px;
+	background-color: #E6F0F7;
+}
+div#lesson-wrapper div#cont3 .body p.directions {
+	font-weight: bold;
+}
+
+/* container 4 - Home Assignment */
+div#lesson-wrapper div#cont4, div#lesson-wrapper div#cont4 .body {
+	font-size: inherit;
+}
+div#lesson-wrapper div#cont4 {
+	border: 1px solid #204316;
+	margin-left: auto;
+	margin-right: auto;
+	width: 80%;
+	-moz-box-shadow: 1px 1px 4px #888;
+	-webkit-box-shadow: 1px 1px 4px #888;
+	box-shadow: 1px 1px 4px #888;
+}
+div#lesson-wrapper div#cont4 .title {
+	font-size: 1.4em;
+	background-color: #55AECC;
+	color: white;
+	font-weight: bold;
+	padding: 10px;
+}
+div#lesson-wrapper div#cont4 .body {
+	padding: 10px 15px;
+	background-color: #EBF2F5;
+}
+div#lesson-wrapper div#cont4 .body p.directions {
+	font-weight: bold;
+}
+
+/* container 5 - Vocabulary */
+div#lesson-wrapper div#cont5, div#lesson-wrapper div#cont5 .body {
+	font-size: inherit;
+}
+div#lesson-wrapper div#cont5 {
+	border: 1px solid #204316;
+	margin-left: auto;
+	margin-right: auto;
+	width: 80%;
+	-moz-box-shadow: 1px 1px 4px #888;
+	-webkit-box-shadow: 1px 1px 4px #888;
+	box-shadow: 1px 1px 4px #888;
+}
+div#lesson-wrapper div#cont5 .title {
+	font-size: 1.4em;
+	background-color: #DC3D5C;
+	color: white;
+	font-weight: bold;
+	padding: 10px;
+}
+div#lesson-wrapper div#cont5 .body {
+	padding: 10px 15px;
+	background-color: #FDEAF3;
+}
+div#lesson-wrapper div#cont5 .body p.directions {
+	font-weight: bold;
+}
+
+/************************************
+	images
+************************************/
+div#lesson-wrapper img {
+	max-width: 100%;
+	height: auto;
+}
+div#lesson-wrapper div.img-center {
+	text-align: center;
+}
+
+
+
+
+

@@ -31,7 +31,12 @@
                     $questText = $quesDetails['question_text'];
                 ?>
         <div class="questionsBox">
-            <div class="questions"><?php echo strip_tags($questText); ?></div>
+            <div class="questions">
+                <?php 
+                    $string = str_replace('src="../', 'src="'.$imgSrcPath.'', $questText);
+                    echo strip_tags($string, '<img><p><br><br>');
+                ?>
+            </div>
             <ul class="answerList">
                 @foreach($ansDetails as $ans)
                 <li>
