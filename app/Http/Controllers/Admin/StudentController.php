@@ -10,6 +10,7 @@ use App\Http\Requests\AssignPrincipalRequest;
 use App\School;
 use App\User;
 use App\Student;
+use App\Teacher;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
@@ -62,11 +63,13 @@ class StudentController extends Controller
                 $join->on('users.id', '=', 'role_user.user_id');
                 $join->where('role_user.role_id', self::STUDENT_ROLE);
             })
+            ->where('users.data_updated', 0)
             ->whereNull('users.deleted_at')
             ->get();
         
         $allSchools = School::get();
-        return view('admin.students.create', compact('gender', 'blood_group', 'users', 'allSchools'));
+        $allTeacher = Teacher::get();
+        return view('admin.students.create', compact('gender', 'blood_group', 'users', 'allSchools', 'allTeacher'));
     }
 
     public function store(Request $request)
@@ -75,6 +78,7 @@ class StudentController extends Controller
         $rules = [
             'user_id' => 'required|unique:students,user_id',
             'school_id' => 'required',
+            'teacher_id' => 'required',
             'dob' => 'required|min:10|max:10',
             'gender' => 'required|integer',
             'blood_group' => 'nullable',
@@ -93,9 +97,8 @@ class StudentController extends Controller
         $studentsData = $request->all();
         $studentsData['name'] = $userName->name;
         $studentsData['created_by'] = auth()->user()->id;
-        // dd($studentsData);
         $students = Student::create($studentsData);
-
+        User::where('id', $request->input('user_id'))->update(['data_updated'=>1]); // update that full details have been updated
         return redirect()->route('admin.students.index');
     }
 
@@ -202,8 +205,8 @@ class StudentController extends Controller
             $studentDOB = $value->studentDOB;
             $fatherName = $value->fatherName;
             $fatherPhone = $value->fatherPhone;
-            $studentGender = self::GENDER[$value->studentGender];
-            $studentBloodGroup = self::BLOOD_GROUP[$value->studentBloodGroup];
+            $studentGender = $value->studentGender ? self::GENDER[$value->studentGender] : 'N/A';
+            $studentBloodGroup = $value->studentBloodGroup ? self::BLOOD_GROUP[$value->studentBloodGroup] : 'N/A';
             $studentMothenName = $value->studentMothenName;
             $studentMotherPhoneNo = $value->studentMotherPhoneNo;
             $present_address = $value->present_address;

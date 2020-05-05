@@ -75,9 +75,9 @@
                                 {{ $teacher->school_name ?? '' }}
                             </td>
                             <td>
-                                <a class="btn btn-xs btn-default" href="{{ route('admin.teachers.assign-school', $teacher->userId) }}">
+                                <!-- <a class="btn btn-xs btn-default" href="{{ route('admin.teachers.assign-school', $teacher->userId) }}">
                                     Assign School
-                                </a>
+                                </a> -->
                                 @can('teachers_show')
                                     <a class="btn btn-xs btn-primary" href="{{ route('admin.teachers.show', $teacher->userId) }}">
                                         {{ trans('global.view') }}

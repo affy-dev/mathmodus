@@ -321,3 +321,27 @@ input[type=radio] {
     margin-bottom: 15px;
     box-shadow: 0px 7px 4px 0px rgba(48, 50, 50, 0.26);
 }
+
+.pagination>li>a,
+.pagination>li>span {
+    color: #CB520F;
+}
+
+.pagination>.active>a,
+.pagination>.active>a:focus,
+.pagination>.active>a:hover,
+.pagination>.active>span,
+.pagination>.active>span:focus,
+.pagination>.active>span:hover {
+    background-color: #CB520F;
+    border-color: #CB520F;
+}
+
+.page-item.active .page-link {
+    background-color: #CB520F;
+    border-color: #CB520F;
+}
+
+.page-link:hover {
+    color: #CB520F;
+}

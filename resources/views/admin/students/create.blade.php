@@ -40,6 +40,21 @@
                 @endif
             </div>
 
+            <div class="form-group {{ $errors->has('teacher_id') ? 'has-error' : '' }}">
+                <label for="teacher_id">Select Teacher*</label>
+                <select id="teacher_id" name="teacher_id" class="form-control">
+                    <option value="">--- Select Teacher ---</option>
+                    @foreach ($allTeacher as $key => $value)
+                        <option value="{{ $value->id }}" {{ old('teacher_id') == $value->id ? 'selected' : ''}}>{{ $value->name }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('teacher_id'))
+                    <em class="invalid-feedback" style="display:block">
+                        {{ $errors->first('teacher_id') }}
+                    </em>
+                @endif
+            </div>
+
             <div class="form-group {{ $errors->has('dob') ? 'has-error' : '' }}">
                 <label for="dob">{{ trans('global.student.fields.dob') }}*</label>
                 <input type="text" id="dob" name="dob" class="form-control date" value="{{ old('dob', isset($dob) ? $student->dob : '') }}">

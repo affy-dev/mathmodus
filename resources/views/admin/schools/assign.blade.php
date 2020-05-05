@@ -16,7 +16,7 @@
             @csrf
             <div class="form-group {{ $errors->has('roles') ? 'has-error' : '' }}">
             <input name="schoolId" type="hidden" value="{{$schoolId}}" />
-                <select name="user_id" id="user_id" class="form-control select2" >
+                <select name="principal_id" id="principal_id" class="form-control select2" >
                     <option value='0'>Select Principal</option>
                     @foreach($allPrincipals as $key => $value)
                         <option value={{ $value['id'] }} >

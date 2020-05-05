@@ -10,7 +10,7 @@
                     {{ trans('global.dashboard') }}
                 </a>
             </li>
-            @can('user_management_access')
+            
             <li class="nav-item nav-dropdown">
                 <a class="nav-link  nav-dropdown-toggle">
                     <i class="fas fa-users nav-icon">
@@ -19,6 +19,7 @@
                     {{ trans('global.userManagement.title') }}
                 </a>
                 <ul class="nav-dropdown-items">
+                    @can('permission_create')
                     <li class="nav-item">
                         <a href="{{ route("admin.permissions.index") }}" class="nav-link {{ request()->is('admin/permissions') || request()->is('admin/permissions/*') ? 'active' : '' }}">
                             <i class="fas fa-unlock-alt nav-icon">
@@ -27,6 +28,8 @@
                             {{ trans('global.permission.title') }}
                         </a>
                     </li>
+                    @endcan
+                    @can('role_create')
                     <li class="nav-item">
                         <a href="{{ route("admin.roles.index") }}" class="nav-link {{ request()->is('admin/roles') || request()->is('admin/roles/*') ? 'active' : '' }}">
                             <i class="fas fa-briefcase nav-icon">
@@ -35,6 +38,8 @@
                             {{ trans('global.role.title') }}
                         </a>
                     </li>
+                    @endcan
+                    @can('user_create')
                     <li class="nav-item">
                         <a href="{{ route("admin.users.index") }}" class="nav-link {{ request()->is('admin/users') || request()->is('admin/users/*') ? 'active' : '' }}">
                             <i class="fas fa-user nav-icon">
@@ -43,9 +48,9 @@
                             {{ trans('global.user.title') }}
                         </a>
                     </li>
+                    @endcan
                 </ul>
             </li>
-            @endcan
             @can('school_access')
             <li class="nav-item">
                 <a href="{{ route("admin.schools.index") }}" class="nav-link {{ request()->is('admin/schools') || request()->is('admin/schools/*') ? 'active' : '' }}">
@@ -82,7 +87,7 @@
                     <i class="fa fa-sitemap nav-icon">
 
                     </i>
-                    Exams
+                    Subjects
                 </a>
                 <ul class="nav-dropdown-items">
                     <li class="nav-item">
@@ -90,7 +95,7 @@
                             <i class="fa fa-sitemap nav-icon">
 
                             </i>
-                            Take Exam
+                            Choose Subject
                         </a>
                     </li>
                     <li class="nav-item">
@@ -98,7 +103,7 @@
                             <i class="fa fa-bar-chart nav-icon">
 
                             </i>
-                            Exams History
+                            History
                         </a>
                     </li>
                 </ul>

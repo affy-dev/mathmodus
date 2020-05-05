@@ -16,6 +16,8 @@ class School extends Model
         'school_address',
         'school_pincode',
         'school_phone',
+        'principal_id',
+        'created_by',
         'created_at',
         'updated_at',
     ];

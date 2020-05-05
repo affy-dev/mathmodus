@@ -32,8 +32,9 @@ class UsersController extends Controller
     public function store(StoreUserRequest $request)
     {
         abort_unless(\Gate::allows('user_create'), 403);
-
-        $user = User::create($request->all());
+        $inputData = $request->all();
+        $inputData['created_by'] = auth()->user()->id;
+        $user = User::create($inputData);
         $user->roles()->sync($request->input('roles', []));
 
         return redirect()->route('admin.users.index');

@@ -31,7 +31,7 @@
                     $questText = $quesDetails['question_text'];
                 ?>
         <div class="questionsBox">
-            <div class="questions">{{$questText}}</div>
+            <div class="questions"><?php echo strip_tags($questText); ?></div>
             <ul class="answerList">
                 @foreach($ansDetails as $ans)
                 <li>

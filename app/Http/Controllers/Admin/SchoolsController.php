@@ -18,7 +18,7 @@ class SchoolsController extends Controller
     {
         abort_unless(\Gate::allows('school_access'), 403);
         $schools = \DB::table('schools')
-            ->leftJoin('users', 'users.id', '=', 'schools.user_id')
+            ->leftJoin('users', 'users.id', '=', 'schools.principal_id')
             ->get(['schools.id as schoolId', 'users.id as userId', 'users.name as userName', 'schools.school_name', 'schools.school_phone']);
         return view('admin.schools.index', compact('schools'));
     }
@@ -33,8 +33,9 @@ class SchoolsController extends Controller
     public function store(StoreSchoolRequest $request)
     {
         abort_unless(\Gate::allows('school_create'), 403);
-
-        $school = School::create($request->all());
+        $inputData = $request->all();
+        $inputData['created_by'] = auth()->user()->id;
+        $school = School::create($inputData);
 
         return redirect()->route('admin.schools.index');
     }
@@ -85,14 +86,14 @@ class SchoolsController extends Controller
     }
 
     public function assignTeacher(AssignPrincipalRequest $request) {
-        if($request->user_id == 0) {
+        if($request->principal_id == 0) {
             Alert::error('Please select Principal first!', '');
             return redirect()->route('admin.schools.assignTeachers', $request->schoolId);
-        } else if(School::where('user_id', '=', $request->user_id)->exists()) {
+        } else if(School::where('principal_id', '=', $request->principal_id)->exists()) {
             Alert::error('Selected principal is already assigned!', '');
             return redirect()->route('admin.schools.assignTeachers', $request->schoolId);
         }
-        School::where('id', $request->schoolId)->update(['user_id' => $request->user_id]);
+        School::where('id', $request->schoolId)->update(['principal_id' => $request->principal_id]);
         Alert::success('Principal assigned successfully', '');
         return redirect()->route('admin.schools.index');
     }

@@ -8,9 +8,9 @@
         </div>
     </div>
     @endif
-    <div class="row justify-content-center" style="border-bottom: 1px solid #caccce;margin-bottom: 15px;">
-        <div class="col-4">
-            <h3>Course Videos</h3>
+    <div class="row headingBox" style="margin-top: 10px;">
+        <div class="col-sm-12">
+            <h3>Learning Videos</h3>
         </div>
     </div>
 
@@ -34,25 +34,24 @@
                     <?php
                     if( strpos($lessonDetails->video_url, ',') !== false ) {
                     ?>
-                    <button type="button" class="btn btn-primary testBtn-blue launch-video-popup" data-toggle="modal"
+                    <button type="button" class="btn btn-primary testBtn-blue launch-video-popup btn-block" data-toggle="modal"
                         data-target="#exampleModal" data-lesson_name='{{$lessonDetails->lesson_name}}'
                         data-vidoes="{{$lessonDetails->video_url}}">
-                        Click to study
+                        <i class="fas fa-play"></i> Watch
                     </button>
                     <?php 
                         } else {
                     ?>
-                    <button type="button" class="btn btn-warning video-btn testBtn-blue" data-toggle="modal"
+                    <button type="button" class="btn btn-warning video-btn testBtn-blue btn-block" data-toggle="modal"
                         data-src="{{$lessonDetails->video_url}}" data-target="#myModal"
                         data-misc_urls='{{$lessonDetails->misc_urls}}'>
-                        Click to Study
+                        <i class="fas fa-play"></i> Watch
                     </button>
                     <?php 
                         }
                     ?>
                     <a href="{{ route('admin.exams.takeexam', ['courseId' => $courseId, 'lessonId' => $lessonDetails->id]) }}"
-                        class="btn btn-default courseBtn-red">Take Test</a>
-
+                        class="btn btn-default courseBtn-red btn-block">Take Test</a>
                 </div>
             </div>
 
@@ -155,7 +154,7 @@ $(document).ready(function() {
         misc_urls.split(',').forEach((value) => {
             $('#miscGroupUrl').append('<a href="' + value +
                 '" target="_blank" class="list-group-item list-group-item-action flex-column align-items-start"><p class="mb-1">' +
-                (value ? value : 'No further Links attached for this lesson') + '</p></a>')
+                (value ? value : 'No further Links attached to this lesson') + '</p></a>')
         })
     });
 

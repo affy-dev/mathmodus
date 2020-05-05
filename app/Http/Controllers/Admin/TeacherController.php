@@ -59,10 +59,12 @@ class TeacherController extends Controller
                 $join->on('users.id', '=', 'role_user.user_id');
                 $join->where('role_user.role_id', self::TEACHER_ROLE);
             })
+            ->where('users.data_updated', 0)
             ->whereNull('users.deleted_at')
             ->get();
-
-        return view('admin.teachers.create', compact('gender', 'blood_group', 'users'));
+        
+        $allSchools = School::get();
+        return view('admin.teachers.create', compact('gender', 'blood_group', 'users', 'allSchools'));
     }
 
     public function store(Request $request)
@@ -70,6 +72,7 @@ class TeacherController extends Controller
         abort_unless(\Gate::allows('teachers_create'), 403);
         $rules = [
             'user_id' => 'required|unique:teachers,user_id',
+            'school_id' => 'required',
             'dob' => 'required|min:10|max:10',
             'gender' => 'required|integer',
             'email' => 'email|max:255|unique:teachers,email',
@@ -81,8 +84,9 @@ class TeacherController extends Controller
         $userName = User::find($request->input('user_id'));
         $teacherData = $request->all();
         $teacherData['name'] = $userName->name;
+        $teacherData['created_by'] = auth()->user()->id;
         Teacher::create($teacherData);
-
+        User::where('id', $request->input('user_id'))->update(['data_updated'=>1]); // update that full details have been updated
         return redirect()->route('admin.teachers.index');
     }
 

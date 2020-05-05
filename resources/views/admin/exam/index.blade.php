@@ -20,17 +20,10 @@
                         {{$course->course_name}}</h5>
                 </div>
                 <div class="card-footer">
-                    <div class="row">
-                        <div class="col-5">
-                            <a href="{{ route('admin.exams.takeexam', $course->id) }}"
-                                class="btn btn-default testBtn-blue">Take Test</a>
-                        </div>
-                        <div class="col-5">
-                            <a href="{{ route('admin.exams.lessonVideos', $course->id) }}"
-                                class="btn btn-default courseBtn-red">Course
-                                Videos</a>
-                        </div>
-                    </div>
+                    <a href="{{ route('admin.exams.takeexam', $course->id) }}"
+                        class="btn btn-default testBtn-blue btn-block">Diagnostic Test</a>
+                    <a href="{{ route('admin.exams.lessonVideos', $course->id) }}"
+                        class="btn btn-default courseBtn-red btn-block">Start Learning</a>
                 </div>
             </div>
             @endforeach

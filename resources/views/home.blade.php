@@ -63,7 +63,7 @@
                             <div class="rotate">
                                 <i class="fa fa-sitemap nav-icon fa-4x"></i>
                             </div>
-                            <h6 class="text-uppercase">Exams Taken</h6>
+                            <h6 class="text-uppercase">Lesons Completed</h6>
                             <h1 class="display-4">{{$totalTestGiven}}</h1>
                         </div>
                     </div>
