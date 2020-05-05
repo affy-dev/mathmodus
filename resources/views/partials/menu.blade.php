@@ -10,7 +10,7 @@
                     {{ trans('global.dashboard') }}
                 </a>
             </li>
-            
+            @can('user_management_access')
             <li class="nav-item nav-dropdown">
                 <a class="nav-link  nav-dropdown-toggle">
                     <i class="fas fa-users nav-icon">
@@ -18,6 +18,7 @@
                     </i>
                     {{ trans('global.userManagement.title') }}
                 </a>
+                
                 <ul class="nav-dropdown-items">
                     @can('permission_create')
                     <li class="nav-item">
@@ -51,6 +52,7 @@
                     @endcan
                 </ul>
             </li>
+            @endcan
             @can('school_access')
             <li class="nav-item">
                 <a href="{{ route("admin.schools.index") }}" class="nav-link {{ request()->is('admin/schools') || request()->is('admin/schools/*') ? 'active' : '' }}">
