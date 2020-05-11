@@ -57,7 +57,7 @@
                 </div>
                 @endcan
                 @can('exams_list')
-                <div class="col-xl-3 col-sm-6 py-2">
+                <!-- <div class="col-xl-3 col-sm-6 py-2">
                     <div class="card text-white bg-warning">
                         <div class="card-body">
                             <div class="rotate">
@@ -67,11 +67,32 @@
                             <h1 class="display-4">{{$totalTestGiven}}</h1>
                         </div>
                     </div>
-                </div>
-                <div class="col-xl-8 col-sm-8 py-2">
+                </div> -->
+                <div class="col-xl-6 col-sm-6 py-2">
                     <div class="card text-white bg-success">
                         <div class="card-body">
                             <div id="graphContainer"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6 col-sm-6 py-2">
+                    <div class="card text-white bg-success">
+                        <div class="card-body">
+                            <div id="columnChartDiv"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-12 col-sm-12 py-2">
+                    <div class="card text-white bg-success">
+                        <div class="card-body">
+                            <div id="correctAnsVsLessons"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-12 col-sm-12 py-2">
+                    <div class="card text-white bg-success">
+                        <div class="card-body">
+                            <div id="IncorrectAnsVsLessons"></div>
                         </div>
                     </div>
                 </div>
@@ -85,15 +106,16 @@
 @section('scripts')
 @section('scripts')
 <script>
-    
+    const setColors = ['#50B432', '#f34807'];
+
     Highcharts.setOptions({
-     colors: ['#50B432', '#f34807']
+     colors: setColors
     });
     
     Highcharts.chart('graphContainer', {
 
 title: {
-    text: 'Correct Answers VS Wrong Answers'
+    text: 'Correct Answers VS Incorrect Answers'
 },
 
 yAxis: {
@@ -127,7 +149,7 @@ series: [{
     name: 'Correct Answers',
     data: <?php echo json_encode($correctAns); ?>
 }, {
-    name: 'Wrong Answers',
+    name: 'Incorrect Answers',
     data: <?php echo json_encode($wrongAns); ?>
 }],
 
@@ -146,6 +168,122 @@ responsive: {
     }]
 }
 
+});
+
+// ===============Column Comparison Chart==================
+Highcharts.setOptions({
+    lang: {
+    thousandsSep: ' '
+  },
+  colors: setColors
+})
+Highcharts.chart('columnChartDiv', {
+    chart: {
+        type: 'column',
+        zoomType: 'y',
+    },
+    title: {
+        text: 'Correct Answer VS Incorrect Answer / Course'
+    },
+    xAxis: {
+        categories: <?php echo json_encode($courseNames) ?>,
+        crosshair: true
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Count'
+        }
+    },
+    tooltip: {
+        shared: true,
+        useHTML: true
+    },
+    plotOptions: {
+        column: {
+            pointPadding: 0.2,
+            borderWidth: 0
+        }
+    },
+    series: <?php echo $mapCorrIncorrWithCourse; ?>
+});
+
+
+// ===============Correct Column Comparison Chart ==================
+Highcharts.setOptions({
+    lang: {
+    thousandsSep: ' '
+  },
+  colors: setColors
+})
+Highcharts.chart('correctAnsVsLessons', {
+    chart: {
+        type: 'column',
+        zoomType: 'y',
+    },
+    title: {
+        text: 'Correct Answer / All Available Lessons'
+    },
+    xAxis: {
+        categories: <?php echo json_encode($CorrectLessonsName) ?>,
+        crosshair: true
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Count'
+        }
+    },
+    tooltip: {
+        shared: true,
+        useHTML: true
+    },
+    plotOptions: {
+        column: {
+            pointPadding: 0.2,
+            borderWidth: 0
+        }
+    },
+    series: <?php echo json_encode($finalCorrectMapInfo); ?>
+});
+
+
+// ===============InCorrect Column Comparison Chart ==================
+Highcharts.setOptions({
+    lang: {
+    thousandsSep: ' '
+  },
+  colors: ['#f34807']
+})
+Highcharts.chart('IncorrectAnsVsLessons', {
+    chart: {
+        type: 'column',
+        zoomType: 'y',
+    },
+    title: {
+        text: 'Incorrect Answer / All Available Lessons'
+    },
+    xAxis: {
+        categories: <?php echo json_encode($IncorrectLessonsName) ?>,
+        crosshair: true
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Count'
+        }
+    },
+    tooltip: {
+        shared: true,
+        useHTML: true
+    },
+    plotOptions: {
+        column: {
+            pointPadding: 0.2,
+            borderWidth: 0
+        }
+    },
+    series: <?php echo json_encode($finalInCorrectMapInfo); ?>
 });
 
 </script>

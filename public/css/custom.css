@@ -345,3 +345,10 @@ input[type=radio] {
 .page-link:hover {
     color: #CB520F;
 }
+
+.exam-score {
+    background: #fff;
+    box-shadow: 0 25px 75px rgba(16, 30, 54, .25);
+    border-radius: 6px;
+    padding: 30px 60px 26px;
+}

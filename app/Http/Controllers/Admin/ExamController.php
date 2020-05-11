@@ -21,7 +21,7 @@ use Carbon\Carbon;
 
 class ExamController extends Controller
 {
-    private const QUESTION_COUNT = 15;
+    private const QUESTION_COUNT = 10;
 
     const TEST_STATUS = [
         'PENDING' => 'pending',
@@ -276,7 +276,8 @@ class ExamController extends Controller
         if((strpos(url()->previous(),'take-exam') !== false)) {
             $showBackBtn = false;
         }
-        return view('admin.exam.lesson-videos', compact('lessonVideos', 'showBackBtn', 'courseId'));
+        $courseName = Courses::where('id', $courseId)->first();
+        return view('admin.exam.lesson-videos', compact('lessonVideos', 'showBackBtn', 'courseId', 'courseName'));
     }
 
 

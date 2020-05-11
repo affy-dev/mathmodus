@@ -10,7 +10,7 @@
     @endif
     <div class="row headingBox" style="margin-top: 10px;">
         <div class="col-sm-12">
-            <h3>Learning Videos</h3>
+            <h3>Learning Videos [ {{$courseName->course_name}} ]</h3>
         </div>
     </div>
 
@@ -149,6 +149,16 @@ $(document).ready(function() {
     // Gets the video src from the data-src on each button
     let videoSrc;
     $('.video-btn').click(function() {
+        if ($(this).data("src") === '') {
+            swal({
+                title: "Error!",
+                text: "Video Not Available!",
+                icon: "error",
+                buttons: false,
+            });
+            return false;
+        }
+
         videoSrc = 'https://www.youtube.com/embed/' + $(this).data("src");
         const misc_urls = $(this).data("misc_urls");
         misc_urls.split(',').forEach((value) => {
