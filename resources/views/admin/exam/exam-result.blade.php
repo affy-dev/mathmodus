@@ -72,7 +72,9 @@
                     </div>
                     <div style="width:100%;margin-bottom: 4%;">
                         <button type="button" class="btn btn-default video-btn" data-toggle="modal"
-                            data-src="{{$wrongDetails['video_url']}}" data-target="#videoModal">
+                            data-src="{{$wrongDetails['video_url']}}" 
+                            data-target="#videoModal"
+                            data-misc_urls="{{$wrongDetails['misc_urls']}}">
                             Topic Video
                         </button>
                         <button type="button" class="btn btn-default prerequisiteBtn" data-toggle="modal"
@@ -112,7 +114,9 @@
                     </div>
                     <div style="width:100%;margin-bottom: 4%;">
                         <button type="button" class="btn btn-default video-btn" data-toggle="modal"
-                            data-src="{{$correctDetails['video_url']}}" data-target="#videoModal">
+                            data-src="{{$correctDetails['video_url']}}" 
+                            data-target="#videoModal" 
+                            data-misc_urls="{{$correctDetails['misc_urls']}}">
                             Topic Video
                         </button>
                         <button type="button" class="btn btn-default prerequisiteBtn" data-toggle="modal"
@@ -162,6 +166,9 @@
                         msallowfullscreen="msallowfullscreen" oallowfullscreen="oallowfullscreen"
                         webkitallowfullscreen="webkitallowfullscreen"></iframe>
                 </div>
+                <div class="list-group" id="miscGroupUrl" style="margin-top:20px">
+
+                </div>
             </div>
         </div>
     </div>
@@ -186,13 +193,14 @@ function openMultipleVideos(obj) {
         // a poor man's stop video
         $("#video").attr('src', videoSrc);
     })
-    // $("#video").attr('src', videoSrc + "?autoplay=1&amp;modestbranding=1&amp;showinfo=0");
 }
 
 $(document).ready(function() {
             // Gets the video src from the data-src on each button
             var $videoSrc;
+            
             $('.video-btn').click(function() {
+                $('#miscGroupUrl').html('');
                 $videoSrc = $(this).data("src");
                 if ($videoSrc == 'not_available') {
                     swal({
@@ -203,6 +211,12 @@ $(document).ready(function() {
                     });
                     return false;
                 }
+                const misc_urls = $(this).data("misc_urls");
+                misc_urls.split(',').forEach((value) => {
+                    $('#miscGroupUrl').append('<a href="' + value +
+                        '" target="_blank" class="list-group-item list-group-item-action flex-column align-items-start"><p class="mb-1">' +
+                        (value ? value : 'No further Links attached to this lesson') + '</p></a>')
+                })
             });
 
             let content;
@@ -225,7 +239,6 @@ $(document).ready(function() {
                 }
                 $('#modalContent').html(finalContent);
             });
-
 
             // when the modal is opened autoplay it  
             $('#videoModal').on('shown.bs.modal', function(e) {

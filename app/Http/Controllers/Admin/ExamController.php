@@ -215,6 +215,7 @@ class ExamController extends Controller
             $questDetails = Questions::where('id', $correctQuestions->question_id)->get()->toArray();
             $lessonVideo = Topics::where('lession_id', $questDetails[0]['lesson_id'])->get()->toArray();
             $questDetails[0]['video_url'] = (count($lessonVideo) != 0) ? $lessonVideo['0']['video_url'] : 'not_available';
+            $questDetails[0]['misc_urls'] = (count($lessonVideo) != 0) ? $lessonVideo['0']['misc_urls'] : 'not_available';
             
             // all the prerequisite topics are found here
             $topicPreRequisite = (count($lessonVideo) != 0) ? TopicPreRequisite::where('topic_id', $lessonVideo['0']['id'])->get()->toArray() : [];
@@ -234,6 +235,7 @@ class ExamController extends Controller
             $questDetails = Questions::where('id', $wrongQuestions->question_id)->get()->toArray();
             $lessonVideo = Topics::where('lession_id', $questDetails[0]['lesson_id'])->get()->toArray();
             $questDetails[0]['video_url'] = (count($lessonVideo) != 0) ? $lessonVideo['0']['video_url'] : 'not_available';
+            $questDetails[0]['misc_urls'] = (count($lessonVideo) != 0) ? $lessonVideo['0']['misc_urls'] : 'not_available';
             // all the prerequisite topics are found here
             $topicPreRequisite = (count($lessonVideo) != 0) ? TopicPreRequisite::where('topic_id', $lessonVideo['0']['id'])->get()->toArray() : [];
             $preRequisiteIds = '';
@@ -248,6 +250,7 @@ class ExamController extends Controller
             $questDetails[0]['topic_pre_requisite'] = $topicPreRequisiteArray;
             $wrongQuestionDetails[] = $questDetails[0];
         }
+        
         return [
             'correctQuestionDetails' => $correctQuestionDetails,
             'wrongQuestionDetails'   => $wrongQuestionDetails
