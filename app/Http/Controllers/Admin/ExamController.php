@@ -188,6 +188,7 @@ class ExamController extends Controller
         if((strpos(url()->previous(),'take-exam') !== false)) {
             $showBackBtn = false;
         }
+        
         return view('admin.exam.exam-result', compact('correctQuestionDetails', 'wrongQuestionDetails', 'showBackBtn'));
     }
 
@@ -218,16 +219,15 @@ class ExamController extends Controller
             // all the prerequisite topics are found here
             $topicPreRequisite = (count($lessonVideo) != 0) ? TopicPreRequisite::where('topic_id', $lessonVideo['0']['id'])->get()->toArray() : [];
             $preRequisiteIds = '';
+            $topicPreRequisiteArray = [];
             foreach($topicPreRequisite as $preRequisite) {
                 $topicName = Topics::where('id', $preRequisite['pre_requisite_topic_id'])->get()->toArray();
                 if(!$topicName)
                     continue;
 
-                $fullTopicName = $topicName[0]['topic_name'];
-                $preRequisiteIds.=','.$fullTopicName;
+                $topicPreRequisiteArray[$topicName[0]['topic_name']] = $topicName[0]['video_url'];
             }
-            $questDetails[0]['topic_pre_requisite'] = !empty($preRequisiteIds) ? substr($preRequisiteIds, 1) : '';
-
+            $questDetails[0]['topic_pre_requisite'] = $topicPreRequisiteArray;
             $correctQuestionDetails[] = $questDetails[0];
         }
         foreach($wrongAnsIds as $wrongQuestions) {
@@ -237,15 +237,15 @@ class ExamController extends Controller
             // all the prerequisite topics are found here
             $topicPreRequisite = (count($lessonVideo) != 0) ? TopicPreRequisite::where('topic_id', $lessonVideo['0']['id'])->get()->toArray() : [];
             $preRequisiteIds = '';
+            $topicPreRequisiteArray = [];
             foreach($topicPreRequisite as $preRequisite) {
                 $topicName = Topics::where('id', $preRequisite['pre_requisite_topic_id'])->get()->toArray();
                 if(!$topicName)
                     continue;
-
-                $fullTopicName = $topicName[0]['topic_name'];
-                $preRequisiteIds.=','.$fullTopicName;
+                
+                $topicPreRequisiteArray[$topicName[0]['topic_name']] = $topicName[0]['video_url'];
             }
-            $questDetails[0]['topic_pre_requisite'] = !empty($preRequisiteIds) ? substr($preRequisiteIds, 1) : '';
+            $questDetails[0]['topic_pre_requisite'] = $topicPreRequisiteArray;
             $wrongQuestionDetails[] = $questDetails[0];
         }
         return [

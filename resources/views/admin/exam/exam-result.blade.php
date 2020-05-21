@@ -72,11 +72,11 @@
                     </div>
                     <div style="width:100%;margin-bottom: 4%;">
                         <button type="button" class="btn btn-default video-btn" data-toggle="modal"
-                            data-src="{{$wrongDetails['video_url']}}" data-target="#myModal">
+                            data-src="{{$wrongDetails['video_url']}}" data-target="#videoModal">
                             Topic Video
                         </button>
                         <button type="button" class="btn btn-default prerequisiteBtn" data-toggle="modal"
-                            data-text="{{$wrongDetails['topic_pre_requisite']}}" data-target="#exampleModal">
+                            data-text="{{json_encode($wrongDetails['topic_pre_requisite'])}}" data-target="#preRequisiteModal">
                             Pre-Requisuite Topic
                         </button>
                     </div>
@@ -112,11 +112,11 @@
                     </div>
                     <div style="width:100%;margin-bottom: 4%;">
                         <button type="button" class="btn btn-default video-btn" data-toggle="modal"
-                            data-src="{{$correctDetails['video_url']}}" data-target="#myModal">
+                            data-src="{{$correctDetails['video_url']}}" data-target="#videoModal">
                             Topic Video
                         </button>
                         <button type="button" class="btn btn-default prerequisiteBtn" data-toggle="modal"
-                            data-text="{{$correctDetails['topic_pre_requisite']}}" data-target="#exampleModal">
+                            data-text="{{json_encode($correctDetails['topic_pre_requisite'])}}" data-target="#preRequisiteModal">
                             Pre-Requisuite Topic
                         </button>
                     </div>
@@ -128,8 +128,27 @@
     </div>
 </div>
 
+
+<!--Content Modal -->
+<div class="modal fade" id="preRequisiteModal" tabindex="-1" role="dialog" aria-labelledby="preRequisiteModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="preRequisiteModalLabel">Pre-Requisite Topics</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalContent">
+                ...
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Video Modal Popup -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="preRequisiteModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body">
@@ -149,26 +168,27 @@
 </div>
 <!-- Ends here Video Modal Popup -->
 
-<!--Content Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Pre-Requisite Topics</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body" id="modalContent">
-                ...
-            </div>
-        </div>
-    </div>
-</div>
 
 @section('scripts')
 <script>
+function openMultipleVideos(obj) {
+    const videoSrc = obj.getAttribute('data-src');
+    
+    $('#videoModal').on('shown.bs.modal', function(e) {
+        // $('#preRequisiteModal').modal('hide');
+        // set the video src to autoplay and not to show related video. Youtube related video is like a box of chocolates... you never know what you're gonna get
+        $("#video").attr('src', videoSrc + "?autoplay=1&amp;modestbranding=1&amp;showinfo=0");
+    })
+
+    // stop playing the youtube video when I close the modal
+    $('#videoModal').on('hide.bs.modal', function(e) {
+        $('#miscGroupUrl').html('');
+        // a poor man's stop video
+        $("#video").attr('src', videoSrc);
+    })
+    // $("#video").attr('src', videoSrc + "?autoplay=1&amp;modestbranding=1&amp;showinfo=0");
+}
+
 $(document).ready(function() {
             // Gets the video src from the data-src on each button
             var $videoSrc;
@@ -188,98 +208,92 @@ $(document).ready(function() {
             let content;
             $('.prerequisiteBtn').click(function() {
                 content = $(this).data("text");
-                const contentArr = content ? content.split(',') : false;
-                let finalContent = '';
-                if (contentArr) {
-                    contentArr.forEach((item, index) => {
-                        finalContent += '<p>' + item + '</p>';
+                if (Array.isArray(content) &&  content.length==0) {
+                    swal({
+                        title: "Error!",
+                        text: "Topic Pre-requisites Not Available!",
+                        icon: "error",
+                        buttons: false,
                     });
-                } else {
-                    finalContent = 'Not available'
+                    return false;
                 }
-
-                const modalContent = $('#modalContent');
-                modalContent.html(finalContent);
+                let finalContent = '';
+                if (content) {
+                    for(let topicName in content) {
+                    	finalContent += '<button type="button" class="btn btn-warning video-btn testBtn-blue" onClick="openMultipleVideos(this)" data-toggle="modal" data-src="' + content[topicName] + '" data-target="#videoModal" style="margin-bottom: 10px;"><i class="fas fa-play"></i> '+topicName+'</button><br>';
+                    }
+                }
+                $('#modalContent').html(finalContent);
             });
 
 
             // when the modal is opened autoplay it  
-            $('#myModal').on('shown.bs.modal', function(e) {
-
+            $('#videoModal').on('shown.bs.modal', function(e) {
                 // set the video src to autoplay and not to show related video. Youtube related video is like a box of chocolates... you never know what you're gonna get
                 $("#video").attr('src', $videoSrc + "?autoplay=1&amp;modestbranding=1&amp;showinfo=0");
             })
 
             // stop playing the youtube video when I close the modal
-            $('#myModal').on('hide.bs.modal', function(e) {
+            $('#videoModal').on('hide.bs.modal', function(e) {
                 // a poor man's stop video
                 $("#video").attr('src', $videoSrc);
             })
 
 
-            // ==============HightChart Implementation===================
 
-            const correctPercentage = ({
-                    {
-                        count($correctQuestionDetails)
+// ==============HightChart Implementation===================
+
+    const correctPercentage = ({{count($correctQuestionDetails)}} / {{count($correctQuestionDetails) + count($wrongQuestionDetails)}}) * 100;
+    const wrongPercentage = ({{count($wrongQuestionDetails)}} / {{count($correctQuestionDetails) + count($wrongQuestionDetails)}}) * 100;
+
+        Highcharts.setOptions({
+            colors: ['#f34807', '#50B432']
+        });
+
+        Highcharts.chart('container', {
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie'
+            },
+            title: {
+                text: 'Test Analysis'
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</br>'
+            },
+            accessibility: {
+                point: {
+                    valueSuffix: '%'
+                }
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %'
                     }
                 }
-                / {{count($correctQuestionDetails) + count($wrongQuestionDetails)}}) * 100;
-                const wrongPercentage = ({
-                        {
-                            count($wrongQuestionDetails)
-                        }
-                    }
-                    / {{count($correctQuestionDetails) + count($wrongQuestionDetails)}}) * 100;
-
-                    Highcharts.setOptions({
-                        colors: ['#f34807', '#50B432']
-                    });
-
-                    Highcharts.chart('container', {
-                        chart: {
-                            plotBackgroundColor: null,
-                            plotBorderWidth: null,
-                            plotShadow: false,
-                            type: 'pie'
-                        },
-                        title: {
-                            text: 'Test Analysis'
-                        },
-                        tooltip: {
-                            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-                        },
-                        accessibility: {
-                            point: {
-                                valueSuffix: '%'
-                            }
-                        },
-                        plotOptions: {
-                            pie: {
-                                allowPointSelect: true,
-                                cursor: 'pointer',
-                                dataLabels: {
-                                    enabled: true,
-                                    format: '<b>{point.name}</b>: {point.percentage:.1f} %'
-                                }
-                            }
-                        },
-                        series: [{
-                            name: 'Test Result',
-                            colorByPoint: true,
-                            data: [{
-                                name: 'Incorrect Answers',
-                                y: wrongPercentage,
-                                sliced: true,
-                                selected: true
-                            }, {
-                                name: 'Correct Answers',
-                                y: correctPercentage
-                            }]
-                        }]
-                    });
-                    // document ready  
-                });
+            },
+            series: [{
+                name: 'Test Result',
+                colorByPoint: true,
+                data: [{
+                    name: 'Incorrect Answers',
+                    y: wrongPercentage,
+                    sliced: true,
+                    selected: true
+                }, {
+                    name: 'Correct Answers',
+                    y: correctPercentage
+                }]
+            }]
+        });
+        // document ready  
+    });
 </script>
 @endsection
 @endsection
