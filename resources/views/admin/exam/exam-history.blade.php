@@ -51,6 +51,7 @@
                     @endforeach
                 </tbody>
             </table>
+            {{ $testHistory->links() }}
         </div>
     </div>
 </div>

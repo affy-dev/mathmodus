@@ -259,7 +259,7 @@ class ExamController extends Controller
 
     public function getHistory() {
         abort_unless(\Gate::allows('exam_history'), 403);
-        $testHistory = StudentTestResults::where('user_id', auth()->user()->id)->where('test_status', self::TEST_STATUS['COMPLETED'])->orderBy('id', 'desc')->get();
+        $testHistory = StudentTestResults::where('user_id', auth()->user()->id)->where('test_status', self::TEST_STATUS['COMPLETED'])->orderBy('id', 'desc')->paginate(10);
         $courses = Courses::all();
         $availableCourses = [];
         foreach ($courses->toArray() as $key => $value) {

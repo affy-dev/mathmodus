@@ -48,13 +48,13 @@
     <div id="accordion">
         @if(count($wrongQuestionDetails) > 0)
         <div class="card">
-            <div class="card-header" id="headingOne">
+            <div class="card-header" id="headingOne" style="background: #D98938;">
                 <h5 class="mb-0">
                     <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true"
-                        aria-controls="collapseOne" style="font-weight:bold" title="Click to see the details">
+                        aria-controls="collapseOne" style="font-weight:bold;color:#fff" title="Click to see the details">
                         Incorrect Answers
                     </button>
-                    <span style="float: right;margin-top: 6px;cursor:pointer;color: #D98938;" data-toggle="collapse"
+                    <span style="float: right;margin-top: 6px;cursor:pointer;color: #fff;" data-toggle="collapse"
                         data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"
                         title="Click to see the details"><i class="fas fa-arrow-down"></i></span>
                 </h5>
@@ -89,14 +89,14 @@
         @endif
         @if(count($correctQuestionDetails) > 0)
         <div class="card">
-            <div class="card-header" id="headingTwo">
+            <div class="card-header" id="headingTwo" style="background: #4dbd74;">
                 <h5 class="mb-0">
                     <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo"
-                        aria-expanded="false" aria-controls="collapseTwo" style="font-weight:bold"
+                        aria-expanded="false" aria-controls="collapseTwo" style="font-weight:bold;color:#fff"
                         title="Click to see the details">
                         Correct Answers
                     </button>
-                    <span style="float: right;margin-top: 6px;cursor:pointer;color: #D98938;" data-toggle="collapse"
+                    <span style="float: right;margin-top: 6px;cursor:pointer;color: #fff;" data-toggle="collapse"
                         data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"
                         title="Click to see the details"><i class="fas fa-arrow-down"></i></span>
                 </h5>
