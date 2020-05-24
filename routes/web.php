@@ -6,7 +6,7 @@ Route::get('/', 'Frontend\HomeController@index')->name('frontend.home');
 Route::get('/how-it-works', 'Frontend\HomeController@howItWorks')->name('frontend.howitworks');
 Route::get('/contact-us', 'Frontend\HomeController@contactUs')->name('frontend.contactus');
 
-Route::redirect('/home', '/admin');
+// Route::redirect('/home', '/admin/exams');
 
 Auth::routes(['register' => false]);
 

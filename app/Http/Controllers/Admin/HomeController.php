@@ -17,6 +17,7 @@ class HomeController
 
     public function index()
     {
+        abort_unless(\Gate::allows('access_dashboard'), 403);
         $countPrincipal = User::whereHas('roles', function($q){$q->whereIn('id', [env('USER_ROLES_PRINCIPAL', '2')]);})->count();
         $countStudent = User::whereHas('roles', function($q){$q->whereIn('id', [env('USER_ROLES_STUDENTS', '3')]);})->count();
         $countTeacher = User::whereHas('roles', function($q){$q->whereIn('id', [env('USER_ROLES_TEACHER', '4')]);})->count();
@@ -25,8 +26,6 @@ class HomeController
         $examsTaken = StudentTestResults::where('user_id', auth()->user()->id)->where('test_status', self::TEST_STATUS['COMPLETED'])->get();
         $totalTestGiven = count($examsTaken);
         
-
-
         $courses = Courses::all();
         $availableCourses = [];
         foreach ($courses->toArray() as $key => $value) {
@@ -85,13 +84,19 @@ class HomeController
             }
             $c++;
         }
+
+        $finalCorrectMapInfo = [];
+        $finalInCorrectMapInfo = [];
+        if(count($mapDataWithLessons) > 0) {
+            $finalCorrectMapInfo[] = $mapDataWithLessons[0];
+            $finalInCorrectMapInfo[] = $mapDataWithLessons[1];
+        }
         
-        $finalCorrectMapInfo[] = $mapDataWithLessons[0];
-        $finalInCorrectMapInfo[] = $mapDataWithLessons[1];
-        // dd($finalCorrectMapInfo);
+        
         //===================== Graph by Courses ========================
         $correctArr = [];
         $wrongArr = [];
+        $courseNames = [];
         foreach($resultCount as $courseId => $ans) {
             $courseNames[] = $availableCourses[$courseId];
             $correctArr[] = array_sum($ans['correct']);

@@ -26,14 +26,24 @@
                                 <h3>Sign In</h3>
                                 <div class="lms_login_body">
                                     <div class="form-group">
-                                        <label for="login_email">Email address</label>
-                                        <input name="email" type="text" class="form-control"
-                                            placeholder="{{ trans('global.login_email') }}">
+                                        <label for="login_email">Email address or Username</label>
+                                        <input name="identity" type="text" class="form-control"
+                                            placeholder="{{ trans('global.login_email_username') }}">
+                                        @if($errors->has('identity'))
+                                        <em class="invalid-feedback" style="color: #fb0000;">
+                                            {{ $errors->first('identity') }}
+                                        </em>
+                                        @endif
                                     </div>
                                     <div class="form-group">
                                         <label for="login_pass">Password</label>
                                         <input name="password" type="password" class="form-control"
                                             placeholder="{{ trans('global.login_password') }}">
+                                        @if($errors->has('password'))
+                                        <em class="invalid-feedback" style="color: #fb0000;">
+                                            {{ $errors->first('password') }}
+                                        </em>
+                                        @endif
                                     </div>
                                     <div class="checkbox">
                                         <label>

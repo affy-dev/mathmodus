@@ -1,7 +1,7 @@
 <!--Header start-->
 <header id="lms_header" style="background:#000">
     <div class="container">
-        <h1 class=""> <a href="/"> <img alt="Porto" data-sticky-width="82" style="height: 80px;width: 138px;" data-sticky-height="40" src="{{ asset('frontend/images/new-logo.png') }}"> </a> </h1>
+        <h1 class=""> <a href="/"> <img alt="Porto" data-sticky-width="82" style="height: 100px;width: 160px;" data-sticky-height="40" src="{{ asset('frontend/images/new-logo.png') }}"> </a> </h1>
         <button class="lms_menu_toggle btn-responsive-nav btn-inverse" data-toggle="collapse"
             data-target=".nav-main-collapse"><i class="fa fa-bars"></i> </button>
     </div>

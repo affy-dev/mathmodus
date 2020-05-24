@@ -16,6 +16,7 @@
     <link rel="icon" type="image/ico" href="{{asset('frontend/mathmodus.ico')}}" />
     <!-- main css -->
     <link rel="stylesheet" href="{{ asset('frontend/css/main.css') }}" media="screen" />
+    <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}" media="screen" />
     <title>{{ trans('global.site_title') }}</title>
     @yield('styles') 
 </head>

@@ -928,7 +928,7 @@ body.boxed #lms_header.single-menu nav ul.nav-main > li > a, body.boxed #lms_hea
 	left: 0;
 	width: 100%;
 	height: 100%;
-	opacity: 1;
+	opacity: 0.3;
 	background: url(../images/bg/bg.png);
 }
 .lms_ss_caption h1, .lms_ss_caption h2, .lms_ss_caption h3, .lms_ss_caption h4, .lms_ss_caption h5, .lms_ss_caption h6 {

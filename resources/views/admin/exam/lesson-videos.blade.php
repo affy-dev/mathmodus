@@ -10,7 +10,7 @@
     @endif
     <div class="row headingBox" style="margin-top: 10px;">
         <div class="col-sm-12">
-            <h3>Learning Videos [ {{$courseName->course_name}} ]</h3>
+            <h3>Learning Videos [ {{$courseName->course_name}} ({{count($lessonVideos)}} Videos) ]</h3>
         </div>
     </div>
 
@@ -90,7 +90,7 @@
 
 <!--Launch Video Modal Popup -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-body">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">

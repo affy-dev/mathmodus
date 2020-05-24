@@ -2,6 +2,7 @@
     <nav class="sidebar-nav ps ps--active-y">
 
         <ul class="nav">
+            @can('access_dashboard')
             <li class="nav-item">
                 <a href="{{ route("admin.home") }}" class="nav-link">
                     <i class="nav-icon fas fa-tachometer-alt">
@@ -10,6 +11,7 @@
                     {{ trans('global.dashboard') }}
                 </a>
             </li>
+            @endcan
             @can('user_management_access')
             <li class="nav-item nav-dropdown">
                 <a class="nav-link  nav-dropdown-toggle">

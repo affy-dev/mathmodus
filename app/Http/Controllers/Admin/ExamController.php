@@ -44,10 +44,10 @@ class ExamController extends Controller
         $testFromLessonsTab = $lessonId != null ? true : false;
         $courseDetails = !$testFromLessonsTab ? Courses::where('id', $courseId)->first() : Lessons::where('id', $lessonId)->first();
         $testName = !$testFromLessonsTab ? $courseDetails->course_name : $courseDetails->lesson_name;
-        $imgSrcPath = !$testFromLessonsTab ? '../../../' : '../../../../../'; 
+        $imgSrcPath = !$testFromLessonsTab ? '../../../' : '../../../../../';
         if(!\Cache::has('courseId') && !\Cache::has('mcqs')) {
             if(!$testFromLessonsTab) {
-                $lessons = Lessons::where('course_id', $courseId)->pluck('id')->random(self::QUESTION_COUNT)->toArray();
+                $lessons = Lessons::where('course_id', $courseDetails->course_content_id)->pluck('id')->random(self::QUESTION_COUNT)->toArray();
             } else {
                 $lessons =[$lessonId];
             }

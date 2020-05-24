@@ -17,9 +17,10 @@
             <h3>Test Analysis</h3>
         </div>
     </div>
-    <div id="container"></div>
-    <div class="row" style="margin-bottom:15px">
-        <div class="col-12">
+    
+    <div class="row">
+        
+        <div class="col-sm-12">
             <div class="card-group exam-score">
                 <div class="card">
                     <div class="card-body text-center">
@@ -42,93 +43,82 @@
                 </div>
             </div>
         </div>
-    </div>
+        <div class="col-sm-12">
+            <div id="resultGraph"></div>
+        </div>
 
-
-    <div id="accordion">
-        @if(count($wrongQuestionDetails) > 0)
-        <div class="card">
-            <div class="card-header" id="headingOne" style="background: #D98938;">
-                <h5 class="mb-0">
-                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true"
-                        aria-controls="collapseOne" style="font-weight:bold;color:#fff" title="Click to see the details">
-                        Incorrect Answers
-                    </button>
-                    <span style="float: right;margin-top: 6px;cursor:pointer;color: #fff;" data-toggle="collapse"
-                        data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"
-                        title="Click to see the details"><i class="fas fa-arrow-down"></i></span>
-                </h5>
-            </div>
-
-            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
-                <div class="card-body">
-                    @foreach($wrongQuestionDetails as $wrongDetails)
-                    <div class="wrong-ans" role="alert">
-                        <?php 
-                            $qText = str_replace('src="../', 'src="../../../', $wrongDetails['question_text']);
-                            echo strip_tags($qText, '<table><img><p><br><br>');
-                        ?>
-                        <span style="float:right"><i class="fa fa-times-circle" aria-hidden="true"></i></span>
-                    </div>
-                    <div style="width:100%;margin-bottom: 4%;">
-                        <button type="button" class="btn btn-default video-btn" data-toggle="modal"
-                            data-src="{{$wrongDetails['video_url']}}" 
-                            data-target="#videoModal"
-                            data-misc_urls="{{$wrongDetails['misc_urls']}}">
-                            Topic Video
-                        </button>
-                        <button type="button" class="btn btn-default prerequisiteBtn" data-toggle="modal"
-                            data-text="{{json_encode($wrongDetails['topic_pre_requisite'])}}" data-target="#preRequisiteModal">
-                            Pre-Requisuite Topic
-                        </button>
-                    </div>
-                    @endforeach
+        <div class="col-sm-12">
+            <div class="accordion js-accordion">
+                @if(count($wrongQuestionDetails) > 0)
+                <div class="accordion__item js-accordion-item">
+                    <div class="accordion-header js-accordion-header">Incorrect Answers (Click to see the details)</div>
+                    <div class="accordion-body js-accordion-body">
+                        <div class="accordion-body__contents">
+                            <div class="card-body">
+                                <?php $questionCount = 0; ?>
+                                @foreach($wrongQuestionDetails as $wrongDetails)
+                                <div class="wrong-ans" role="alert">
+                                    <?php 
+                                        $qText = str_replace('src="../', 'src="../../../', $wrongDetails['question_text']);
+                                        echo '('.++$questionCount.') '.strip_tags($qText, '<table><img><p><br><br>');
+                                    ?>
+                                    <span style="float:right"><i class="fa fa-times-circle" aria-hidden="true"></i></span>
+                                </div>
+                                <div style="width:100%;margin-bottom: 4%;">
+                                    <button type="button" class="btn btn-default video-btn" data-toggle="modal"
+                                        data-src="{{$wrongDetails['video_url']}}" 
+                                        data-target="#videoModal"
+                                        data-misc_urls="{{$wrongDetails['misc_urls']}}">
+                                        Topic Video
+                                    </button>
+                                    <button type="button" class="btn btn-default prerequisiteBtn" data-toggle="modal"
+                                        data-text="{{json_encode($wrongDetails['topic_pre_requisite'])}}" data-target="#preRequisiteModal">
+                                        Pre-Requisuite Topic
+                                    </button>
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div> 
                 </div>
+                @endif
+
+                @if(count($correctQuestionDetails) > 0)
+                <div class="accordion__item js-accordion-item">
+                    <div class="accordion-header js-accordion-header">Correct Answers (Click to see the details)</div>
+                    <div class="accordion-body js-accordion-body">
+                        <div class="accordion-body__contents">
+                            <div class="card-body">
+                                <?php $questionCount = 0; ?>
+                                @foreach($correctQuestionDetails as $correctDetails)
+                                <div class="correct-ans" role="alert">
+                                    <?php 
+                                        $qText = str_replace('src="../', 'src="../../../', $correctDetails['question_text']);
+                                        echo '('.++$questionCount.') '.strip_tags($qText, '<table><img><p><br><br>');
+                                    ?>
+                                    <span style="float:right"><i class="fa fa-check-circle" aria-hidden="true"></i></span>
+                                </div>
+                                <div style="width:100%;margin-bottom: 4%;">
+                                    <button type="button" class="btn btn-default video-btn" data-toggle="modal"
+                                        data-src="{{$correctDetails['video_url']}}" 
+                                        data-target="#videoModal" 
+                                        data-misc_urls="{{$correctDetails['misc_urls']}}">
+                                        Topic Video
+                                    </button>
+                                    <button type="button" class="btn btn-default prerequisiteBtn" data-toggle="modal"
+                                        data-text="{{json_encode($correctDetails['topic_pre_requisite'])}}" data-target="#preRequisiteModal">
+                                        Pre-Requisuite Topic
+                                    </button>
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @endif
             </div>
         </div>
-        @endif
-        @if(count($correctQuestionDetails) > 0)
-        <div class="card">
-            <div class="card-header" id="headingTwo" style="background: #4dbd74;">
-                <h5 class="mb-0">
-                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo"
-                        aria-expanded="false" aria-controls="collapseTwo" style="font-weight:bold;color:#fff"
-                        title="Click to see the details">
-                        Correct Answers
-                    </button>
-                    <span style="float: right;margin-top: 6px;cursor:pointer;color: #fff;" data-toggle="collapse"
-                        data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"
-                        title="Click to see the details"><i class="fas fa-arrow-down"></i></span>
-                </h5>
 
-            </div>
-            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-                <div class="card-body">
-                    @foreach($correctQuestionDetails as $correctDetails)
-                    <div class="correct-ans" role="alert">
-                        <?php 
-                            $qText = str_replace('src="../', 'src="../../../', $correctDetails['question_text']);
-                            echo strip_tags($qText, '<table><img><p><br><br>');
-                        ?>
-                        <span style="float:right"><i class="fa fa-check-circle" aria-hidden="true"></i></span>
-                    </div>
-                    <div style="width:100%;margin-bottom: 4%;">
-                        <button type="button" class="btn btn-default video-btn" data-toggle="modal"
-                            data-src="{{$correctDetails['video_url']}}" 
-                            data-target="#videoModal" 
-                            data-misc_urls="{{$correctDetails['misc_urls']}}">
-                            Topic Video
-                        </button>
-                        <button type="button" class="btn btn-default prerequisiteBtn" data-toggle="modal"
-                            data-text="{{json_encode($correctDetails['topic_pre_requisite'])}}" data-target="#preRequisiteModal">
-                            Pre-Requisuite Topic
-                        </button>
-                    </div>
-                    @endforeach
-                </div>
-            </div>
-        </div>
-        @endif
     </div>
 </div>
 
@@ -153,7 +143,7 @@
 
 <!-- Video Modal Popup -->
 <div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="preRequisiteModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-body">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -166,8 +156,10 @@
                         msallowfullscreen="msallowfullscreen" oallowfullscreen="oallowfullscreen"
                         webkitallowfullscreen="webkitallowfullscreen"></iframe>
                 </div>
+                <hr>
+                <h4 class="modal-title">Additional Study Links</h4>
                 <div class="list-group" id="miscGroupUrl" style="margin-top:20px">
-
+                    
                 </div>
             </div>
         </div>
@@ -263,7 +255,7 @@ $(document).ready(function() {
             colors: ['#f34807', '#50B432']
         });
 
-        Highcharts.chart('container', {
+        Highcharts.chart('resultGraph', {
             chart: {
                 plotBackgroundColor: null,
                 plotBorderWidth: null,
@@ -307,6 +299,60 @@ $(document).ready(function() {
         });
         // document ready  
     });
+
+
+var accordion = (function(){
+  
+  var $accordion = $('.js-accordion');
+  var $accordion_header = $accordion.find('.js-accordion-header');
+  var $accordion_item = $('.js-accordion-item');
+ 
+  // default settings 
+  var settings = {
+    // animation speed
+    speed: 400,
+    
+    // close all other accordion items if true
+    oneOpen: false
+  };
+    
+  return {
+    // pass configurable object literal
+    init: function($settings) {
+      $accordion_header.on('click', function() {
+        accordion.toggle($(this));
+      });
+      
+      $.extend(settings, $settings); 
+      
+      // ensure only one accordion is active if oneOpen is true
+      if(settings.oneOpen && $('.js-accordion-item.active').length > 1) {
+        $('.js-accordion-item.active:not(:first)').removeClass('active');
+      }
+      
+      // reveal the active accordion bodies
+      $('.js-accordion-item.active').find('> .js-accordion-body').show();
+    },
+    toggle: function($this) {
+            
+      if(settings.oneOpen && $this[0] != $this.closest('.js-accordion').find('> .js-accordion-item.active > .js-accordion-header')[0]) {
+        $this.closest('.js-accordion')
+               .find('> .js-accordion-item') 
+               .removeClass('active')
+               .find('.js-accordion-body')
+               .slideUp()
+      }
+      
+      // show/hide the clicked accordion item
+      $this.closest('.js-accordion-item').toggleClass('active');
+      $this.next().stop().slideToggle(settings.speed);
+    }
+  }
+})();
+
+$(document).ready(function(){
+  accordion.init({ speed: 800, oneOpen: true });
+});
 </script>
 @endsection
 @endsection

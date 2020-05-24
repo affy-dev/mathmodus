@@ -1,14 +1,3 @@
-/*
-Copyright © 2015 Himanshu Softtech.
-------------------------------------------------------------------
-[Master Stylesheet]
-
-Project:	Learning System HTML Template
-Version:	1.0.0
-Assigned to:	Themeforest
-Primary use:	Learning System  
--------------------------------------------------------------------*/
-@import url("style.css");
 @import url("bootstrap.css");
 @import url("font-awesome.css");
 @import url("animate.css");

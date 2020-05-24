@@ -22,6 +22,7 @@
     </div>
     <form action="{{ route("admin.exams.submitExam") }}" method="POST" id="testForm">
         @csrf
+        <?php $questionCount = 0; ?>
         @foreach($mcqs as $qDetails)
         @foreach($qDetails as $ques)
         @if(count($ques) > 0)
@@ -34,7 +35,7 @@
             <div class="questions">
                 <?php 
                     $string = str_replace('src="../', 'src="'.$imgSrcPath.'', $questText);
-                    echo strip_tags($string, '<img><p><br><br>');
+                    echo '('.++$questionCount.') '.strip_tags($string, '<table><img><p><br><br>');
                 ?>
             </div>
             <ul class="answerList">
