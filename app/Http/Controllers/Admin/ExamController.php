@@ -47,7 +47,7 @@ class ExamController extends Controller
         $imgSrcPath = !$testFromLessonsTab ? '../../../' : '../../../../../';
         if(!\Cache::has('courseId') && !\Cache::has('mcqs')) {
             if(!$testFromLessonsTab) {
-                $lessons = Lessons::where('course_id', $courseDetails->course_content_id)->pluck('id')->random(self::QUESTION_COUNT)->toArray();
+                $lessons = Lessons::where('course_id', $courseDetails->course_content_id)->pluck('id')->toArray();
             } else {
                 $lessons =[$lessonId];
             }
@@ -55,7 +55,6 @@ class ExamController extends Controller
             foreach ($lessons as $key => $lessionId) {
                 $questionsLimit = $testFromLessonsTab ? self::QUESTION_COUNT : 1;
                 $quest = Questions::where('lesson_id', $lessionId)->inRandomOrder()->limit($questionsLimit)->get()->toArray();
-                
                 $questionAnswerDetails = [];
                 $i=0;
                 foreach ($quest as $key => $value) {
@@ -214,6 +213,8 @@ class ExamController extends Controller
         foreach($correctAnsIds as $correctQuestions) {
             $questDetails = Questions::where('id', $correctQuestions->question_id)->get()->toArray();
             $lessonVideo = Topics::where('lession_id', $questDetails[0]['lesson_id'])->get()->toArray();
+            $fullLessonVideo = Lessons::where('id', $questDetails[0]['lesson_id'])->get()->toArray();
+            $questDetails[0]['full_video_url'] = (count($fullLessonVideo) != 0) ? $fullLessonVideo['0']['video_url'] : 'not_available';
             $questDetails[0]['video_url'] = (count($lessonVideo) != 0) ? $lessonVideo['0']['video_url'] : 'not_available';
             $questDetails[0]['misc_urls'] = (count($lessonVideo) != 0) ? $lessonVideo['0']['misc_urls'] : 'not_available';
             
@@ -234,6 +235,8 @@ class ExamController extends Controller
         foreach($wrongAnsIds as $wrongQuestions) {
             $questDetails = Questions::where('id', $wrongQuestions->question_id)->get()->toArray();
             $lessonVideo = Topics::where('lession_id', $questDetails[0]['lesson_id'])->get()->toArray();
+            $fullLessonVideo = Lessons::where('id', $questDetails[0]['lesson_id'])->get()->toArray();
+            $questDetails[0]['full_video_url'] = (count($fullLessonVideo) != 0) ? $fullLessonVideo['0']['video_url'] : 'not_available';
             $questDetails[0]['video_url'] = (count($lessonVideo) != 0) ? $lessonVideo['0']['video_url'] : 'not_available';
             $questDetails[0]['misc_urls'] = (count($lessonVideo) != 0) ? $lessonVideo['0']['misc_urls'] : 'not_available';
             // all the prerequisite topics are found here

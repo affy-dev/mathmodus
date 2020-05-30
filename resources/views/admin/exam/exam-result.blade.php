@@ -68,8 +68,18 @@
                                     <button type="button" class="btn btn-default video-btn" data-toggle="modal"
                                         data-src="{{$wrongDetails['video_url']}}" 
                                         data-target="#videoModal"
-                                        data-misc_urls="{{$wrongDetails['misc_urls']}}">
+                                        data-misc_urls="{{$wrongDetails['misc_urls']}}"
+                                        data-lesson-video="false"
+                                    >
                                         Topic Video
+                                    </button>
+                                    <button type="button" class="btn btn-default video-btn" data-toggle="modal"
+                                        data-src="{{$wrongDetails['full_video_url']}}" 
+                                        data-target="#videoModal"
+                                        data-misc_urls="{{$wrongDetails['misc_urls']}}"
+                                        data-lesson-video="true"
+                                    >
+                                        Full Lesson Video
                                     </button>
                                     <button type="button" class="btn btn-default prerequisiteBtn" data-toggle="modal"
                                         data-text="{{json_encode($wrongDetails['topic_pre_requisite'])}}" data-target="#preRequisiteModal">
@@ -102,8 +112,18 @@
                                     <button type="button" class="btn btn-default video-btn" data-toggle="modal"
                                         data-src="{{$correctDetails['video_url']}}" 
                                         data-target="#videoModal" 
-                                        data-misc_urls="{{$correctDetails['misc_urls']}}">
+                                        data-misc_urls="{{$correctDetails['misc_urls']}}"
+                                        data-lesson-video="false"
+                                    >
                                         Topic Video
+                                    </button>
+                                    <button type="button" class="btn btn-default video-btn" data-toggle="modal"
+                                        data-src="{{$correctDetails['full_video_url']}}" 
+                                        data-target="#videoModal"
+                                        data-misc_urls="{{$correctDetails['misc_urls']}}"
+                                        data-lesson-video="true"
+                                    >
+                                        Full Lesson Video
                                     </button>
                                     <button type="button" class="btn btn-default prerequisiteBtn" data-toggle="modal"
                                         data-text="{{json_encode($correctDetails['topic_pre_requisite'])}}" data-target="#preRequisiteModal">
@@ -193,7 +213,8 @@ $(document).ready(function() {
             
             $('.video-btn').click(function() {
                 $('#miscGroupUrl').html('');
-                $videoSrc = $(this).data("src");
+                const checkFullLessonVideo = $(this).data("lesson-video");
+                $videoSrc = (checkFullLessonVideo === true) ? 'https://www.youtube.com/embed/'+ $(this).data("src") : $(this).data("src");
                 if ($videoSrc == 'not_available') {
                     swal({
                         title: "Error!",
@@ -204,11 +225,15 @@ $(document).ready(function() {
                     return false;
                 }
                 const misc_urls = $(this).data("misc_urls");
-                misc_urls.split(',').forEach((value) => {
-                    $('#miscGroupUrl').append('<a href="' + value +
-                        '" target="_blank" class="list-group-item list-group-item-action flex-column align-items-start"><p class="mb-1">' +
-                        (value ? value : 'No further Links attached to this lesson') + '</p></a>')
-                })
+                if (misc_urls == 'not_available' || misc_urls == '') {
+                    $('#miscGroupUrl').append('<p class="mb-1">No further Links attached to this lesson!</p>')
+                } else {
+                    misc_urls.split(',').forEach((value) => {
+                        $('#miscGroupUrl').append('<a href="' + value +
+                            '" target="_blank" class="list-group-item list-group-item-action flex-column align-items-start"><p class="mb-1">' +
+                            (value ? value : 'No further Links attached to this lesson') + '</p></a>')
+                    })
+                }
             });
 
             let content;
@@ -244,7 +269,23 @@ $(document).ready(function() {
                 $("#video").attr('src', $videoSrc);
             })
 
+            // $('#videoModal').on('hidden.bs.modal', function () {
+            //     swal({
+            //         title: "Do you want to give test for this lesson?",
+            //         icon: "warning",
+            //         buttons: true,
+            //         dangerMode: true,
+            //     })
+            //     .then((willDelete) => {
+            //         if (willDelete) {
 
+            //             return;
+            //         } else {
+            //             return;
+            //         }
+            //     });
+            // // do something…
+            // })
 
 // ==============HightChart Implementation===================
 
