@@ -18,6 +18,7 @@ use App\TopicPreRequisite;
 use App\StudentTestResults;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class ExamController extends Controller
 {
@@ -269,8 +270,14 @@ class ExamController extends Controller
         foreach ($courses->toArray() as $key => $value) {
             $availableCourses[$value['id']] = $value['course_name'];
         }
-        
-        return view('admin.exam.exam-history', compact('testHistory', 'availableCourses'));
+        $canDeleteTest = auth()->user()->can_delete_test;
+        return view('admin.exam.exam-history', compact('testHistory', 'availableCourses', 'canDeleteTest'));
+    }
+
+    public function deleteTest(Request $request, $testId) {
+        StudentTestResults::where('id', $testId)->delete();
+        Alert::success('Test Deleted Successfully', '');
+        return redirect()->route('admin.exams.history');
     }
 
     public function lessonVideos(Request $request, $courseId, $testId = null) {

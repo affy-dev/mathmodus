@@ -19,6 +19,14 @@
                 </tr>
                 <tr>
                     <th>
+                        UserName
+                    </th>
+                    <td>
+                        {{ $user->username }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
                         {{ trans('global.user.fields.email') }}
                     </th>
                     <td>
@@ -41,6 +49,14 @@
                         @foreach($user->roles as $id => $roles)
                             <span class="label label-info label-many">{{ $roles->title }}</span>
                         @endforeach
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Can Delete Test
+                    </th>
+                    <td>
+                        {{ $user->can_delete_test == 1 ? 'Yes' : 'No' }}
                     </td>
                 </tr>
             </tbody>

@@ -85,10 +85,10 @@
                                     >
                                         Full Lesson Video
                                     </button>
-                                    <button type="button" class="btn btn-default prerequisiteBtn" data-toggle="modal"
+                                    <!-- <button type="button" class="btn btn-default prerequisiteBtn" data-toggle="modal"
                                         data-text="{{json_encode($wrongDetails['topic_pre_requisite'])}}" data-target="#preRequisiteModal">
                                         Pre-Requisuite Topic
-                                    </button>
+                                    </button> -->
                                 </div>
                                 @endforeach
                             </div>
@@ -133,10 +133,10 @@
                                     >
                                         Full Lesson Video
                                     </button>
-                                    <button type="button" class="btn btn-default prerequisiteBtn" data-toggle="modal"
+                                    <!-- <button type="button" class="btn btn-default prerequisiteBtn" data-toggle="modal"
                                         data-text="{{json_encode($correctDetails['topic_pre_requisite'])}}" data-target="#preRequisiteModal">
                                         Pre-Requisuite Topic
-                                    </button>
+                                    </button> -->
                                 </div>
                                 @endforeach
                             </div>

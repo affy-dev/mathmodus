@@ -81,6 +81,16 @@
                         {{ trans('global.user.fields.roles_helper') }}
                     </p>
             </div>
+            <div class="form-group">
+                <label for="can_delete_test">Can delete Test ?</label>
+                <input type="radio" name="can_delete_test" id="can_delete_test" value="1" />Yes
+                <input type="radio" name="can_delete_test" id="can_delete_test" value="0" />No
+                @if($errors->has('can_delete_test'))
+                <em class="invalid-feedback">
+                    {{ $errors->first('can_delete_test') }}
+                </em>
+                @endif
+            </div>
             <div>
                 <input class="btn btn-default" type="submit" value="{{ trans('global.save') }}">
             </div>

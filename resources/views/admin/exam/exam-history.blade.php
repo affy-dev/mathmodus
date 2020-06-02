@@ -46,6 +46,11 @@
                                     <a class="btn btn-xs btn-default" href="{{ route('admin.exams.examresult', $test->id) }}">
                                         {{ trans('global.view') }} Test Report
                                     </a>
+                                    @if(!empty($canDeleteTest))
+                                    <a class="btn btn-xs btn-danger" onclick="return confirm('Are you sure want to delete?')" href="{{ route('admin.exams.deleteTest', $test->id) }}">
+                                        Delete Test
+                                    </a>
+                                    @endif
                             </td>  
                         </tr>
                     @endforeach

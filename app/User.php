@@ -37,7 +37,8 @@ class User extends Authenticatable
         'created_by',
         'email_verified_at',
         'data_updated',
-        'username'
+        'username',
+        'can_delete_test'
     ];
 
     public function getEmailVerifiedAtAttribute($value)
