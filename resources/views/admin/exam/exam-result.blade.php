@@ -70,6 +70,8 @@
                                         data-target="#videoModal"
                                         data-misc_urls="{{$wrongDetails['misc_urls']}}"
                                         data-lesson-video="false"
+                                        data-lessonId="{{$wrongDetails['lesson_id']}}"
+                                        data-courseId="{{$wrongDetails['courseId']}}"
                                     >
                                         Topic Video
                                     </button>
@@ -78,6 +80,8 @@
                                         data-target="#videoModal"
                                         data-misc_urls="{{$wrongDetails['misc_urls']}}"
                                         data-lesson-video="true"
+                                        data-lessonId="{{$wrongDetails['lesson_id']}}"
+                                        data-courseId="{{$wrongDetails['courseId']}}"
                                     >
                                         Full Lesson Video
                                     </button>
@@ -114,6 +118,8 @@
                                         data-target="#videoModal" 
                                         data-misc_urls="{{$correctDetails['misc_urls']}}"
                                         data-lesson-video="false"
+                                        data-lessonId="{{$correctDetails['lesson_id']}}"
+                                        data-courseId="{{$correctDetails['courseId']}}"
                                     >
                                         Topic Video
                                     </button>
@@ -122,6 +128,8 @@
                                         data-target="#videoModal"
                                         data-misc_urls="{{$correctDetails['misc_urls']}}"
                                         data-lesson-video="true"
+                                        data-lessonId="{{$correctDetails['lesson_id']}}"
+                                        data-courseId="{{$correctDetails['courseId']}}"
                                     >
                                         Full Lesson Video
                                     </button>
@@ -142,6 +150,8 @@
     </div>
 </div>
 
+<input type="hidden" name="lessonId" id="lessonId" value="" />
+<input type="hidden" name="courseId" id="courseId" value="" />
 
 <!--Content Modal -->
 <div class="modal fade" id="preRequisiteModal" tabindex="-1" role="dialog" aria-labelledby="preRequisiteModalLabel"
@@ -214,6 +224,15 @@ $(document).ready(function() {
             $('.video-btn').click(function() {
                 $('#miscGroupUrl').html('');
                 const checkFullLessonVideo = $(this).data("lesson-video");
+                const lessonId = $(this).data("lessonid");
+                const courseId = $(this).data("courseid");
+                if(lessonId) {
+                    $('#lessonId').val(lessonId);
+                    $('#courseId').val(courseId);
+                } else {
+                    $('#lessonId').val('');
+                    $('#courseId').val('');
+                }
                 $videoSrc = (checkFullLessonVideo === true) ? 'https://www.youtube.com/embed/'+ $(this).data("src") : $(this).data("src");
                 if ($videoSrc == 'not_available') {
                     swal({
@@ -269,23 +288,30 @@ $(document).ready(function() {
                 $("#video").attr('src', $videoSrc);
             })
 
-            // $('#videoModal').on('hidden.bs.modal', function () {
-            //     swal({
-            //         title: "Do you want to give test for this lesson?",
-            //         icon: "warning",
-            //         buttons: true,
-            //         dangerMode: true,
-            //     })
-            //     .then((willDelete) => {
-            //         if (willDelete) {
-
-            //             return;
-            //         } else {
-            //             return;
-            //         }
-            //     });
-            // // do something…
-            // })
+            $('#videoModal').on('hidden.bs.modal', function () {
+                swal({
+                    title: "Do you want to give test for this lesson again?",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        const lessonId = $('#lessonId').val();
+                        const newCourseId = $('#courseId').val();
+                        const routeUrl = "{{ route('admin.exams.takeexam') }}/"+newCourseId+"/"+lessonId;
+                        $('#lessonId').val('');
+                        $('#courseId').val('');
+                        window.location = routeUrl;
+                        return;
+                    } else {
+                        $('#lessonId').val('');
+                        $('#courseId').val('');
+                        return;
+                    }
+                });
+            // do something…
+            })
 
 // ==============HightChart Implementation===================
 

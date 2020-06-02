@@ -217,7 +217,7 @@ class ExamController extends Controller
             $questDetails[0]['full_video_url'] = (count($fullLessonVideo) != 0) ? $fullLessonVideo['0']['video_url'] : 'not_available';
             $questDetails[0]['video_url'] = (count($lessonVideo) != 0) ? $lessonVideo['0']['video_url'] : 'not_available';
             $questDetails[0]['misc_urls'] = (count($lessonVideo) != 0) ? $lessonVideo['0']['misc_urls'] : 'not_available';
-            
+            $questDetails[0]['courseId'] = $fullLessonVideo['0']['course_id'];
             // all the prerequisite topics are found here
             $topicPreRequisite = (count($lessonVideo) != 0) ? TopicPreRequisite::where('topic_id', $lessonVideo['0']['id'])->get()->toArray() : [];
             $preRequisiteIds = '';
@@ -239,6 +239,7 @@ class ExamController extends Controller
             $questDetails[0]['full_video_url'] = (count($fullLessonVideo) != 0) ? $fullLessonVideo['0']['video_url'] : 'not_available';
             $questDetails[0]['video_url'] = (count($lessonVideo) != 0) ? $lessonVideo['0']['video_url'] : 'not_available';
             $questDetails[0]['misc_urls'] = (count($lessonVideo) != 0) ? $lessonVideo['0']['misc_urls'] : 'not_available';
+            $questDetails[0]['courseId'] = $fullLessonVideo['0']['course_id'];
             // all the prerequisite topics are found here
             $topicPreRequisite = (count($lessonVideo) != 0) ? TopicPreRequisite::where('topic_id', $lessonVideo['0']['id'])->get()->toArray() : [];
             $preRequisiteIds = '';
