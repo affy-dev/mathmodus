@@ -23,6 +23,7 @@ use RealRashid\SweetAlert\Facades\Alert;
 class ExamController extends Controller
 {
     private const QUESTION_COUNT = 10;
+    private const QUESTION_PER_LESSONS = 25;
 
     const TEST_STATUS = [
         'PENDING' => 'pending',
@@ -48,7 +49,7 @@ class ExamController extends Controller
         $imgSrcPath = !$testFromLessonsTab ? '../../../' : '../../../../../';
         if(!\Cache::has('courseId') && !\Cache::has('mcqs')) {
             if(!$testFromLessonsTab) {
-                $lessons = Lessons::where('course_id', $courseDetails->course_content_id)->pluck('id')->toArray();
+                $lessons = Lessons::where('course_id', $courseId)->pluck('id')->toArray();
             } else {
                 $lessons =[$lessonId];
             }
@@ -90,7 +91,7 @@ class ExamController extends Controller
                 $testId = $testCreated->id;
                 session(['testId' => $testId]);
                 
-                $expiresAt = Carbon::now()->addMinutes(30);
+                $expiresAt = Carbon::now()->addMinutes(180);
                 \Cache::put('courseId', $courseId, $expiresAt);
                 \Cache::put('mcqs', $mcqs, $expiresAt);
                 \Cache::put('testId', $testId, $expiresAt);

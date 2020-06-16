@@ -33,7 +33,7 @@
                 ?>
         <div class="questionsBox">
             <div class="questions">
-                <?php 
+                <?php
                     $string = str_replace('src="../', 'src="'.$imgSrcPath.'', $questText);
                     echo '('.++$questionCount.') '.strip_tags($string, '<table><img><p><br><br>');
                 ?>

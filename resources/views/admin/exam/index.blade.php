@@ -20,10 +20,8 @@
                         {{$course->course_name}}</h5>
                 </div>
                 <div class="card-footer">
-                    <?php if(!empty($course->course_content_id)) { ?>
                     <a href="{{ route('admin.exams.takeexam', $course->id) }}"
                         class="btn btn-default testBtn-blue btn-block">Diagnostic Test</a>
-                    <?php } ?>
                     <a href="{{ route('admin.exams.lessonVideos', $course->id) }}"
                         class="btn btn-default courseBtn-red btn-block">Start Learning</a>
                 </div>
