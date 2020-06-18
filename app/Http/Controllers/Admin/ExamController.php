@@ -54,11 +54,13 @@ class ExamController extends Controller
                 $lessons =[$lessonId];
             }
             $mcqs = [];
+            $questionCount = 0;
             foreach ($lessons as $key => $lessionId) {
                 $questionsLimit = $testFromLessonsTab ? self::QUESTION_COUNT : 1;
                 $quest = Questions::where('lesson_id', $lessionId)->inRandomOrder()->limit($questionsLimit)->get()->toArray();
                 $questionAnswerDetails = [];
                 $i=0;
+                $questionCount++;
                 foreach ($quest as $key => $value) {
                     $answerOptions = \DB::table('question_answer')
                     ->where('question_id', $value['id'])
@@ -69,11 +71,13 @@ class ExamController extends Controller
                     }
                     $questionAnswerDetails[$i]['questionDetails'] = $value;
                     $questionAnswerDetails[$i]['answerDetails'] = $ansDet;
+                    $questionAnswerDetails[$i]['questNumber'] = $questionCount;
                     $i++;
                 }
+                
                 $mcqs[] = $questionAnswerDetails;
             }
-            
+
             $checkIfQuestionsAreEmpty = 0;
             foreach ($mcqs as $key => $value) {
                 if(count($value) != 0) {
@@ -137,11 +141,15 @@ class ExamController extends Controller
         // validation ends here
         $correctAnsIds = [];
         $wrongAnsIds = [];
+        $counter=0;
         foreach ($allQuestionIds as $quesId) {
+            $counter++;
             $ansId = $data['answerGroup_'.$quesId];
+            $questNumber = $data['questNumber_'.$quesId];
             $ansDetails = \DB::table('question_answer')
             ->where('id', $ansId)
             ->first();
+            $ansDetails->quesNum = $questNumber;
             if($ansDetails->correct_answer == 'TRUE') {
                 $correctAnsIds[] = $ansDetails;
             } else {
@@ -220,6 +228,7 @@ class ExamController extends Controller
             $questDetails[0]['video_url'] = (count($lessonVideo) != 0) ? $lessonVideo['0']['video_url'] : 'not_available';
             $questDetails[0]['misc_urls'] = (count($lessonVideo) != 0) ? $lessonVideo['0']['misc_urls'] : 'not_available';
             $questDetails[0]['courseId'] = $fullLessonVideo['0']['course_id'];
+            $questDetails[0]['quesNum'] = $correctQuestions->quesNum;
             // all the prerequisite topics are found here
             $topicPreRequisite = (count($lessonVideo) != 0) ? TopicPreRequisite::where('topic_id', $lessonVideo['0']['id'])->get()->toArray() : [];
             $preRequisiteIds = '';
@@ -242,6 +251,7 @@ class ExamController extends Controller
             $questDetails[0]['video_url'] = (count($lessonVideo) != 0) ? $lessonVideo['0']['video_url'] : 'not_available';
             $questDetails[0]['misc_urls'] = (count($lessonVideo) != 0) ? $lessonVideo['0']['misc_urls'] : 'not_available';
             $questDetails[0]['courseId'] = $fullLessonVideo['0']['course_id'];
+            $questDetails[0]['quesNum'] = $wrongQuestions->quesNum;
             // all the prerequisite topics are found here
             $topicPreRequisite = (count($lessonVideo) != 0) ? TopicPreRequisite::where('topic_id', $lessonVideo['0']['id'])->get()->toArray() : [];
             $preRequisiteIds = '';

@@ -46,7 +46,6 @@
         <div class="col-sm-12">
             <div id="resultGraph"></div>
         </div>
-
         <div class="col-sm-12">
             <div class="accordion js-accordion">
                 @if(count($wrongQuestionDetails) > 0)
@@ -60,7 +59,7 @@
                                 <div class="wrong-ans" role="alert">
                                     <?php 
                                         $qText = str_replace('src="../', 'src="../../../', $wrongDetails['question_text']);
-                                        echo '('.++$questionCount.') '.strip_tags($qText, '<table><img><p><br><br>');
+                                        echo '('.$wrongDetails['quesNum'].') '.strip_tags($qText, '<table><img><p><br><br>');
                                     ?>
                                     <span style="float:right"><i class="fa fa-times-circle" aria-hidden="true"></i></span>
                                 </div>
@@ -108,7 +107,7 @@
                                 <div class="correct-ans" role="alert">
                                     <?php 
                                         $qText = str_replace('src="../', 'src="../../../', $correctDetails['question_text']);
-                                        echo '('.++$questionCount.') '.strip_tags($qText, '<table><img><p><br><br>');
+                                        echo '('.$correctDetails['quesNum'].') '.strip_tags($qText, '<table><img><p><br><br>');
                                     ?>
                                     <span style="float:right"><i class="fa fa-check-circle" aria-hidden="true"></i></span>
                                 </div>

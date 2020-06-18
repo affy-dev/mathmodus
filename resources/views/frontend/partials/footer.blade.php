@@ -3,7 +3,7 @@
         <div class="container">
             <div class="row">
                 
-                <div class="col-lg-12 col-md-12 col-sm-12">
+                <!-- <div class="col-lg-12 col-md-12 col-sm-12">
                     <div class="lms_newsletter">
                         <h3>Newsletter</h3>
                         <div class="form-group">
@@ -13,7 +13,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -33,8 +33,7 @@
                 <div class="col-lg-6 col-md-6 col-sm-6">
                     <div class="lms_footer_contact">
                         <h3>Contacts</h3>
-                        <p class="lms_address"><span class="lms_theme_color">Address :</span> Trafford Wharf Road,
-                            Manchester M17 1AB, United Kingdom +44 277 188 8800 </p>
+                        <p class="lms_address"><span class="lms_theme_color">Address :</span> 17687 Tobermory Place Leesburg, VA 20175 </p>
                         <p class="lms_phone"><span class="lms_theme_color">Phone :</span> Local: +1(703)-443-1242 /
                             Mobile: +1(703)-443-1242 </p>
                         <p class="lms_email"><span class="lms_theme_color">Email id :</span> <a

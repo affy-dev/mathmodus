@@ -22,20 +22,20 @@
     </div>
     <form action="{{ route("admin.exams.submitExam") }}" method="POST" id="testForm">
         @csrf
-        <?php $questionCount = 0; ?>
         @foreach($mcqs as $qDetails)
         @foreach($qDetails as $ques)
         @if(count($ques) > 0)
         <?php 
-                    $quesDetails = $ques['questionDetails'];
-                    $ansDetails = $ques['answerDetails'];
-                    $questText = $quesDetails['question_text'];
-                ?>
+            $quesDetails = $ques['questionDetails'];
+            $ansDetails = $ques['answerDetails'];
+            $questNumber = $ques['questNumber'];
+            $questText = $quesDetails['question_text'];
+        ?>
         <div class="questionsBox">
             <div class="questions">
                 <?php
                     $string = str_replace('src="../', 'src="'.$imgSrcPath.'', $questText);
-                    echo '('.++$questionCount.') '.strip_tags($string, '<table><img><p><br><br>');
+                    echo '('.$questNumber.') '.strip_tags($string, '<table><img><p><br><br>');
                 ?>
             </div>
             <ul class="answerList">
@@ -48,6 +48,7 @@
                 <input type="hidden" name="questionIds[]" value="{{$quesDetails['id']}}" />
                 <input type="hidden" name="courseId" value="{{$courseId}}" />
                 <input type="hidden" name="testId" value="{{$testId}}" />
+                <input type="hidden" name="questNumber_{{$quesDetails['id']}}" value="{{$questNumber}}" />
             </ul>
         </div>
         @endif

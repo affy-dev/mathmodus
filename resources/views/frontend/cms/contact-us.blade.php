@@ -10,28 +10,48 @@
         </div>
     </div>
 </div>
-<div class="lms_contact_form">
-    <div class="row">
-        <div class="col-lg-6 col-md-6 col-sm-6">
+
+<form action="{{ route("contact-us") }}" method="POST" enctype="multipart/form-data">
+@csrf
+    <div class="lms_contact_form">
+        @if(count($errors))
             <div class="form-group">
-                <input type="text" class="form-control" id="uname" placeholder="Your Full Name">
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach($errors->all() as $error)
+                            <li>{{$error}}</li>
+                        @endforeach
+                    </ul>
+                </div>
             </div>
-            <div class="form-group">
-                <input type="text" class="form-control" id="uemail" placeholder="Your Email">
+        @endif
+        @if(session()->has('message'))
+            <div class="alert alert-success">
+                {{ session()->get('message') }}
             </div>
-            <div class="form-group">
-                <input type="url" class="form-control" id="web_site" placeholder="Your Website">
+        @endif
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="full_name" name="full_name" placeholder="Your Full Name" value="{{ old('full_name', '') }}">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="email" name="email" placeholder="Your Email" value="{{ old('email', '') }}">
+                </div>
+                <!-- <div class="form-group">
+                    <input type="url" class="form-control" id="web_site" placeholder="Your Website">
+                </div> -->
             </div>
-        </div>
-        <div class="col-lg-6 col-md-6 col-sm-6">
-            <div class="form-group">
-                <textarea rows="10" class="form-control" id="message" placeholder="Your Message..."></textarea>
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="form-group">
+                    <textarea rows="10" class="form-control" id="messages" name="messages" placeholder="Your Message...">{{ old('messages') }}</textarea>
+                </div>
             </div>
-        </div>
-        <div class="col-lg-12">
-            <a id="em_sub" class="btn btn-default pull-right">Send</a>
-            <p id="err"></p>
+            <div class="col-lg-12">
+            <input class="btn btn-default" type="submit" value="Send">
+                <p id="err"></p>
+            </div>
         </div>
     </div>
-</div>
+</form>
 @endsection
