@@ -197,7 +197,7 @@ class ExamController extends Controller
         if((strpos(url()->previous(),'take-exam') !== false)) {
             $showBackBtn = false;
         }
-        
+        // dd($getTestAnalysis);
         return view('admin.exam.exam-result', compact('correctQuestionDetails', 'wrongQuestionDetails', 'showBackBtn'));
     }
 
