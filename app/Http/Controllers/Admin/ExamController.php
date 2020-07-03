@@ -61,7 +61,9 @@ class ExamController extends Controller
                 $questionAnswerDetails = [];
                 $i=0;
                 $questionCount++;
+                $countFromLessonTab=0;
                 foreach ($quest as $key => $value) {
+                    $countFromLessonTab++;
                     $answerOptions = \DB::table('question_answer')
                     ->where('question_id', $value['id'])
                     ->get();
@@ -71,13 +73,13 @@ class ExamController extends Controller
                     }
                     $questionAnswerDetails[$i]['questionDetails'] = $value;
                     $questionAnswerDetails[$i]['answerDetails'] = $ansDet;
-                    $questionAnswerDetails[$i]['questNumber'] = $questionCount;
+                    $questionAnswerDetails[$i]['questNumber'] = $testFromLessonsTab ? $countFromLessonTab : $questionCount;
                     $i++;
                 }
                 
                 $mcqs[] = $questionAnswerDetails;
             }
-
+            
             $checkIfQuestionsAreEmpty = 0;
             foreach ($mcqs as $key => $value) {
                 if(count($value) != 0) {

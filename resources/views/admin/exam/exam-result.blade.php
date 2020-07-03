@@ -64,7 +64,7 @@
                                     <span style="float:right"><i class="fa fa-times-circle" aria-hidden="true"></i></span>
                                 </div>
                                 <div style="width:100%;margin-bottom: 4%;">
-                                    <button type="button" class="btn btn-default video-btn" data-toggle="modal"
+                                    <!-- <button type="button" class="btn btn-default video-btn" data-toggle="modal"
                                         data-src="{{$wrongDetails['video_url']}}" 
                                         data-target="#videoModal"
                                         data-misc_urls="{{$wrongDetails['misc_urls']}}"
@@ -73,7 +73,7 @@
                                         data-courseId="{{$wrongDetails['courseId']}}"
                                     >
                                         Topic Video
-                                    </button>
+                                    </button> -->
                                     <button type="button" class="btn btn-default video-btn" data-toggle="modal"
                                         data-src="{{$wrongDetails['full_video_url']}}" 
                                         data-target="#videoModal"
@@ -112,7 +112,7 @@
                                     <span style="float:right"><i class="fa fa-check-circle" aria-hidden="true"></i></span>
                                 </div>
                                 <div style="width:100%;margin-bottom: 4%;">
-                                    <button type="button" class="btn btn-default video-btn" data-toggle="modal"
+                                    <!-- <button type="button" class="btn btn-default video-btn" data-toggle="modal"
                                         data-src="{{$correctDetails['video_url']}}" 
                                         data-target="#videoModal" 
                                         data-misc_urls="{{$correctDetails['misc_urls']}}"
@@ -121,7 +121,7 @@
                                         data-courseId="{{$correctDetails['courseId']}}"
                                     >
                                         Topic Video
-                                    </button>
+                                    </button> -->
                                     <button type="button" class="btn btn-default video-btn" data-toggle="modal"
                                         data-src="{{$correctDetails['full_video_url']}}" 
                                         data-target="#videoModal"
@@ -164,7 +164,7 @@
                 </button>
             </div>
             <div class="modal-body" id="modalContent">
-                ...
+                
             </div>
         </div>
     </div>
@@ -187,6 +187,9 @@
                 </div>
                 <hr>
                 <h4 class="modal-title">Additional Study Links</h4>
+                <div class="list-group" id="takeTestBtn" style="margin-top:20px">
+                    
+                </div>
                 <div class="list-group" id="miscGroupUrl" style="margin-top:20px">
                     
                 </div>
@@ -244,8 +247,12 @@ $(document).ready(function() {
                 }
                 const misc_urls = $(this).data("misc_urls");
                 if (misc_urls == 'not_available' || misc_urls == '') {
+                    const routeUrl = "{{ route('admin.exams.takeexam') }}/"+courseId+"/"+lessonId;
+                    $('#takeTestBtn').html('<a class="btn btn-warning" href="'+routeUrl+'" role="button">Want to Take Test again ?</a>')
                     $('#miscGroupUrl').append('<p class="mb-1">No further Links attached to this lesson!</p>')
                 } else {
+                    const routeUrl = "{{ route('admin.exams.takeexam') }}/"+courseId+"/"+lessonId;
+                    $('#takeTestBtn').html('<a class="btn btn-warning" href="'+routeUrl+'" role="button">Want to Take Test again ?</a>')
                     misc_urls.split(',').forEach((value) => {
                         $('#miscGroupUrl').append('<a href="' + value +
                             '" target="_blank" class="list-group-item list-group-item-action flex-column align-items-start"><p class="mb-1">' +
@@ -285,6 +292,10 @@ $(document).ready(function() {
             $('#videoModal').on('hide.bs.modal', function(e) {
                 // a poor man's stop video
                 $("#video").attr('src', $videoSrc);
+                $('#takeTestBtn').html('')
+                $('#miscGroupUrl').html('');
+                $('#lessonId').val('');
+                $('#courseId').val('');
             })
 
             $('#videoModal').on('hidden.bs.modal', function () {
