@@ -22,13 +22,16 @@
     </div>
     @endif
     <div class="row">
-        @foreach($lessonVideos as $lessonDetails)
+        <?php 
+            $counter = 0;
+        ?>
+        @foreach($lessonVideos as $key => $lessonDetails)
         <div class="col-lg-4 col-sm-12 col-md-12">
-
+            <?php $counter++; ?>
             <div class="card card-custom-css">
                 <div class="card-body">
                     <h5 class="card-title" style="font-weight: 700;font-size: 18px;color: #D98938;">
-                        {{$lessonDetails->lesson_name}}</h5>
+                    ({{ ($lessonVideos->currentpage()-1) * $lessonVideos->perpage() + $key + 1 }}) {{$lessonDetails->lesson_name}}</h5>
                 </div>
                 <div class="card-footer">
                     <?php
