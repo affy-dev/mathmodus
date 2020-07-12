@@ -121,44 +121,42 @@ class ExamController extends Controller
     public function submitExam(Request $request) {
         abort_unless(\Gate::allows('submit_exam'), 403);
         $data = $request->all();
-        
         if(!StudentTestResults::where('id', $data['testId'])->exists() || StudentTestResults::where('id', $data['testId'])->where('test_status', self::TEST_STATUS['COMPLETED'])->exists()) {
             return redirect()->route('admin.exams.index')->withErrors(['Last Test had been alreadt completed or skipped by you. Start with another test']);
         }
         
         $courseId = $data['courseId'];
-        // $answerIds = $data['answerId'];
         $allQuestionIds = $data['questionIds'];
-        $count=0;
-        // test validation whether user answer every question or not
-        foreach ($allQuestionIds as $quesId) {
-            if(!array_key_exists('answerGroup_'.$quesId, $data)) {
-                $count++;
-            }
-        }
-        
-        if($count != 0) {
-            return redirect()->back()->withErrors(['Please answer all questions before submitting']);
-        }
+
         // validation ends here
         $correctAnsIds = [];
         $wrongAnsIds = [];
         $counter=0;
         foreach ($allQuestionIds as $quesId) {
             $counter++;
-            $ansId = $data['answerGroup_'.$quesId];
+            $ansId = array_key_exists('answerGroup_'.$quesId, $data) ? $data['answerGroup_'.$quesId] : $quesId;
             $questNumber = $data['questNumber_'.$quesId];
-            $ansDetails = \DB::table('question_answer')
-            ->where('id', $ansId)
-            ->first();
-            $ansDetails->quesNum = $questNumber;
-            if($ansDetails->correct_answer == 'TRUE') {
-                $correctAnsIds[] = $ansDetails;
-            } else {
+            if(array_key_exists('answerGroup_'.$quesId, $data)) { // unswered list comers here
+                $ansId = $data['answerGroup_'.$quesId];
+                $ansDetails = \DB::table('question_answer')
+                ->where('id', $ansId)
+                ->first();
+                
+                $ansDetails->quesNum = $questNumber;
+                if($ansDetails->correct_answer == 'TRUE') {
+                    $correctAnsIds[] = $ansDetails;
+                } else {
+                    $wrongAnsIds[] = $ansDetails;
+                }
+            } else { // unanswered comes here
+                $ansDetails = \DB::table('question_answer')
+                ->where('question_id', $quesId)
+                ->first();
+                $ansDetails->quesNum = $questNumber;
                 $wrongAnsIds[] = $ansDetails;
             }
         }
-        
+
         $correctQuestionCount = count($correctAnsIds);
         $wrongQuestionCount = count($wrongAnsIds);
         $totalQuestionCount = $correctQuestionCount + $wrongQuestionCount;
@@ -295,6 +293,9 @@ class ExamController extends Controller
 
     public function lessonVideos(Request $request, $courseId, $testId = null) {
         abort_unless(\Gate::allows('exam_lesson_videos'), 403);
+        \Cache::forget('courseId');
+        \Cache::forget('mcqs');
+        \Cache::forget('testId');
         if($testId != null && StudentTestResults::where('id', $testId)->exists()) {
             StudentTestResults::where('id', $testId)->delete();
         }

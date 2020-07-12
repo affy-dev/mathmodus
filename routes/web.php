@@ -11,7 +11,7 @@ Route::post('/post-message',['as'=>'contact-us','uses'=>'Frontend\HomeController
 
 Auth::routes(['register' => false]);
 
-Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['auth']], function () {
+Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['web','auth']], function () {
     Route::get('/', 'HomeController@index')->name('home');
 
     Route::delete('permissions/destroy', 'PermissionsController@massDestroy')->name('permissions.massDestroy');

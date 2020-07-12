@@ -10,7 +10,7 @@
     @endif
     <div class="row headingBox" style="margin-top: 10px;">
         <div class="col-sm-12">
-            <h3>Learning Videos [ {{$courseName->course_name}} ({{count($lessonVideos)}} Videos) ]</h3>
+            <h3>Learning Videos : [ {{$courseName->course_name}} ]</h3>
         </div>
     </div>
 

@@ -33,9 +33,9 @@
         ?>
         <div class="questionsBox">
             <div class="questions">
-                <?php
-                    $string = str_replace('src="../', 'src="'.$imgSrcPath.'', $questText);
-                    echo '('.$questNumber.') '.strip_tags($string, '<table><img><p><br><br>');
+                <?php        
+                    $question = str_replace('src="../', 'src="'.$imgSrcPath.'', $questText);
+                    echo '('.$questNumber.') '.$question;
                 ?>
             </div>
             <ul class="answerList">
@@ -66,12 +66,12 @@ function submitForm() {
     $('#sbmtBtn').prop('disabled', true);
     $('#sbmtBtn').html('<i class="fa fa-circle-o-notch fa-spin" style="font-size:24px"></i>');
     let check = true;
-    $("input:radio").each(function() {
-        const name = $(this).attr("name");
-        if ($("input:radio[name=" + name + "]:checked").length == 0) {
-            check = false;
-        }
-    });
+    // $("input:radio").each(function() {
+    //     const name = $(this).attr("name");
+    //     if ($("input:radio[name=" + name + "]:checked").length == 0) {
+    //         check = false;
+    //     }
+    // });
     if (check) {
         $('form#testForm').submit();
     } else {
