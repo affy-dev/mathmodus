@@ -95,7 +95,7 @@ class ExamController extends Controller
                 ]);
 
                 $testId = $testCreated->id;
-                session(['testId' => $testId]);
+                session(['testId' => $testId, 'testFromLessonsTab' => $testFromLessonsTab]);
                 
                 $expiresAt = Carbon::now()->addMinutes(180);
                 \Cache::put('courseId', $courseId, $expiresAt);
@@ -112,6 +112,7 @@ class ExamController extends Controller
             \Cache::forget('mcqs');
             \Cache::forget('testId');
             session()->forget('testId');
+            session()->forget('testFromLessonsTab');
             return redirect()->route('admin.exams.index')->withErrors(['There are no questions available in this test']);
         }
         
@@ -170,6 +171,7 @@ class ExamController extends Controller
             'total_ans' => $totalQuestionCount,
             'correct_ans' => $correctQuestionCount,
             'wrong_ans' => $wrongQuestionCount,
+            'testFromLessonsTab' => session('testFromLessonsTab')
         ]);
         \Cache::forget('courseId');
         \Cache::forget('mcqs');
@@ -187,18 +189,20 @@ class ExamController extends Controller
         $getTestAnalysis = $this->getTestAnalysis($testId);
         $correctQuestionDetails = $getTestAnalysis['correctQuestionDetails'];
         $wrongQuestionDetails = $getTestAnalysis['wrongQuestionDetails'];
+        $testFromLessonsTab = $getTestAnalysis['testFromLessonsTab'];
         if($testId == null) {
             session()->forget('correctAnsIds');
             session()->forget('wrongAnsIds');
             session()->forget('test_status');
             session()->forget('testId');
+            session()->forget('testFromLessonsTab');
         }
         $showBackBtn = true;
         if((strpos(url()->previous(),'take-exam') !== false)) {
             $showBackBtn = false;
         }
-        // dd($getTestAnalysis);
-        return view('admin.exam.exam-result', compact('correctQuestionDetails', 'wrongQuestionDetails', 'showBackBtn'));
+        
+        return view('admin.exam.exam-result', compact('correctQuestionDetails', 'wrongQuestionDetails', 'showBackBtn', 'testFromLessonsTab'));
     }
 
     private function getTestAnalysis($testId = null) {
@@ -213,10 +217,12 @@ class ExamController extends Controller
             $correctAnsIds = unserialize($testHistory[0]['correctAnsIds']);
             $wrongAnsIds   = unserialize($testHistory[0]['wrongAnsIds']);
             $test_status   = $testHistory[0]['test_status'];
+            $testFromLessonsTab   = $testHistory[0]['testFromLessonsTab'];
         } else {
             $correctAnsIds = session('correctAnsIds');
             $wrongAnsIds = session('wrongAnsIds');
             $test_status = session('test_status');
+            $testFromLessonsTab = session('testFromLessonsTab');
         }
         $correctQuestionDetails = [];
         $wrongQuestionDetails = [];
@@ -269,7 +275,8 @@ class ExamController extends Controller
         
         return [
             'correctQuestionDetails' => $correctQuestionDetails,
-            'wrongQuestionDetails'   => $wrongQuestionDetails
+            'wrongQuestionDetails' => $wrongQuestionDetails,
+            'testFromLessonsTab' => $testFromLessonsTab
         ];
     }
 
