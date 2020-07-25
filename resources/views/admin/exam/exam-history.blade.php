@@ -37,15 +37,21 @@
                                 {{ ucfirst($availableCourses[$test->courseId]) ?? '' }}
                             </td>
                             <td>
-                                <span class="btn bg-success btn-xs">{{ ucfirst($test->test_status) ?? '' }}</span>
+                                <span class="btn <?php echo $test->test_status == 'completed' ? 'bg-success' : 'bg-danger' ?> btn-xs">{{ ucfirst($test->test_status) ?? '' }}</span>
                             </td>
                             <td>
                                 {{ date("F d Y h:i:s",strtotime($test->created_at)) ?? '' }}
                             </td>
                             <td style="text-align:center">
-                                    <a class="btn btn-xs btn-default" href="{{ route('admin.exams.examresult', $test->id) }}">
-                                        {{ trans('global.view') }} Test Report
-                                    </a>
+                                    <?php if($test->test_status == 'completed') { ?>
+                                        <a class="btn btn-xs btn-default" href="{{ route('admin.exams.examresult', $test->id) }}">
+                                            {{ trans('global.view') }} Test Report
+                                        </a>
+                                    <?php } else { ?>
+                                        <a class="btn btn-xs btn-success" style="width:106px" href="{{ route('admin.exams.takeexam', [$test->courseId, 0 ,$test->id]) }}">
+                                            Resume Test
+                                        </a>
+                                    <?php } ?>
                                     @if(!empty($canDeleteTest))
                                     <a class="btn btn-xs btn-danger" onclick="return confirm('Are you sure want to delete?')" href="{{ route('admin.exams.deleteTest', $test->id) }}">
                                         Delete Test

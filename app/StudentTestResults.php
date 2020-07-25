@@ -17,6 +17,8 @@ class StudentTestResults extends Model
     protected $fillable = [
         'user_id',
         'courseId',
+        'lessonId',
+        'mcqs',
         'correctAnsIds',
         'wrongAnsIds',
         'test_status',

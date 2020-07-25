@@ -40,13 +40,26 @@ class ExamController extends Controller
         return view('admin.exam.index', compact('courses'));
     }
 
-    public function takeExam(Request $request, $courseId, $lessonId = null) {
+    public function takeExam(Request $request, $courseId, $lessonId = null, $testId = null) {
         abort_unless(\Gate::allows('take_exam'), 403);
+        $expiresAt = Carbon::now()->addMinutes(180);
         $testName = '';
         $testFromLessonsTab = $lessonId != null ? true : false;
-        $courseDetails = !$testFromLessonsTab ? Courses::where('id', $courseId)->first() : Lessons::where('id', $lessonId)->first();
-        $testName = !$testFromLessonsTab ? $courseDetails->course_name : $courseDetails->lesson_name;
+        $courseDetails = !$testFromLessonsTab || $testId ? Courses::where('id', $courseId)->first() : Lessons::where('id', $lessonId)->first();
+        $testName = !$testFromLessonsTab || $testId ? $courseDetails->course_name : $courseDetails->lesson_name;
         $imgSrcPath = !$testFromLessonsTab ? '../../../' : '../../../../../';
+        
+        if($testId != null) {
+            $testDetails = StudentTestResults::where('id', $testId)->first();
+            $getMcqs = unserialize($testDetails->mcqs);
+            session(['testId' => $testId, 'testFromLessonsTab' => $testFromLessonsTab]);
+            if( $testDetails->lessonId != 0 ) {
+                $testName = Lessons::where('id', $testDetails->lessonId)->first()->lesson_name;
+            }
+            \Cache::put('courseId', $courseId, $expiresAt);
+            \Cache::put('mcqs', $getMcqs, $expiresAt);
+            \Cache::put('testId', $testId, $expiresAt);
+        }
         if(!\Cache::has('courseId') && !\Cache::has('mcqs')) {
             if(!$testFromLessonsTab) {
                 $lessons = Lessons::where('course_id', $courseId)->pluck('id')->toArray();
@@ -76,32 +89,29 @@ class ExamController extends Controller
                     $questionAnswerDetails[$i]['questNumber'] = $testFromLessonsTab ? $countFromLessonTab : $questionCount;
                     $i++;
                 }
-                
                 $mcqs[] = $questionAnswerDetails;
             }
-            
-            $checkIfQuestionsAreEmpty = 0;
-            foreach ($mcqs as $key => $value) {
-                if(count($value) != 0) {
-                    $checkIfQuestionsAreEmpty++;
-                }
-            }
+            // $checkIfQuestionsAreEmpty = 0;
+            // foreach ($mcqs as $key => $value) {
+            //     if(count($value) != 0) {
+            //         $checkIfQuestionsAreEmpty++;
+            //     }
+            // }
             $testId=0;
-            if( $checkIfQuestionsAreEmpty != 0 ) {
+            // if( $checkIfQuestionsAreEmpty != 0 ) {
                 $testCreated = StudentTestResults::create([
-                    'user_id'=> auth()->user()->id, 
-                    'courseId' => $courseId,
-                    'test_status' => self::TEST_STATUS['PENDING']
+                    'user_id'       =>  auth()->user()->id, 
+                    'courseId'      =>  $courseId,
+                    'test_status'   =>  self::TEST_STATUS['PENDING'],
+                    'mcqs'          =>  serialize($mcqs),
+                    'lessonId'      =>  $lessonId != null ? $lessonId : 0
                 ]);
-
                 $testId = $testCreated->id;
                 session(['testId' => $testId, 'testFromLessonsTab' => $testFromLessonsTab]);
-                
-                $expiresAt = Carbon::now()->addMinutes(180);
                 \Cache::put('courseId', $courseId, $expiresAt);
                 \Cache::put('mcqs', $mcqs, $expiresAt);
                 \Cache::put('testId', $testId, $expiresAt);
-            }
+            // }
         } else {
             $courseId = \Cache::get('courseId');
             $mcqs = \Cache::get('mcqs');
@@ -115,7 +125,6 @@ class ExamController extends Controller
             session()->forget('testFromLessonsTab');
             return redirect()->route('admin.exams.index')->withErrors(['There are no questions available in this test']);
         }
-        
         return view('admin.exam.take-exam', compact('courseId', 'mcqs', 'testId', 'testName', 'imgSrcPath'));
     }
 
@@ -282,7 +291,8 @@ class ExamController extends Controller
 
     public function getHistory() {
         abort_unless(\Gate::allows('exam_history'), 403);
-        $testHistory = StudentTestResults::where('user_id', auth()->user()->id)->where('test_status', self::TEST_STATUS['COMPLETED'])->orderBy('id', 'desc')->paginate(10);
+        $testHistory = StudentTestResults::where('user_id', auth()->user()->id)->orderBy('id', 'desc')->paginate(10);
+        // dd($testHistory);
         $courses = Courses::all();
         $availableCourses = [];
         foreach ($courses->toArray() as $key => $value) {

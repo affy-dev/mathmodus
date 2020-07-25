@@ -45,7 +45,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('exams/history',['as'=>'exams.history','uses'=>'ExamController@getHistory']);
     Route::get('exams/exam-result/{testId?}',['as'=>'exams.examresult','uses'=>'ExamController@examResults']);
     Route::resource('exams', 'ExamController');
-    Route::get('exams/take-exam/{courseId?}/{lessonId?}',['as'=>'exams.takeexam','uses'=>'ExamController@takeExam']);
+    Route::get('exams/take-exam/{courseId?}/{lessonId?}/{testId?}',['as'=>'exams.takeexam','uses'=>'ExamController@takeExam']);
     Route::post('exams/submit-exams',['as'=>'exams.submitExam','uses'=>'ExamController@submitExam']);
     Route::get('exams/delete-test/{testId}',['as'=>'exams.deleteTest','uses'=>'ExamController@deleteTest']);
     
