@@ -70,7 +70,7 @@
                                         {{ trans('global.edit') }}
                                     </a>
                                 @endcan
-                                @can('user_edit')
+                                @can('user_activate')
                                     <a class="btn btn-xs {{ $user->user_status == 0 ? 'btn-success' : 'btn-danger' }} " href="{{ route('admin.users.activate', $user->id) }}">
                                     {{ $user->user_status == 0 ? 'Activate' : 'Deactivate' }}
                                     </a>
