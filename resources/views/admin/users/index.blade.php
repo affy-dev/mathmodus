@@ -32,6 +32,9 @@
                             {{ trans('global.user.fields.roles') }}
                         </th>
                         <th>
+                            Status
+                        </th>
+                        <th>
                             &nbsp;
                         </th>
                     </tr>
@@ -54,6 +57,9 @@
                                 @endforeach
                             </td>
                             <td>
+                                {{ $user->user_status == 0 ? 'Not Verified' : 'Verified' }}
+                            </td>
+                            <td>
                                 @can('user_show')
                                     <a class="btn btn-xs btn-primary" href="{{ route('admin.users.show', $user->id) }}">
                                         {{ trans('global.view') }}
@@ -62,6 +68,11 @@
                                 @can('user_edit')
                                     <a class="btn btn-xs btn-info" href="{{ route('admin.users.edit', $user->id) }}">
                                         {{ trans('global.edit') }}
+                                    </a>
+                                @endcan
+                                @can('user_edit')
+                                    <a class="btn btn-xs {{ $user->user_status == 0 ? 'btn-success' : 'btn-danger' }} " href="{{ route('admin.users.activate', $user->id) }}">
+                                    {{ $user->user_status == 0 ? 'Activate' : 'Deactivate' }}
                                     </a>
                                 @endcan
                                 @can('user_delete')

@@ -17,6 +17,7 @@
     <!-- main css -->
     <link rel="stylesheet" href="{{ asset('frontend/css/main.css') }}" media="screen" />
     <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}" media="screen" />
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <title>{{ trans('global.site_title') }}</title>
     @yield('styles') 
 </head>
@@ -53,6 +54,7 @@
     <script type="text/javascript" src="{{ asset('frontend/js/bootstrap.js') }}"></script>
     <script type="text/javascript" src="{{ asset('frontend/js/custom.js') }}"></script>
     <!--main js file end-->
+    @include('sweetalert::alert')
     @yield('scripts')  
 </body>
 <!-- Body End -->

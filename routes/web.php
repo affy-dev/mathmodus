@@ -9,7 +9,7 @@ Route::post('/post-message',['as'=>'contact-us','uses'=>'Frontend\HomeController
 
 // Route::redirect('/home', '/admin/exams');
 
-Auth::routes(['register' => false]);
+Auth::routes();
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['web','auth']], function () {
     Route::get('/', 'HomeController@index')->name('home');
@@ -20,8 +20,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::delete('roles/destroy', 'RolesController@massDestroy')->name('roles.massDestroy');
     Route::resource('roles', 'RolesController');
 
+    
     Route::delete('users/destroy', 'UsersController@massDestroy')->name('users.massDestroy');
+    Route::get('users/activate/{id}', 'UsersController@activate')->name('users.activate');
     Route::resource('users', 'UsersController');
+    // Route::get('users/activate-user/{id}',['as'=>'admin.users.activateUser','uses'=>'UsersController@activateUser']);
 
     Route::delete('products/destroy', 'ProductsController@massDestroy')->name('products.massDestroy');
     Route::resource('products', 'ProductsController');

@@ -8,6 +8,8 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Role;
 use App\User;
+use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class UsersController extends Controller
 {
@@ -84,5 +86,17 @@ class UsersController extends Controller
         User::whereIn('id', request('ids'))->delete();
 
         return response(null, 204);
+    }
+
+    public function activate(Request $request, $userId) {
+        $user = User::where('id', $userId)->first();
+        if($user->user_status == 0) {    
+            User::where('id', $userId)->update(['user_status' => 1]);
+            Alert::success('User Activated Successfully', '');
+        } else {
+            User::where('id', $userId)->update(['user_status' => 0]);
+            Alert::success('User De-Activated Successfully', '');
+        }
+        return redirect()->route('admin.users.index');
     }
 }

@@ -1,71 +1,103 @@
-@extends('layouts.app')
+@extends('frontend.layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Register') }}</div>
 
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card-group">
+            <div class="card p-4">
                 <div class="card-body">
+                    @if(\Session::has('message'))
+                    <p class="alert alert-info">
+                        {{ \Session::get('message') }}
+                    </p>
+                    @endif
                     <form method="POST" action="{{ route('register') }}">
-                        @csrf
-
-                        <div class="form-group row">
-                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="name" type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="name" value="{{ old('name') }}" required autofocus>
-
-                                @if ($errors->has('name'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('name') }}</strong>
-                                    </span>
-                                @endif
+                        {{ csrf_field() }}
+                        <h1>
+                            <div class="login-logo" style="text-align:center">
+                                <img alt="Porto" src="{{ asset('frontend/images/new-logo.png') }}">
                             </div>
-                        </div>
+                        </h1>
+                        <!-- <div class="col-lg-12 col-md-offset-3">
+                            <h2>Register</h2>
+                        </div> -->
 
-                        <div class="form-group row">
-                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
+                        <div class="col-lg-12 col-md-12 col-md-offset-3">
+                            <div class="lms_login_window lms_login_light">
+                                <h3>Register</h3>
+                                <div class="lms_login_body">
+                                    <div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
+                                        <label for="name">{{ trans('global.user.fields.name') }}*</label>
+                                        <input type="text" id="name" name="name" class="form-control"
+                                            value="{{ old('name', isset($user) ? $user->name : '') }}">
+                                        @if($errors->has('name'))
+                                        <em class="invalid-feedback" style="color:#e40505">
+                                            {{ $errors->first('name') }}
+                                        </em>
+                                        @endif
+                                    </div>
+                                    <div class="form-group {{ $errors->has('username') ? 'has-error' : '' }}">
+                                        <label for="username">{{ trans('global.user.fields.username') }}*</label>
+                                        <input type="text" id="username" name="username" class="form-control"
+                                            value="{{ old('username', isset($user) ? $user->username : '') }}">
+                                        @if($errors->has('username'))
+                                        <em class="invalid-feedback" style="color:#e40505">
+                                            {{ $errors->first('username') }}
+                                        </em>
+                                        @endif
+                                        <p class="helper-block">
+                                            {{ trans('global.user.fields.username_helper') }}
+                                        </p>
+                                    </div>
+                                    <div class="form-group {{ $errors->has('email') ? 'has-error' : '' }}">
+                                        <label for="email">{{ trans('global.user.fields.email') }}*</label>
+                                        <input type="email" id="email" name="email" class="form-control"
+                                            value="{{ old('email', isset($user) ? $user->email : '') }}">
+                                        @if($errors->has('email'))
+                                        <em class="invalid-feedback" style="color:#e40505">
+                                            {{ $errors->first('email') }}
+                                        </em>
+                                        @endif
+                                        <p class="helper-block">
+                                            {{ trans('global.user.fields.email_helper') }}
+                                        </p>
+                                    </div>
+                                    <div class="form-group {{ $errors->has('roles') ? 'has-error' : '' }}">
+                                        <label for="roles">{{ trans('global.user.fields.roles') }}*
+                                            <select name="roles" id="roles" class="form-control select2">
+                                                <option value="">--Select--</option>
+                                                @foreach($roles as $id => $roles)
+                                                <option value="{{ $id }}"
+                                                    {{ (isset($user) && $user->roles->contains($id)) ? 'selected' : '' }}>
+                                                    {{ $roles }}
+                                                </option>
+                                                @endforeach
+                                            </select>
+                                            @if($errors->has('roles'))
+                                            <em class="invalid-feedback" style="color:#e40505">
+                                                {{ $errors->first('roles') }}
+                                            </em>
+                                            @endif
+                                            <p class="helper-block">
+                                                {{ trans('global.user.fields.roles_helper') }}
+                                            </p>
+                                    </div>
+                                    <div class="form-group {{ $errors->has('password') ? 'has-error' : '' }}">
+                                        <label for="password">{{ trans('global.user.fields.password') }}</label>
+                                        <input type="password" id="password" name="password" class="form-control">
+                                        @if($errors->has('password'))
+                                        <em class="invalid-feedback" style="color:#e40505">
+                                            {{ $errors->first('password') }}
+                                        </em>
+                                        @endif
+                                        <p class="helper-block">
+                                            {{ trans('global.user.fields.password_helper') }}
+                                        </p>
+                                    </div>
+                                    <button type="submit" class="btn btn-default">Sign Up</button>
 
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required>
-
-                                @if ($errors->has('email'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
-
-                                @if ($errors->has('password'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
-                            </div>
-                        </div>
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Register') }}
-                                </button>
+                                </div>
                             </div>
                         </div>
                     </form>

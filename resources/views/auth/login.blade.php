@@ -52,9 +52,14 @@
                                     </div>
                                     <button type="submit" class="btn btn-default">{{ trans('global.login') }}</button>
                                     <a class="btn btn-link px-0" style="color:#D98938"
+                                        href="{{ route('register') }}">
+                                        Signup? 
+                                    </a>
+                                    <a class="btn btn-link px-0" style="color:#D98938"
                                         href="{{ route('password.request') }}">
                                         {{ trans('global.forgot_password') }}
                                     </a>
+                                    
                                 </div>
                             </div>
                         </div>
