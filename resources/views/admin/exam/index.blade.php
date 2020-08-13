@@ -11,7 +11,7 @@
             </div>
             @endif
         </div>
-        <button onclick="window.print()">Print this page</button>
+        
         <div class="card-deck">
             @foreach($courses as $course)
             <div class="card card-custom-css">

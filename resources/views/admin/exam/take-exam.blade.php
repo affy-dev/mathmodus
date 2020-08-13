@@ -13,7 +13,7 @@
         <div class="col-sm-12">
             <h3>Test Name: [ {{$testName}} ]</h3>
         </div>
-        <button onclick="window.print()">Print this page</button>
+        
     </div>
     <div class="col-sm" style="text-align:right">
         <a class="btn btn-default"
