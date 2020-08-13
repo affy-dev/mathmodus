@@ -95,7 +95,7 @@
                                             {{ trans('global.user.fields.password_helper') }}
                                         </p>
                                     </div>
-                                    <button type="submit" class="btn btn-default">Sign Up</button>
+                                    <button type="submit" class="btn btn-default">Sign Up & Pay $100</button>
 
                                 </div>
                             </div>

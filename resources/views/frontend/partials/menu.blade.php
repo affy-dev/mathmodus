@@ -13,6 +13,7 @@
                     <li class="{{ request()->is('how-it-works') ? 'active' : '' }}"><a href="/how-it-works">How It Works</a></li>
                     <li class="{{ request()->is('contact-us') ? 'active' : '' }}"><a href="/contact-us">Contact Us</a></li>
                     <li class="{{ request()->is('login') ? 'active' : '' }}"><a href="/login">Login <i class="fa fa-sign-in" aria-hidden="true"></i></a></li>
+                    <li class="{{ request()->is('register') ? 'active' : '' }}"><a href="/register">Register </a></li>
                 </ul>
             </nav>
             <div class="lms_search_toggle"><a><i class="fa fa-search"></i></a></div>

@@ -988,8 +988,8 @@ ul.lms_list_upper_roman {
 }
 
 .lms_login_window .lms_login_body label {
-    color: #CCC;
-    font-weight: 100;
+    color: #585757a6;
+    font-weight: bold;
 }
 
 .lms_login_window .lms_login_body input {

@@ -90,8 +90,8 @@ class RegisterController extends Controller
         $this->validator($request->all())->validate();
 
         event(new Registered($user = $this->create($request->all())));
-        Alert::success('Successfully registered. Please wait for the admin to activate your account', '');
-        return $this->registered($request, $user)
-                        ?: redirect($this->redirectPath());
+        return redirect()->route('payment');
+        // return $this->registered($request, $user)
+        //                 ?: redirect($this->redirectPath());
     }
 }

@@ -11,6 +11,10 @@ Route::post('/post-message',['as'=>'contact-us','uses'=>'Frontend\HomeController
 
 Auth::routes();
 
+Route::get('/payment', 'PayPalController@handlePayment')->name('payment');
+Route::get('/cancel', 'PayPalController@paymentCancel')->name('payment.cancel');
+Route::get('/payment/success', 'PayPalController@paymentSuccess')->name('payment.success');
+
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['web','auth']], function () {
     Route::get('/', 'HomeController@index')->name('home');
 
