@@ -10,9 +10,13 @@ use App\Role;
 use App\User;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
+use App\Http\Controllers\Admin\RolesController;
 
 class UsersController extends Controller
 {
+    const STUDENT_ROLES = 3;
+    const USER_ROLES_TEACHER = 4;
+
     public function index()
     {
         abort_unless(\Gate::allows('user_access'), 403);
@@ -22,12 +26,12 @@ class UsersController extends Controller
         return view('admin.users.index', compact('users'));
     }
 
-    public function create()
+    public function create(User $user)
     {
         abort_unless(\Gate::allows('user_create'), 403);
-
-        $roles = Role::all()->pluck('title', 'id');
-
+        $currentUserRoles = RolesController::getLoggedInUserRolesIdAndName();
+        $getRolesIds = RolesController::getAllRolesDependency();
+        $roles = Role::whereIn('id', $getRolesIds[$currentUserRoles->roleId])->get()->pluck('title', 'id');
         return view('admin.users.create', compact('roles'));
     }
 

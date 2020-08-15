@@ -95,8 +95,8 @@
                                             {{ trans('global.user.fields.password_helper') }}
                                         </p>
                                     </div>
-                                    <button type="submit" class="btn btn-default">Sign Up & Pay $100</button>
-
+                                    <button type="submit" class="btn btn-default">Sign Up</button>
+                                    <!-- <div id="paypal-button-container"></div> -->
                                 </div>
                             </div>
                         </div>
@@ -106,4 +106,28 @@
         </div>
     </div>
 </div>
+@section('scripts')
+    <!-- <script>
+        paypal.Buttons({
+    createOrder: function(data, actions) {
+      // This function sets up the details of the transaction, including the amount and line item details.
+      return actions.order.create({
+        purchase_units: [{
+          amount: {
+            value: '9'
+          }
+        }]
+      });
+    },
+    onApprove: function(data, actions) {
+      // This function captures the funds from the transaction.
+      return actions.order.capture().then(function(details) {
+          console.log('sssssssss',details);
+        // This function shows a transaction success message to your buyer.
+        alert('Transaction completed by ' + details.payer.name.given_name);
+      });
+    }
+  }).render('#paypal-button-container');
+    </script> -->
+@endsection
 @endsection

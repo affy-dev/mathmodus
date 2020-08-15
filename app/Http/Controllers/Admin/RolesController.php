@@ -11,6 +11,13 @@ use App\Role;
 
 class RolesController extends Controller
 {
+
+    public static $roleDependency = [
+        1 => [2,3,4],
+        2 => [3,4],
+        4 => [3]
+    ];
+
     public function index()
     {
         abort_unless(\Gate::allows('role_access'), 403);
@@ -84,4 +91,18 @@ class RolesController extends Controller
 
         return response(null, 204);
     }
+
+    public static function getLoggedInUserRolesIdAndName() {
+        $role= \DB::table('role_user')
+        ->where('role_user.user_id','=',auth()->user()->id)
+        ->join('roles', 'role_user.role_id', '=', 'roles.id')
+        ->select('roles.title as title', 'roles.id as roleId', 'role_user.user_id as user_id')
+        ->first();
+        return $role;
+    }
+    
+    public static function getAllRolesDependency() {
+        return self::$roleDependency;
+    }
+
 }

@@ -110,12 +110,10 @@ class HomeController
             }
             $counter++;
         }
-        // dd($mapCorrIncorrWithCourse);
+        
         $mapCorrIncorrWithCourse = json_encode($mapCorrIncorrWithCourse);
 
         //===================== Graph by Lessons ========================
-        // dd($correctAnsIds);
-
         
         return view('home', compact('mapCorrIncorrWithCourse', 'availableCourses', 'courseNames', 'countPrincipal', 'countStudent', 'countTeacher', 'schoolCount', 'countUser', 'totalTestGiven', 'correctAns', 'wrongAns', 'finalCorrectMapInfo', 'finalInCorrectMapInfo', 'IncorrectLessonsName', 'CorrectLessonsName'));
     }

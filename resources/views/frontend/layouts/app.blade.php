@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="{{ asset('frontend/css/main.css') }}" media="screen" />
     <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}" media="screen" />
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=AX2B0e_u7YO4waoNp46CXTOdbDFFd6YmSlHmPfB7k2IbFqqcRIfjeP-yg2Wewbfd6UWxMljtqpxbZc0e"></script>
     <title>{{ trans('global.site_title') }}</title>
     @yield('styles') 
 </head>
