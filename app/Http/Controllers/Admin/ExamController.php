@@ -44,7 +44,7 @@ class ExamController extends Controller
         abort_unless(\Gate::allows('take_exam'), 403);
         $expiresAt = Carbon::now()->addMinutes(180);
         $testName = '';
-        $testFromLessonsTab = $lessonId != null ? true : false;
+        $testFromLessonsTab = $lessonId != null ? true : 0;
         $courseDetails = !$testFromLessonsTab || $testId ? Courses::where('id', $courseId)->first() : Lessons::where('id', $lessonId)->first();
         $testName = !$testFromLessonsTab || $testId ? $courseDetails->course_name : $courseDetails->lesson_name;
         $imgSrcPath = !$testFromLessonsTab ? '../../../' : '../../../../../';
@@ -125,7 +125,7 @@ class ExamController extends Controller
             session()->forget('testFromLessonsTab');
             return redirect()->route('admin.exams.index')->withErrors(['There are no questions available in this test']);
         }
-        return view('admin.exam.take-exam', compact('courseId', 'mcqs', 'testId', 'testName', 'imgSrcPath'));
+        return view('admin.exam.take-exam', compact('courseId', 'mcqs', 'testId', 'testName', 'imgSrcPath', 'testFromLessonsTab'));
     }
 
     public function submitExam(Request $request) {

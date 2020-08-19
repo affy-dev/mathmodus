@@ -13,7 +13,7 @@
         <div class="col-sm-12">
             <h3>Test Name: [ {{$testName}} ]</h3>
         </div>
-        
+
     </div>
     <div class="col-sm" style="text-align:right">
         <a class="btn btn-default"
@@ -21,6 +21,8 @@
             Skip Test
         </a>
     </div>
+    
+    <a id="button"></a>
     <form action="{{ route("admin.exams.submitExam") }}" method="POST" id="testForm">
         @csrf
         @foreach($mcqs as $qDetails)
@@ -32,7 +34,9 @@
             $questNumber = $ques['questNumber'];
             $questText = $quesDetails['question_text'];
         ?>
-        <div class="questionsBox">
+        <div id="quesNo_{{$questNumber}}" style="height: 50px;"></div>
+        <div class="questionsBox" >
+            
             <div class="questions">
                 <?php        
                     $question = str_replace('src="../', 'src="'.$imgSrcPath.'', $questText);
@@ -63,6 +67,15 @@
 </div>
 @section('scripts')
 <script>
+$(function() {
+    $('.scroll-down').click(function() {
+        $('html, body').animate({
+            scrollTop: $('.questions').offset().top
+        }, 'slow');
+        return false;
+    });
+});
+
 function submitForm() {
     $('#sbmtBtn').prop('disabled', true);
     $('#sbmtBtn').html('<i class="fa fa-circle-o-notch fa-spin" style="font-size:24px"></i>');
@@ -86,6 +99,38 @@ function submitForm() {
         });
     }
 }
+
+
+var btn = $('#button');
+let arrowDownCounter = 0;
+let totalExams = 0;
+let testFromLessonsTab = {{$testFromLessonsTab}};
+
+if(testFromLessonsTab){
+    totalExams = {{count($mcqs[0])}};
+} else {
+    totalExams = {{count($mcqs)}};
+}
+
+$(window).scroll(function() {
+  if ($(window).scrollTop() > 100) {
+    btn.addClass('show');
+  } else {
+    btn.removeClass('show');
+  }
+});
+
+btn.on('click', function(e) {
+  arrowDownCounter++;
+  if(arrowDownCounter <= totalExams) {
+      window.location.hash = '#quesNo_'+arrowDownCounter;
+  } else {
+    arrowDownCounter = 0;
+  }
+  e.preventDefault();
+});
+
+
 </script>
 @endsection
 @endsection
