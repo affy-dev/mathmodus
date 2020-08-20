@@ -22,7 +22,7 @@
         </a>
     </div>
     
-    <a id="button"></a>
+    <a id="scrlbutton"></a>
     <form action="{{ route("admin.exams.submitExam") }}" method="POST" id="testForm">
         @csrf
         @foreach($mcqs as $qDetails)
@@ -101,7 +101,7 @@ function submitForm() {
 }
 
 
-var btn = $('#button');
+var btn = $('#scrlbutton');
 let arrowDownCounter = 0;
 let totalExams = 0;
 let testFromLessonsTab = {{$testFromLessonsTab}};

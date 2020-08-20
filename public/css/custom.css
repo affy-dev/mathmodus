@@ -438,7 +438,7 @@ input[type=radio] {
     }
 }
 
-#button {
+#scrlbutton {
     display: block;
     background-color: #1d1c1a;
     width: 50px;
@@ -453,7 +453,7 @@ input[type=radio] {
     z-index: 1000;
 }
 
-#button::after {
+#scrlbutton::after {
     content: "\f063";
     font-family: FontAwesome;
     font-weight: normal;
@@ -463,16 +463,16 @@ input[type=radio] {
     color: #fff;
 }
 
-#button:hover {
+#scrlbutton:hover {
     cursor: pointer;
     background-color: #333;
 }
 
-#button:active {
+#scrlbutton:active {
     background-color: #555;
 }
 
-#button.show {
+#scrlbutton.show {
     opacity: 1;
     visibility: visible;
 }
