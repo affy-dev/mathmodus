@@ -81,9 +81,121 @@
                         {{ $qualification }}
                     </td>
                 </tr>
+                <tr>
+                    <th>
+                        Total Students
+                    </th>
+                    <td>
+                        {{ count($getAllStudents) }}
+                    </td>
+                </tr>
             </tbody>
         </table>
+        <div class="col-sm-12">
+            <div id="resultGraph"></div>
+            <hr>
+            <hr>
+            <hr>
+            <div id="columnChartDiv"></div>
+        </div>
     </div>
 </div>
+<?php if(count($examsTaken) > 0) { ?>
+@section('scripts')
+    <script>
+    
+        const correctPercentage = ({{$correct_ans}} / {{$total_ans}}) * 100;
+        const wrongPercentage = ({{$wrong_ans}} / {{$total_ans}}) * 100;
+        
+        const setColors = ['#50B432', '#f34807'];
 
+        Highcharts.setOptions({
+            colors: ['#f34807', '#50B432']
+        });
+
+        Highcharts.chart('resultGraph', {
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie'
+            },
+            title: {
+                text: 'Correct Answers Percentage / Wrong Answers Percentage'
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</br>'
+            },
+            accessibility: {
+                point: {
+                    valueSuffix: '%'
+                }
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                    }
+                }
+            },
+            series: [{
+                name: 'Test Result',
+                colorByPoint: true,
+                data: [{
+                    name: 'Incorrect Answers',
+                    y: wrongPercentage,
+                    sliced: true,
+                    selected: true
+                }, {
+                    name: 'Correct Answers',
+                    y: correctPercentage
+                }]
+            }]
+        });
+    
+
+
+        // ===============Column Comparison Chart==================
+        Highcharts.setOptions({
+            lang: {
+            thousandsSep: ' '
+        },
+        colors: setColors
+        })
+        Highcharts.chart('columnChartDiv', {
+            chart: {
+                type: 'column',
+                zoomType: 'y',
+            },
+            title: {
+                text: 'Correct Answer VS Incorrect Answer / Course'
+            },
+            xAxis: {
+                categories: <?php echo json_encode($courseNames) ?>,
+                crosshair: true
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Count'
+                }
+            },
+            tooltip: {
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: <?php echo $mapCorrIncorrWithCourse; ?>
+        });
+    </script>
+@endsection
+<?php } ?>
 @endsection

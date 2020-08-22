@@ -11,7 +11,7 @@
             @csrf
 
             <div class="form-group {{ $errors->has('user_id') ? 'has-error' : '' }}">
-                <label for="user_id">Select Teacher*</label>
+                <label for="user_id">Select Teacher for which you want to add details*</label>
                 <select id="user_id" name="user_id" class="form-control">
                     <option value="">--- Select Teacher ---</option>
                     @foreach ($users as $key => $value)

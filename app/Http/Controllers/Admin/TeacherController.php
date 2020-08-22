@@ -13,6 +13,10 @@ use App\Student;
 use App\School;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
+use App\StudentTestResults;
+use App\Courses;
+use App\Questions;
+use App\Lessons;
 
 class TeacherController extends Controller
 {
@@ -33,6 +37,11 @@ class TeacherController extends Controller
     ];
 
     const TEACHER_ROLE = 4;
+
+    const TEST_STATUS = [
+        'PENDING' => 'pending',
+        'COMPLETED' => 'completed'
+    ];
 
     public function index()
     {
@@ -99,7 +108,7 @@ class TeacherController extends Controller
                 $join->where('users.id','=', $userId);
             })
             ->whereNull('users.deleted_at')
-            ->get(['users.id as userId', 'teachers.id as teacherId', 'users.name as name', 'teachers.designation as designation', 'teachers.qualification as qualification', 'teachers.dob as dob', 'teachers.gender as gender', 'teachers.email as email', 'teachers.phone_no as phone_no', 'teachers.address as address', 'teachers.joining_date as joining_date']);
+            ->get(['users.id as userId', 'teachers.id as teacherId', 'users.name as name', 'teachers.designation as designation', 'teachers.qualification as qualification', 'teachers.dob as dob', 'teachers.gender as gender', 'teachers.email as email', 'teachers.phone_no as phone_no', 'teachers.address as address', 'teachers.joining_date as joining_date', 'teachers.school_id as school_id']);
 
         $name = '';
         $designation = '';
@@ -122,11 +131,13 @@ class TeacherController extends Controller
             $address = $value->address;
             $joining_date = $value->joining_date;
             $teacherId = $value->teacherId;
+            $schoolId = $value->school_id;
         }
 
         $gender = self::GENDER;
         $blood_group = self::BLOOD_GROUP;
-        return view('admin.teachers.edit', compact('name', 'email', 'dob', 'designation', 'qualification', 'genderValue', 'email', 'phone_no', 'address', 'joining_date', 'teacherId', 'userId', 'gender'));
+        $allSchools = School::get();
+        return view('admin.teachers.edit', compact('name', 'email', 'dob', 'designation', 'qualification', 'genderValue', 'email', 'phone_no', 'address', 'joining_date', 'teacherId', 'userId', 'gender', 'allSchools', 'schoolId'));
     }
 
     public function update(Request $request, $teacherId)
@@ -144,6 +155,7 @@ class TeacherController extends Controller
             'email'     => 'unique:users,email,'.$userId,
             'phone_no'  => 'required|max:10',
             'address'   => 'required|max:255',
+            'school_id' => 'required',
         ];
 
         $this->validate($request, $rules);
@@ -184,7 +196,107 @@ class TeacherController extends Controller
             $address = $value->address;
             $joining_date = $value->joining_date;
         }
-        return view('admin.teachers.show', compact('name', 'email', 'dob', 'designation', 'qualification', 'gender', 'email', 'phone_no', 'address', 'joining_date'));
+
+        $getAllStudents = Student::where('teacher_id', $userId)->get()->toArray();
+        $studentsId = [];
+        foreach ($getAllStudents as $studentData) {
+            $studentsId[] = $studentData['user_id'];
+        }
+        
+        $examsTaken = StudentTestResults::whereIn('user_id', $studentsId)
+        ->where('test_status', self::TEST_STATUS['COMPLETED'])
+        ->get();
+        // dd($examsTaken);
+        $total_ans = 0;
+        $correct_ans = 0;
+        $wrong_ans = 0;
+
+        if(count($examsTaken) > 0) {
+            foreach ($examsTaken as $key => $value) {
+                $total_ans = $total_ans + $value->total_ans;
+                $correct_ans = $correct_ans + $value->correct_ans;
+                $wrong_ans = $wrong_ans + $value->wrong_ans;
+            }
+        }
+        $totalTestGiven = count($examsTaken);
+        $courses = Courses::all();
+        $availableCourses = [];
+        foreach ($courses->toArray() as $key => $value) {
+            $availableCourses[$value['id']] = $value['course_name'];
+        }
+
+        $correctAns = [];
+        $wrongAns = [];
+        $correctAnsIds = [];
+        $wrongAnsIds = [];
+        $mapCorrIncorrWithCourse = [];
+        $counter = 0;
+        $mapCounter = 0;
+        $resultCount = [];
+        $finalCorrectLessons = [];
+        $lessonsCorrect = [];
+        $lessonsWrong = [];
+        $lessonsFinalData = [];
+        
+        foreach($examsTaken as $exms) {
+            $correctAns[] = $exms->correct_ans;
+            $wrongAns[] = $exms->wrong_ans;
+            $resultCount[$exms->courseId]['correct'][] = $exms->correct_ans;
+            $resultCount[$exms->courseId]['wrong'][] = $exms->wrong_ans;
+        }
+        $mapDataWithLessons = [];
+        $c=0;
+        $IncorrectLessonsName = [];
+        $CorrectLessonsName = [];
+        foreach($lessonsFinalData as $dt) {
+            if($c==0) {
+                $lessonsDetails = Lessons::whereIn('id', array_keys($dt))->get();
+                foreach ($lessonsDetails as $less) {
+                    $CorrectLessonsName[] = $less->lesson_name;
+                }
+                $mapDataWithLessons[$c]['name'] = 'Correct';
+                $mapDataWithLessons[$c]['data'] = array_values($dt);  
+            } else {
+                $lessonsDetails = Lessons::whereIn('id', array_keys($dt))->get();
+                foreach ($lessonsDetails as $less) {
+                    $IncorrectLessonsName[] = $less->lesson_name;
+                }
+                $mapDataWithLessons[$c]['name'] = 'InCorrect';
+                $mapDataWithLessons[$c]['data'] = array_values($dt);  
+            }
+            $c++;
+        }
+
+        $finalCorrectMapInfo = [];
+        $finalInCorrectMapInfo = [];
+        if(count($mapDataWithLessons) > 0) {
+            $finalCorrectMapInfo[] = $mapDataWithLessons[0];
+            $finalInCorrectMapInfo[] = $mapDataWithLessons[1];
+        }
+        
+        
+        //===================== Graph by Courses ========================
+        $correctArr = [];
+        $wrongArr = [];
+        $courseNames = [];
+        foreach($resultCount as $courseId => $ans) {
+            $courseNames[] = $availableCourses[$courseId];
+            $correctArr[] = array_sum($ans['correct']);
+            $wrongArr[] = array_sum($ans['wrong']);
+            if($counter == (count($resultCount)-1)) { 
+                $mapCorrIncorrWithCourse[$mapCounter]['name'] = 'Correct';
+                $mapCorrIncorrWithCourse[$mapCounter]['data'] = $correctArr;
+                $mapCounter++;
+                $mapCorrIncorrWithCourse[$mapCounter]['name'] = 'Incorrect';
+                $mapCorrIncorrWithCourse[$mapCounter]['data'] = $wrongArr;
+            }
+            $counter++;
+        }
+        
+        $mapCorrIncorrWithCourse = json_encode($mapCorrIncorrWithCourse);
+        //===================== End Graph by Courses ========================
+
+        return view('admin.teachers.show', compact('name', 'email', 'dob', 'designation', 'qualification', 'gender', 'email', 'phone_no', 'address', 'joining_date', 'total_ans', 'correct_ans', 'wrong_ans', 'mapCorrIncorrWithCourse', 'correctAns', 'wrongAns', 'finalCorrectMapInfo', 'finalInCorrectMapInfo', 'IncorrectLessonsName', 'CorrectLessonsName', 'totalTestGiven', 'courseNames', 'examsTaken', 'getAllStudents'));
     }
 
     public function destroy(Teacher $teacher)
