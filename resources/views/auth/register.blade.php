@@ -65,7 +65,7 @@
                                     </div>
                                     <div class="form-group {{ $errors->has('roles') ? 'has-error' : '' }}">
                                         <label for="roles">{{ trans('global.user.fields.roles') }}*
-                                            <select name="roles" id="roles" class="form-control select2">
+                                            <select name="roles" id="roles" class="form-control select2" style="border: 2px solid #ff9933;border-radius: 4px;">
                                                 <option value="">--Select--</option>
                                                 @foreach($roles as $id => $roles)
                                                 <option value="{{ $id }}"

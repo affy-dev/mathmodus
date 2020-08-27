@@ -91,6 +91,9 @@
                                         {{ trans('global.edit') }}
                                     </a>
                                 @endcan
+                                    <a class="btn btn-xs btn-info" href="#">
+                                            Lesson Wise Report
+                                    </a>
                                 @can('student_delete')
                                     <form action="{{ route('admin.students.destroy', $student->studentId) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
                                         <input type="hidden" name="_method" value="DELETE">

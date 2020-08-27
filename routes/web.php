@@ -50,6 +50,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     Route::get('exams/lessons-videos/{courseId}/{testId?}',['as'=>'exams.lessonVideos','uses'=>'ExamController@lessonVideos']);
     Route::get('exams/history',['as'=>'exams.history','uses'=>'ExamController@getHistory']);
+    Route::get('exams/reports',['as'=>'exams.reports','uses'=>'ExamController@reports']);
     Route::get('exams/exam-result/{testId?}',['as'=>'exams.examresult','uses'=>'ExamController@examResults']);
     Route::resource('exams', 'ExamController');
     Route::get('exams/take-exam/{courseId?}/{lessonId?}/{testId?}',['as'=>'exams.takeexam','uses'=>'ExamController@takeExam']);

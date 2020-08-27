@@ -142,28 +142,39 @@ class ExamController extends Controller
         $correctAnsIds = [];
         $wrongAnsIds = [];
         $counter=0;
+        $wrong_lesson_ids = [];
+        $correct_lesson_ids = [];
         foreach ($allQuestionIds as $quesId) {
             $counter++;
             $ansId = array_key_exists('answerGroup_'.$quesId, $data) ? $data['answerGroup_'.$quesId] : $quesId;
             $questNumber = $data['questNumber_'.$quesId];
-            if(array_key_exists('answerGroup_'.$quesId, $data)) { // unswered list comers here
+            if(array_key_exists('answerGroup_'.$quesId, $data)) { // answered list comers here
                 $ansId = $data['answerGroup_'.$quesId];
                 $ansDetails = \DB::table('question_answer')
                 ->where('id', $ansId)
                 ->first();
                 
+                $questionDetails = \DB::table('questions')
+                                    ->where('id', $ansDetails->question_id)
+                                    ->first();
                 $ansDetails->quesNum = $questNumber;
                 if($ansDetails->correct_answer == 'TRUE') {
                     $correctAnsIds[] = $ansDetails;
+                    $correct_lesson_ids[] = $questionDetails->lesson_id;
                 } else {
                     $wrongAnsIds[] = $ansDetails;
+                    $wrong_lesson_ids[] = $questionDetails->lesson_id;
                 }
             } else { // unanswered comes here
                 $ansDetails = \DB::table('question_answer')
                 ->where('question_id', $quesId)
                 ->first();
+                $questionDetails = \DB::table('questions')
+                                    ->where('id', $ansDetails->question_id)
+                                    ->first();
                 $ansDetails->quesNum = $questNumber;
                 $wrongAnsIds[] = $ansDetails;
+                $wrong_lesson_ids[] = $questionDetails->lesson_id;
             }
         }
 
@@ -180,7 +191,9 @@ class ExamController extends Controller
             'total_ans' => $totalQuestionCount,
             'correct_ans' => $correctQuestionCount,
             'wrong_ans' => $wrongQuestionCount,
-            'testFromLessonsTab' => session('testFromLessonsTab')
+            'testFromLessonsTab' => session('testFromLessonsTab'),
+            'wrong_lesson_ids' => serialize($wrong_lesson_ids),
+            'correct_lesson_ids' => serialize($correct_lesson_ids),
         ]);
         \Cache::forget('courseId');
         \Cache::forget('mcqs');
@@ -199,6 +212,8 @@ class ExamController extends Controller
         $correctQuestionDetails = $getTestAnalysis['correctQuestionDetails'];
         $wrongQuestionDetails = $getTestAnalysis['wrongQuestionDetails'];
         $testFromLessonsTab = $getTestAnalysis['testFromLessonsTab'];
+        $correct_lesson_ids = $getTestAnalysis['correct_lesson_ids'];
+        $wrong_lesson_ids = $getTestAnalysis['wrong_lesson_ids'];
         if($testId == null) {
             session()->forget('correctAnsIds');
             session()->forget('wrongAnsIds');
@@ -218,6 +233,8 @@ class ExamController extends Controller
         $correctAnsIds = '';
         $wrongAnsIds = '';
         $test_status = '';
+        $wrong_lesson_ids = '';
+        $correct_lesson_ids = '';
         if( $testId != null ) {
             $testHistory = StudentTestResults::where('user_id', auth()->user()->id)
                                             ->where('test_status', self::TEST_STATUS['COMPLETED'])
@@ -225,6 +242,8 @@ class ExamController extends Controller
                                             ->get();
             $correctAnsIds = unserialize($testHistory[0]['correctAnsIds']);
             $wrongAnsIds   = unserialize($testHistory[0]['wrongAnsIds']);
+            $wrong_lesson_ids   = unserialize($testHistory[0]['wrong_lesson_ids']);
+            $correct_lesson_ids   = unserialize($testHistory[0]['correct_lesson_ids']);
             $test_status   = $testHistory[0]['test_status'];
             $testFromLessonsTab   = $testHistory[0]['testFromLessonsTab'];
         } else {
@@ -285,7 +304,9 @@ class ExamController extends Controller
         return [
             'correctQuestionDetails' => $correctQuestionDetails,
             'wrongQuestionDetails' => $wrongQuestionDetails,
-            'testFromLessonsTab' => $testFromLessonsTab
+            'testFromLessonsTab' => $testFromLessonsTab,
+            'correct_lesson_ids' => $correct_lesson_ids,
+            'wrong_lesson_ids' => $wrong_lesson_ids,
         ];
     }
 
@@ -325,6 +346,42 @@ class ExamController extends Controller
         return view('admin.exam.lesson-videos', compact('lessonVideos', 'showBackBtn', 'courseId', 'courseName'));
     }
 
+    public function reports(Request $request) {
+        $testHistory = StudentTestResults::where('user_id', auth()->user()->id)
+                                            ->where('test_status', self::TEST_STATUS['COMPLETED'])
+                                            ->get(['wrong_lesson_ids','correct_lesson_ids']);
+        
+        $wrong_lesson_ids = [];
+        $correct_lesson_ids = [];
+        foreach ($testHistory as $dt) {
+            $wrong_lesson_ids[] = !empty($dt->wrong_lesson_ids) ? unserialize($dt->wrong_lesson_ids) : [];
+            $correct_lesson_ids[] = !empty($dt->correct_lesson_ids) ? unserialize($dt->correct_lesson_ids) : [];
+        }
+        $filterAllCorrectBlankLessonData = array_filter($correct_lesson_ids, function($value) { return !empty($value) && $value !== ''; });
+        $finallCorrectData = [];
+        foreach ($filterAllCorrectBlankLessonData as $data) {
+            foreach ($data as $key => $dt) {
+                $finallCorrectData[] = $dt;
+            }
+        }
+        
+        $filterAllInCorrectBlankLessonData = array_filter($wrong_lesson_ids, function($value) { return !empty($value) && $value !== ''; });
+        $finallInCorrectData = [];
+        foreach ($filterAllInCorrectBlankLessonData as $data) {
+            foreach ($data as $key => $dt) {
+                $finallInCorrectData[] = $dt;
+            }
+        }
+        $allLessonTestGiven = array_unique(array_merge($finallCorrectData, $finallInCorrectData));
+        $correctAnsData = array_count_values($finallCorrectData);
+        $inCorrectAnsData = array_count_values($finallInCorrectData);
+        $lessons = Lessons::all(['lesson_name','id'])->toArray();
+        $allLessons = [];
+        foreach($lessons as $less) {
+            $allLessons[$less['id']] = $less['lesson_name'];
+        }
+        return view('admin.exam.reports', compact('allLessons', 'correctAnsData', 'inCorrectAnsData', 'allLessonTestGiven', 'allLessons'));
+    }
 
     private function getAllTopicsVideosByCourseId($courseId) {
         if($courseId) {
@@ -332,5 +389,7 @@ class ExamController extends Controller
         }
         return [];
     }
+
+    
 
 }

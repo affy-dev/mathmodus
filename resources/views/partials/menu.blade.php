@@ -110,6 +110,14 @@
                             History
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route("admin.exams.reports") }}" class="nav-link {{ request()->is('admin/exams/reports') || request()->is('admin/exams/reports') ? 'active' : '' }}">
+                            <i class="fa fa-bar-chart nav-icon">
+
+                            </i>
+                            Lesson Wise Reports
+                        </a>
+                    </li>
                 </ul>
             </li>
             @endcan
