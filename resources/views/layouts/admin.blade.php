@@ -47,7 +47,9 @@
         <button class="navbar-toggler sidebar-toggler d-md-down-none" style="background:#fff" type="button" data-toggle="sidebar-lg-show">
             <span class="navbar-toggler-icon"></span>
         </button>
-
+        
+        <span style="padding: 6px;border: 1px solid #deafaf;margin-left: 6px;background: #fff;border-radius: 5px;"><a href="/" title="Go to site"><i class="fas fa-th-large" aria-hidden="true"></i></a></span>
+        
         <ul class="nav navbar-nav ml-auto">
             @if(count(config('panel.available_languages', [])) > 1)
                 <li class="nav-item dropdown d-md-down-none">

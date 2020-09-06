@@ -22,6 +22,14 @@
       <td style="color:#ff0000;font-weight: bold;">{{isset($inCorrectAnsData[$testData]) ? $inCorrectAnsData[$testData] : '0'}}</td>
     </tr>
     @endforeach
+    <tr>
+        <td colspan="3">
+            @if(count($allLessonTestGiven) == 0)
+                <div style="text-align:center;color:#ff0000;font-weight: bold;">No Data Found</div>
+            @endif
+        </td>
+    </tr>
+    
   </tbody>
 </table>
 

@@ -5,27 +5,37 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Srmklive\PayPal\Services\ExpressCheckout;
 use RealRashid\SweetAlert\Facades\Alert;
-   
+use App\User;
+use App\Orders;
+
 class PayPalController extends Controller
 {
-    public function handlePayment()
+    public function handlePayment(Request $request)
     {
-        $order = '0011';
-
-        //Code to Email Book To User
-
-        return $order;
+        if(!session()->has('startPayment')) {
+            return redirect()->route('frontend.home');
+        }
+        session()->forget('startPayment');
+        $userId = session('userId');
+        return view('frontend.payment-page', compact('userId'));
     }
-   
-    public function paymentCancel()
-    {
-        Alert::error('Your payment has been declend. The payment cancelation page goes here!', '');
-        // return redirect()->route('register');
-    }
-  
+
     public function paymentSuccess(Request $request)
     {
-        Alert::success('Your payment has been successfull. The payment cancelation page goes here!', '');
-        // return redirect()->route('register');
+        try {
+
+            $orderData = $request->all();
+            User::where('id', $orderData['userId'])->update(['user_status' => 1, 'payment_status' => 1]);
+            $order = Orders::create([
+                'user_id'           => $orderData['userId'],
+                'paypal_order_id'   => $orderData['orderID'],
+                'status'            => 'success',
+                'payer_id'          => $orderData['payerID']
+            ]);
+            session()->forget('userId');
+            return $order;
+          } catch (\Exception $e) {
+              return $e->getMessage();
+          }
     }
 }

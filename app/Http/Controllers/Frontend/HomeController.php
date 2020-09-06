@@ -42,5 +42,10 @@ class HomeController
         ContactUsDetails::create($data);
         return redirect()->route('frontend.contactus')->with('message', 'Message sent successfully. We will revert you shortly!');
     }
+
+    public function handlePayment()
+    {
+        Alert::success('Your payment successfull.', '');
+    }
     
 }

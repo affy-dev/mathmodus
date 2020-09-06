@@ -32,7 +32,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/register';
+    protected $redirectTo = '/payment';
 
     /**
      * Create a new controller instance.
@@ -77,22 +77,22 @@ class RegisterController extends Controller
         ];
         $user = User::create($inputData);
         $user->roles()->sync($data['roles']);
-        
+        return $user;
     }
 
     protected function showRegistrationForm() {
-        $roles = Role::all()->pluck('title', 'id');
+        $roles = Role::where('show_on_register_page', 1)->pluck('title', 'id');
         return view('auth.register', compact('roles'));
     }
 
     public function register(Request $request)
     {
         $this->validator($request->all())->validate();
-
-        event(new Registered($user = $this->create($request->all())));
-        // return redirect()->route('payment');
-        Alert::success('Registration process got successfull. Please wait for the admin to activate your account', '');
+        $user = $this->create($request->all());
+        event(new Registered($user));
+        session(['startPayment' => true, 'userId' => $user->id]);
+        // Alert::success('Registration process got successfull. Please wait for the admin to activate your account', '');
         return $this->registered($request, $user)
-                        ?: redirect($this->redirectPath());
+                        ?: redirect()->route('payment');
     }
 }

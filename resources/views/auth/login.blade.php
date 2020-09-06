@@ -60,6 +60,7 @@
                                         {{ trans('global.forgot_password') }}
                                     </a>
                                     
+                                    
                                 </div>
                             </div>
                         </div>

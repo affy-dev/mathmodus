@@ -3,12 +3,9 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Role extends Model
+class Orders extends Model
 {
-    use SoftDeletes;
-
     protected $dates = [
         'created_at',
         'updated_at',
@@ -16,15 +13,12 @@ class Role extends Model
     ];
 
     protected $fillable = [
-        'title',
-        'show_on_register_page',
+        'user_id',
+        'payer_id',
+        'paypal_order_id',
+        'status',
         'created_at',
         'updated_at',
         'deleted_at',
     ];
-
-    public function permissions()
-    {
-        return $this->belongsToMany(Permission::class);
-    }
 }
