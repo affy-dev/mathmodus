@@ -52,8 +52,13 @@ class Handler extends ExceptionHandler
 
     protected function unauthenticated($request, AuthenticationException $exception)
          {
-            return $request->expectsJson()
-                    ? response()->json(['message' => 'Unauthenticated.'], 401)
-                    : redirect()->guest(route('/'));
+            if ($exception instanceof AuthenticationException) {
+                return redirect('/login')->with('message', 'Logged out due to inactivity');;
+            }
+            return parent::render($request, $exception);
+
+            // return $request->expectsJson()
+            //         ? response()->json(['message' => 'Unauthenticated.'], 401)
+            //         : redirect()->guest(route('/'));
     }
 }

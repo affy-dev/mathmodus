@@ -35,19 +35,29 @@ class LoginController extends Controller
         // Check user role
         switch ($roleName) {
             case '1':
-                    return '/admin';
+                    $rolebasedurl = '/admin';
+                    session(['rolebasedurl' => $rolebasedurl]);
+                    return $rolebasedurl;
                 break;
             case '2':
-                    return '/admin';
+                    $rolebasedurl = '/admin';
+                    session(['rolebasedurl' => $rolebasedurl]);
+                    return $rolebasedurl;
                 break; 
             case '3':
-                    return '/admin/exams';
+                    $rolebasedurl = '/admin/exams';
+                    session(['rolebasedurl' => $rolebasedurl]);
+                    return $rolebasedurl;
                 break;
             case '4':
-                    return '/admin';
+                    $rolebasedurl = '/admin';
+                    session(['rolebasedurl' => $rolebasedurl]);
+                    return $rolebasedurl;
                 break; 
             default:
-                    return '/login'; 
+                    $rolebasedurl = '/login';
+                    session(['rolebasedurl' => $rolebasedurl]);
+                    return $rolebasedurl;
                 break;
         }
     }

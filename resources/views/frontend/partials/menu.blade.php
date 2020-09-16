@@ -16,9 +16,9 @@
                         <li class="{{ request()->is('login') ? 'active' : '' }}"><a href="/login">Login <i class="fa fa-sign-in" aria-hidden="true"></i></a></li>
                         <li class="{{ request()->is('register') ? 'active' : '' }}"><a href="/register">Register </a></li>
                     @endguest
-                    <!-- @auth
-                        <li class=""><a href="/admin/exams">Go to Dashboard <i class="fa fa-sign-in" aria-hidden="true"></i></a></li>
-                    @endauth -->
+                    @auth
+                        <li class=""><a href="{{ session('rolebasedurl') }}">Go to Dashboard <i class="fa fa-sign-in" aria-hidden="true"></i></a></li>
+                    @endauth
                 </ul>
             </nav>
             <div class="lms_search_toggle"><a><i class="fa fa-search"></i></a></div>

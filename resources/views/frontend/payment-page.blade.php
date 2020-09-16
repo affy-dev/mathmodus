@@ -151,7 +151,7 @@ p{
                 /* remind that 'data' is the response of the AjaxController */
                 success: function(data) {
                     $('#overlay').hide().delay(3000).fadeIn(1000);
-                    window.location.href='/login';
+                    window.location.href='/login?payment=success';
                 },
                 error: function (request, status, error) {
                     swal({
