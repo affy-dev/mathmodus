@@ -15,7 +15,7 @@ Auth::routes();
 Route::get('/payment', 'PayPalController@handlePayment')->name('payment');
 Route::post('/payment/success/{orderID}', 'PayPalController@paymentSuccess')->name('payment.success');
 
-Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['redirectbasedonroles','web','auth']], function () {
+Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['web','auth']], function () {
     Route::get('/', 'HomeController@index')->name('home');
 
     Route::delete('permissions/destroy', 'PermissionsController@massDestroy')->name('permissions.massDestroy');
