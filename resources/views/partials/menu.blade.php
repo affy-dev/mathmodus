@@ -71,7 +71,7 @@
                     <i class="fa fa-graduation-cap nav-icon">
 
                     </i>
-                    {{ trans('global.student.title') }}
+                    All Student Details
                 </a>
             </li>
             @endcan
@@ -81,7 +81,7 @@
                     <i class="fas fa-chalkboard-teacher nav-icon">
 
                     </i>
-                    Teachers
+                    All Teachers Details
                 </a>
             </li>
             @endcan

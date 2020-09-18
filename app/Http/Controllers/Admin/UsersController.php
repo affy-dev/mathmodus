@@ -20,8 +20,13 @@ class UsersController extends Controller
     public function index()
     {
         abort_unless(\Gate::allows('user_access'), 403);
-
-        $users = User::all();
+        $role = auth()->user()->roles->pluck('id');
+        $roleId = $role[0];
+        if($roleId == 1) {
+            $users = User::all();
+        } else {
+            $users = User::where('created_by', auth()->user()->id)->get();
+        }
 
         return view('admin.users.index', compact('users'));
     }
@@ -40,6 +45,7 @@ class UsersController extends Controller
         abort_unless(\Gate::allows('user_create'), 403);
         $inputData = $request->all();
         $inputData['created_by'] = auth()->user()->id;
+        $inputData['user_status'] = 1;
         $user = User::create($inputData);
         $user->roles()->sync($request->input('roles', []));
 

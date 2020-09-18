@@ -80,7 +80,7 @@
                                 </a> -->
                                 @can('teachers_show')
                                     <a class="btn btn-xs btn-primary" href="{{ route('admin.teachers.show', $teacher->userId) }}">
-                                        {{ trans('global.view') }}
+                                        {{ trans('global.view') }} Details
                                     </a>
                                 @endcan
                                 @can('teachers_edit')

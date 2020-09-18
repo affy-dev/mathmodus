@@ -105,7 +105,7 @@
             </div>
 
             <div class="form-group {{ $errors->has('email') ? 'has-error' : '' }}">
-                <label for="email">{{ trans('global.student.fields.email') }}</label>
+                <label for="email">{{ trans('global.student.fields.email') }}*</label>
                 <input type="text" id="email" name="email" class="form-control" value="{{ old('email', isset($email) ? $student->email : '') }}">
                 @if($errors->has('email'))
                     <em class="invalid-feedback" style="display:block">
