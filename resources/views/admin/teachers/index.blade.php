@@ -4,7 +4,7 @@
     <div style="margin-bottom: 10px;" class="row">
         <div class="col-lg-12">
             <a class="btn btn-default" href="{{ route("admin.teachers.create") }}">
-                {{ trans('global.add') }} Teachers Details
+                {{ trans('global.add') }} Teacher
             </a>
         </div>
     </div>
@@ -57,7 +57,7 @@
 
                             </td>
                             <td>
-                                {{ $teacher->userId ?? '' }}
+                                #{{ $teacher->userId ?? '' }}
                             </td>
                             <td>
                                 {{ $teacher->name ?? '' }}

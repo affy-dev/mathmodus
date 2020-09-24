@@ -5,9 +5,7 @@
     <div class="card-header tbl-header">
         {{ trans('global.edit') }} {{ trans('global.student.title_singular') }} Details
     </div>
-    <?php 
-        // dd($student->father_name);
-    ?>
+    
     <div class="card-body">
         <form action="{{ route("admin.students.update", [$studentId]) }}" method="POST" enctype="multipart/form-data">
             @csrf
@@ -15,15 +13,72 @@
             
             <div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
                 <label for="name">{{ trans('global.user.fields.name') }}*</label>
-                <input type="text" id="name" name="name" class="form-control" value="{{ old('name', isset($userName) ? $userName : '') }}">
+                <input type="text" id="name" name="name" class="form-control"
+                value="{{ old('name', isset($name) ? $name : '') }}">
                 @if($errors->has('name'))
-                    <em class="invalid-feedback">
-                        {{ $errors->first('name') }}
-                    </em>
+                <em class="invalid-feedback" style="display:block">
+                    {{ $errors->first('name') }}
+                </em>
                 @endif
                 <p class="helper-block">
                     {{ trans('global.user.fields.name_helper') }}
                 </p>
+            </div>
+
+            <div class="form-group {{ $errors->has('username') ? 'has-error' : '' }}">
+                <label for="username">{{ trans('global.user.fields.username') }}*</label>
+                <input type="text" id="username" name="username" class="form-control"
+                    value="{{ old('username', isset($userName) ? $userName : '') }}">
+                @if($errors->has('username'))
+                <em class="invalid-feedback" style="display:block">
+                    {{ $errors->first('username') }}
+                </em>
+                @endif
+                <p class="helper-block">
+                    {{ trans('global.user.fields.username_helper') }}
+                </p>
+            </div>
+
+            <div class="form-group {{ $errors->has('email') ? 'has-error' : '' }}">
+                <label for="email">{{ trans('global.user.fields.email') }}*</label>
+                <input type="email" id="email" name="email" class="form-control"
+                value="{{ old('email', isset($emailId) ? $emailId : '') }}">
+                @if($errors->has('email'))
+                <em class="invalid-feedback" style="display:block">
+                    {{ $errors->first('email') }}
+                </em>
+                @endif
+                <p class="helper-block">
+                    {{ trans('global.user.fields.email_helper') }}
+                </p>
+            </div>
+
+            <div class="form-group {{ $errors->has('password') ? 'has-error' : '' }}">
+                <label for="password">{{ trans('global.user.fields.password') }}</label>
+                <input type="password" id="password" name="password" class="form-control">
+                @if($errors->has('password'))
+                <em class="invalid-feedback" style="display:block">
+                    {{ $errors->first('password') }}
+                </em>
+                @endif
+                <p class="helper-block">
+                    {{ trans('global.user.fields.password_helper') }}
+                </p>
+            </div>
+
+            <div class="form-group {{ $errors->has('teacher_id') ? 'has-error' : '' }}">
+                <label for="teacher_id">Select Teacher*</label>
+                <select id="teacher_id" name="teacher_id" class="form-control">
+                    <option value="">--- Select Teacher ---</option>
+                    @foreach ($allTeacher as $key => $value)
+                        <option value="{{ $value->id }}" {{ (old('teacher_id') == $value->id) || ($teacher_id == $value->id)  ? 'selected' : ''}}>{{ $value->name }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('teacher_id'))
+                    <em class="invalid-feedback" style="display:block">
+                        {{ $errors->first('teacher_id') }}
+                    </em>
+                @endif
             </div>
 
             <div class="form-group {{ $errors->has('dob') ? 'has-error' : '' }}">
@@ -72,19 +127,6 @@
                 @endif
                 <p class="helper-block">
                     {{ trans('global.student.fields.blood_group_helper') }}
-                </p>
-            </div>
-
-            <div class="form-group {{ $errors->has('email') ? 'has-error' : '' }}">
-                <label for="email">{{ trans('global.student.fields.email') }}</label>
-                <input type="text" id="email" name="email" class="form-control" value="{{ old('email', isset($emailId) ? $emailId : '') }}">
-                @if($errors->has('email'))
-                    <em class="invalid-feedback" style="display:block">
-                        {{ $errors->first('email') }}
-                    </em>
-                @endif
-                <p class="helper-block">
-                    {{ trans('global.student.fields.email_helper') }}
                 </p>
             </div>
 

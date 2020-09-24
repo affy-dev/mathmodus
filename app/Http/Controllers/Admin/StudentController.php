@@ -16,6 +16,7 @@ use App\StudentTestResults;
 use App\Courses;
 use App\Questions;
 use App\Lessons;
+use Illuminate\Support\Facades\Hash;
 
 class StudentController extends Controller
 {
@@ -91,47 +92,77 @@ class StudentController extends Controller
         abort_unless(\Gate::allows('student_create'), 403);
         $gender = self::GENDER;
         $blood_group = self::BLOOD_GROUP;
-        $users = \DB::table('users')
-            ->join('role_user', function($join) {
-                $join->on('users.id', '=', 'role_user.user_id');
-                $join->where('role_user.role_id', self::STUDENT_ROLE);
-            })
-            ->where('users.data_updated', 0)
-            ->whereNull('users.deleted_at')
-            ->get();
+        // $users = \DB::table('users')
+        //     ->join('role_user', function($join) {
+        //         $join->on('users.id', '=', 'role_user.user_id');
+        //         $join->where('role_user.role_id', self::STUDENT_ROLE);
+        //     })
+        //     // ->where('users.data_updated', 0)
+        //     ->whereNull('users.deleted_at')
+        //     ->get();
         
         $allSchools = School::get();
         $allTeacher = Teacher::get();
-        return view('admin.students.create', compact('gender', 'blood_group', 'users', 'allSchools', 'allTeacher'));
+        return view('admin.students.create', compact('gender', 'blood_group', 'allSchools', 'allTeacher'));
     }
 
     public function store(Request $request)
     {
         abort_unless(\Gate::allows('student_create'), 403);
+        
         $rules = [
-            'user_id' => 'required|unique:students,user_id',
-            'school_id' => 'required',
-            'teacher_id' => 'required',
-            'dob' => 'required|min:10|max:10',
-            'gender' => 'required|integer',
-            'blood_group' => 'nullable',
-            'email' => 'email|max:255|unique:students,email',
-            'phone_no' => 'max:10',
-            'father_name' => 'required|max:255',
-            'father_phone_no' => 'required|max:15',
-            'mother_name' => 'required|max:255',
-            'mother_phone_no' => 'max:15',
-            'present_address' => 'required|max:500',
+            'name'              => 'required',
+            'username'          => 'required|unique:users',
+            'email'             => 'required|unique:users',
+            'password'          => 'required',
+            // 'school_id'         => 'required',
+            'teacher_id'        => 'required',
+            'dob'               => 'required|min:10|max:10',
+            'gender'            => 'required|integer',
+            'blood_group'       => 'nullable',
+            'phone_no'          => 'max:10',
+            'father_name'       => 'required|max:255',
+            'father_phone_no'   => 'required|integer',
+            'mother_name'       => 'required|max:255',
+            'mother_phone_no'   => 'integer',
+            'present_address'   => 'required|max:500',
             'permanent_address' => 'required|max:500',
         ];
-
         $this->validate($request, $rules);
-        $userName = User::find($request->input('user_id'));
-        $studentsData = $request->all();
-        $studentsData['name'] = $userName->name;
-        $studentsData['created_by'] = auth()->user()->id;
-        $students = Student::create($studentsData);
-        User::where('id', $request->input('user_id'))->update(['data_updated'=>1]); // update that full details have been updated
+        $inputData = $request->all();
+        $hashedPassword = Hash::make($inputData['password']);
+        $inputData['password'] = $hashedPassword;
+        $studentData = $inputData;
+        unset($inputData['teacher_id']);
+        unset($inputData['dob']);
+        unset($inputData['gender']);
+        unset($inputData['blood_group']);
+        unset($inputData['phone_no']);
+        unset($inputData['father_name']);
+        unset($inputData['father_phone_no']);
+        unset($inputData['mother_name']);
+        unset($inputData['mother_phone_no']);
+        unset($inputData['present_address']);
+        unset($inputData['permanent_address']);
+        
+        $inputData['created_by'] = auth()->user()->id;
+        $inputData['user_status'] = 1;
+        $user = User::create($inputData);
+        $user->roles()->sync(self::STUDENT_ROLE);
+
+        // $userName = User::find($request->input('user_id'));
+        // $studentsData = $request->all();
+        // $studentsData['name'] = $inputData['name'];
+        // $inputData['created_by'] = auth()->user()->id;
+        // unset($studentData['name']);
+        unset($studentData['username']);
+        unset($studentData['email']);
+        unset($studentData['password']);
+        $schoolId = School::where('principal_id', auth()->user()->id)->first();
+        $studentData['school_id'] = $schoolId->id;
+        $studentData['user_id'] = $user->id;
+        $students = Student::create($studentData);
+        // User::where('id', $request->input('user_id'))->update(['data_updated'=>1]); // update that full details have been updated
         return redirect()->route('admin.students.index');
     }
 
@@ -144,69 +175,88 @@ class StudentController extends Controller
                 $join->where('users.id','=', $userId);
             })
             ->whereNull('users.deleted_at')
-            ->get(['users.id as userId','students.id as studentId','users.name as userName', 'users.email as emailId', 'students.dob as studentDOB', 'students.father_name as fatherName', 'students.father_phone_no as fatherPhone', 'students.gender as studentGender', 'students.blood_group as studentBloodGroup', 'students.mother_name as studentMothenName', 'students.mother_phone_no as studentMotherPhoneNo', 'students.present_address', 'students.permanent_address', 'students.phone_no']);
+            ->get(['users.id as userId','students.id as studentId','users.name as name','users.username as userName', 'users.email as emailId', 'students.dob as studentDOB', 'students.father_name as fatherName', 'students.father_phone_no as fatherPhone', 'students.gender as studentGender', 'students.blood_group as studentBloodGroup', 'students.mother_name as studentMothenName', 'students.mother_phone_no as studentMotherPhoneNo', 'students.present_address', 'students.permanent_address', 'students.phone_no', 'students.teacher_id']);
 
-        $userName = '';
-        $emailId = '';
-        $studentDOB = '';
-        $fatherName = '';
-        $fatherPhone = '';
-        $studentGender = '';
-        $studentBloodGroup = '';
-        $studentMothenName = '';
-        $studentMotherPhoneNo = '';
-        $present_address = '';
-        $permanent_address = '';
-        $studentId = '';
-        $studentPhoneNo = '';
+        $allTeacher = Teacher::get();
         foreach ($student as $key => $value) {
-            $userName = $value->userName;
-            $emailId = $value->emailId;
-            $studentDOB = $value->studentDOB;
-            $fatherName = $value->fatherName;
-            $fatherPhone = $value->fatherPhone;
-            $studentGender = $value->studentGender;
-            $studentBloodGroup = $value->studentBloodGroup;
-            $studentMothenName = $value->studentMothenName;
-            $studentMotherPhoneNo = $value->studentMotherPhoneNo;
-            $present_address = $value->present_address;
-            $permanent_address = $value->permanent_address;
-            $studentId = $value->studentId;
-            $studentPhoneNo = $value->phone_no;
+            $name = $value->name ? $value->name : '';
+            $userName = $value->userName ? $value->userName : '';
+            $emailId = $value->emailId ? $value->emailId : '';
+            $studentDOB = $value->studentDOB ? $value->studentDOB : '';
+            $fatherName = $value->fatherName ? $value->fatherName : '';
+            $fatherPhone = $value->fatherPhone ? $value->fatherPhone : '';
+            $studentGender = $value->studentGender ? $value->studentGender : '';
+            $studentBloodGroup = $value->studentBloodGroup ? $value->studentBloodGroup : '';
+            $studentMothenName = $value->studentMothenName ? $value->studentMothenName : '';
+            $studentMotherPhoneNo = $value->studentMotherPhoneNo ? $value->studentMotherPhoneNo : '';
+            $present_address = $value->present_address ? $value->present_address : '';
+            $permanent_address = $value->permanent_address ? $value->permanent_address : '';
+            $studentId = $value->studentId ? $value->studentId : '';
+            $studentPhoneNo = $value->phone_no ? $value->phone_no : '';
+            $teacher_id = $value->teacher_id ? $value->teacher_id : '';
         }
 
         $gender = self::GENDER;
         $blood_group = self::BLOOD_GROUP;
-        return view('admin.students.edit', compact('userName', 'emailId', 'studentDOB', 'fatherName', 'fatherPhone', 'studentGender', 'studentBloodGroup', 'studentMothenName', 'studentMotherPhoneNo', 'present_address', 'permanent_address', 'gender', 'blood_group', 'studentId', 'studentPhoneNo', 'userId'));
+        return view('admin.students.edit', compact('name','userName', 'emailId', 'studentDOB', 'fatherName', 'fatherPhone', 'studentGender', 'studentBloodGroup', 'studentMothenName', 'studentMotherPhoneNo', 'present_address', 'permanent_address', 'gender', 'blood_group', 'studentId', 'studentPhoneNo', 'userId', 'teacher_id', 'allTeacher'));
     }
 
     public function update(Request $request, $studentId)
     {
         abort_unless(\Gate::allows('student_edit'), 403);
-        
+        $inputData = $request->except(['_token','_method']);
         $rules = [
-            'name' => 'required|unique:users,id',
-            'dob' => 'required|min:10|max:10',
-            'gender' => 'required|integer',
-            'blood_group' => 'nullable',
-            'email' => 'email|max:255|unique:students,email',
-            'phone_no' => 'max:10',
-            'father_name' => 'required|max:255',
-            'father_phone_no' => 'required|max:15',
-            'mother_name' => 'required|max:255',
-            'mother_phone_no' => 'max:15',
-            'present_address' => 'required|max:500',
+            'name'              => 'required|unique:users,name,'.$inputData['userId'],
+            'username'          => 'required|unique:users,username,'.$inputData['userId'],
+            'email'             => 'required|email|unique:users,email,'.$inputData['userId'],
+            'teacher_id'        => 'required',
+            'dob'               => 'required|min:10|max:10',
+            'gender'            => 'required|integer',
+            'blood_group'       => 'nullable',
+            'phone_no'          => 'max:10',
+            'father_name'       => 'required|max:255',
+            'father_phone_no'   => 'required|integer',
+            'mother_name'       => 'required|max:255',
+            'mother_phone_no'   => 'integer',
+            'present_address'   => 'required|max:500',
             'permanent_address' => 'required|max:500',
         ];
-        $inputData = $request->except(['_token','_method']);
-        $name = $inputData['name'];
-        $email = $inputData['email'];
-        $userId = $inputData['userId'];
+         
         $this->validate($request, $rules);
-        User::where('id', $userId)->update(['name'=>$name, 'email'=>$email]); // update USER table data
-        unset($inputData['name']);
+        
+        // $inputData = $request->all();
+        
+        $studentData = $inputData;
+        $user_id = $inputData['userId'];
         unset($inputData['userId']);
-        Student::where('id', $studentId)->update($inputData);
+        unset($inputData['teacher_id']);
+        unset($inputData['dob']);
+        unset($inputData['gender']);
+        unset($inputData['blood_group']);
+        unset($inputData['phone_no']);
+        unset($inputData['father_name']);
+        unset($inputData['father_phone_no']);
+        unset($inputData['mother_name']);
+        unset($inputData['mother_phone_no']);
+        unset($inputData['present_address']);
+        unset($inputData['permanent_address']);
+        
+        if(is_null($inputData['password'])) {
+            unset($inputData['password']);
+        } else {
+            $hashedPassword = Hash::make($inputData['password']);
+            $inputData['password'] = $hashedPassword;
+        }
+
+        User::where('id', $user_id)->update($inputData); // update USER table data
+        unset($studentData['username']);
+        unset($studentData['email']);
+        unset($studentData['userId']);
+        
+        if (is_null($studentData['password']) || !empty($studentData['password'])) {
+            unset($studentData['password']);
+        }
+        Student::where('id', $studentId)->update($studentData);
         return redirect()->route('admin.students.index');
     }
 

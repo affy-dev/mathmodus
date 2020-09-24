@@ -71,7 +71,7 @@
                     <i class="fa fa-graduation-cap nav-icon">
 
                     </i>
-                    All Student Details
+                    Students
                 </a>
             </li>
             @endcan
@@ -81,7 +81,7 @@
                     <i class="fas fa-chalkboard-teacher nav-icon">
 
                     </i>
-                    All Teachers Details
+                    Teachers
                 </a>
             </li>
             @endcan
