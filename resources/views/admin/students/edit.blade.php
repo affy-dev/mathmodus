@@ -71,7 +71,7 @@
                 <select id="teacher_id" name="teacher_id" class="form-control">
                     <option value="">--- Select Teacher ---</option>
                     @foreach ($allTeacher as $key => $value)
-                        <option value="{{ $value->id }}" {{ (old('teacher_id') == $value->id) || ($teacher_id == $value->id)  ? 'selected' : ''}}>{{ $value->name }}</option>
+                        <option value="{{ $value->user_id }}" {{ (old('teacher_id') == $value->user_id) || ($teacher_id == $value->user_id)  ? 'selected' : ''}}>{{ $value->name }}</option>
                     @endforeach
                 </select>
                 @if($errors->has('teacher_id'))
@@ -81,7 +81,7 @@
                 @endif
             </div>
 
-            <div class="form-group {{ $errors->has('dob') ? 'has-error' : '' }}">
+            <!-- <div class="form-group {{ $errors->has('dob') ? 'has-error' : '' }}">
                 <label for="dob">{{ trans('global.student.fields.dob') }}*</label>
                 <input type="text" id="dob" name="dob" class="form-control date" value="{{ old('dob', isset($studentDOB) ? $studentDOB : '') }}">
                 @if($errors->has('dob'))
@@ -220,7 +220,7 @@
                 <p class="helper-block">
                     {{ trans('global.student.fields.permanent_address_helper') }}
                 </p>
-            </div>
+            </div> -->
             <input type="hidden" name="userId" value={{$userId}}>
             <div>
                 <input class="btn btn-default" type="submit" value="{{ trans('global.save') }}">

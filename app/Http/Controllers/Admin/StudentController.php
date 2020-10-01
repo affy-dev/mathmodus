@@ -117,16 +117,16 @@ class StudentController extends Controller
             'password'          => 'required',
             // 'school_id'         => 'required',
             'teacher_id'        => 'required',
-            'dob'               => 'required|min:10|max:10',
-            'gender'            => 'required|integer',
-            'blood_group'       => 'nullable',
-            'phone_no'          => 'max:10',
-            'father_name'       => 'required|max:255',
-            'father_phone_no'   => 'required|integer',
-            'mother_name'       => 'required|max:255',
-            'mother_phone_no'   => 'integer',
-            'present_address'   => 'required|max:500',
-            'permanent_address' => 'required|max:500',
+            // 'dob'               => 'required|min:10|max:10',
+            // 'gender'            => 'required|integer',
+            // 'blood_group'       => 'nullable',
+            // 'phone_no'          => 'max:10',
+            // 'father_name'       => 'required|max:255',
+            // 'father_phone_no'   => 'required|integer',
+            // 'mother_name'       => 'required|max:255',
+            // 'mother_phone_no'   => 'integer',
+            // 'present_address'   => 'required|max:500',
+            // 'permanent_address' => 'required|max:500',
         ];
         $this->validate($request, $rules);
         $inputData = $request->all();
@@ -134,16 +134,16 @@ class StudentController extends Controller
         $inputData['password'] = $hashedPassword;
         $studentData = $inputData;
         unset($inputData['teacher_id']);
-        unset($inputData['dob']);
-        unset($inputData['gender']);
-        unset($inputData['blood_group']);
-        unset($inputData['phone_no']);
-        unset($inputData['father_name']);
-        unset($inputData['father_phone_no']);
-        unset($inputData['mother_name']);
-        unset($inputData['mother_phone_no']);
-        unset($inputData['present_address']);
-        unset($inputData['permanent_address']);
+        // unset($inputData['dob']);
+        // unset($inputData['gender']);
+        // unset($inputData['blood_group']);
+        // unset($inputData['phone_no']);
+        // unset($inputData['father_name']);
+        // unset($inputData['father_phone_no']);
+        // unset($inputData['mother_name']);
+        // unset($inputData['mother_phone_no']);
+        // unset($inputData['present_address']);
+        // unset($inputData['permanent_address']);
         
         $inputData['created_by'] = auth()->user()->id;
         $inputData['user_status'] = 1;
@@ -195,7 +195,7 @@ class StudentController extends Controller
             $studentPhoneNo = $value->phone_no ? $value->phone_no : '';
             $teacher_id = $value->teacher_id ? $value->teacher_id : '';
         }
-
+        // dd($teacher_id);
         $gender = self::GENDER;
         $blood_group = self::BLOOD_GROUP;
         return view('admin.students.edit', compact('name','userName', 'emailId', 'studentDOB', 'fatherName', 'fatherPhone', 'studentGender', 'studentBloodGroup', 'studentMothenName', 'studentMotherPhoneNo', 'present_address', 'permanent_address', 'gender', 'blood_group', 'studentId', 'studentPhoneNo', 'userId', 'teacher_id', 'allTeacher'));
@@ -210,16 +210,16 @@ class StudentController extends Controller
             'username'          => 'required|unique:users,username,'.$inputData['userId'],
             'email'             => 'required|email|unique:users,email,'.$inputData['userId'],
             'teacher_id'        => 'required',
-            'dob'               => 'required|min:10|max:10',
-            'gender'            => 'required|integer',
-            'blood_group'       => 'nullable',
-            'phone_no'          => 'max:10',
-            'father_name'       => 'required|max:255',
-            'father_phone_no'   => 'required|integer',
-            'mother_name'       => 'required|max:255',
-            'mother_phone_no'   => 'integer',
-            'present_address'   => 'required|max:500',
-            'permanent_address' => 'required|max:500',
+            // 'dob'               => 'required|min:10|max:10',
+            // 'gender'            => 'required|integer',
+            // 'blood_group'       => 'nullable',
+            // 'phone_no'          => 'max:10',
+            // 'father_name'       => 'required|max:255',
+            // 'father_phone_no'   => 'required|integer',
+            // 'mother_name'       => 'required|max:255',
+            // 'mother_phone_no'   => 'integer',
+            // 'present_address'   => 'required|max:500',
+            // 'permanent_address' => 'required|max:500',
         ];
          
         $this->validate($request, $rules);
@@ -230,16 +230,16 @@ class StudentController extends Controller
         $user_id = $inputData['userId'];
         unset($inputData['userId']);
         unset($inputData['teacher_id']);
-        unset($inputData['dob']);
-        unset($inputData['gender']);
-        unset($inputData['blood_group']);
-        unset($inputData['phone_no']);
-        unset($inputData['father_name']);
-        unset($inputData['father_phone_no']);
-        unset($inputData['mother_name']);
-        unset($inputData['mother_phone_no']);
-        unset($inputData['present_address']);
-        unset($inputData['permanent_address']);
+        // unset($inputData['dob']);
+        // unset($inputData['gender']);
+        // unset($inputData['blood_group']);
+        // unset($inputData['phone_no']);
+        // unset($inputData['father_name']);
+        // unset($inputData['father_phone_no']);
+        // unset($inputData['mother_name']);
+        // unset($inputData['mother_phone_no']);
+        // unset($inputData['present_address']);
+        // unset($inputData['permanent_address']);
         
         if(is_null($inputData['password'])) {
             unset($inputData['password']);
@@ -268,8 +268,9 @@ class StudentController extends Controller
                 $join->on('users.id', '=', 'students.user_id');
                 $join->where('users.id','=', $userId);
             })
-            ->get(['users.id as userId','users.name as userName', 'users.email as emailId', 'students.dob as studentDOB', 'students.father_name as fatherName', 'students.father_phone_no as fatherPhone', 'students.gender as studentGender', 'students.blood_group as studentBloodGroup', 'students.mother_name as studentMothenName', 'students.mother_phone_no as studentMotherPhoneNo', 'students.present_address', 'students.permanent_address', 'students.phone_no']);
-
+            ->get(['users.id as userId','users.name as name', 'users.username as userName', 'users.email as emailId', 'students.dob as studentDOB', 'students.father_name as fatherName', 'students.father_phone_no as fatherPhone', 'students.gender as studentGender', 'students.blood_group as studentBloodGroup', 'students.mother_name as studentMothenName', 'students.mother_phone_no as studentMotherPhoneNo', 'students.present_address', 'students.permanent_address', 'students.phone_no']);
+        
+        $name = '';
         $userName = '';
         $emailId = '';
         $studentDOB = '';
@@ -283,6 +284,7 @@ class StudentController extends Controller
         $permanent_address = '';
         $phone_no='';
         foreach ($student as $key => $value) {
+            $name = $value->name;
             $userName = $value->userName;
             $emailId = $value->emailId;
             $studentDOB = $value->studentDOB;
@@ -391,7 +393,7 @@ class StudentController extends Controller
         //===================== End Graph by Courses ========================
 
         
-        return view('admin.students.show', compact('userName', 'emailId', 'studentDOB', 'fatherName', 'fatherPhone', 'studentGender', 'studentBloodGroup', 'studentMothenName', 'studentMotherPhoneNo', 'present_address', 'permanent_address', 'phone_no', 'total_ans', 'correct_ans', 'wrong_ans', 'mapCorrIncorrWithCourse', 'correctAns', 'wrongAns', 'finalCorrectMapInfo', 'finalInCorrectMapInfo', 'IncorrectLessonsName', 'CorrectLessonsName', 'totalTestGiven', 'courseNames', 'examsTaken'));
+        return view('admin.students.show', compact('name', 'userName', 'emailId', 'studentDOB', 'fatherName', 'fatherPhone', 'studentGender', 'studentBloodGroup', 'studentMothenName', 'studentMotherPhoneNo', 'present_address', 'permanent_address', 'phone_no', 'total_ans', 'correct_ans', 'wrong_ans', 'mapCorrIncorrWithCourse', 'correctAns', 'wrongAns', 'finalCorrectMapInfo', 'finalInCorrectMapInfo', 'IncorrectLessonsName', 'CorrectLessonsName', 'totalTestGiven', 'courseNames', 'examsTaken'));
     }
 
     public function destroy(Student $student)

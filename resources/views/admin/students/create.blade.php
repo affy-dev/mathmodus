@@ -97,7 +97,7 @@
                 @endif
             </div>
 
-            <div class="form-group {{ $errors->has('dob') ? 'has-error' : '' }}">
+            <!-- <div class="form-group {{ $errors->has('dob') ? 'has-error' : '' }}">
                 <label for="dob">{{ trans('global.student.fields.dob') }}*</label>
                 <input type="text" id="dob" name="dob" class="form-control date" value="{{ old('dob', isset($dob) ? $student->dob : '') }}">
                 @if($errors->has('dob'))
@@ -238,9 +238,18 @@
                 <p class="helper-block">
                     {{ trans('global.student.fields.permanent_address_helper') }}
                 </p>
-            </div>
+            </div> -->
 
-
+            <!-- <div class="form-group {{ $errors->has('guardian_name') ? 'has-error' : '' }}">
+                <label for="guardian_name">Guardian Name*</label>
+                <input type="text" id="guardian_name" name="guardian_name" class="form-control" value="{{ old('guardian_name', isset($guardian_name) ? $student->guardian_name : '') }}">
+                @if($errors->has('guardian_name'))
+                    <em class="invalid-feedback" style="display:block">
+                        {{ $errors->first('guardian_name') }}
+                    </em>
+                @endif
+                
+            </div> -->
 
             <div>
                 <input class="btn btn-default" type="submit" value="{{ trans('global.save') }}">

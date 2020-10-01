@@ -14,6 +14,14 @@
                         Name
                     </th>
                     <td>
+                        {{$name}}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        User Name
+                    </th>
+                    <td>
                         {{ $userName }}
                     </td>
                 </tr>
@@ -25,7 +33,7 @@
                         {{$emailId}}
                     </td>
                 </tr>
-                <tr>
+                <!-- <tr>
                     <th>
                         DOB
                     </th>
@@ -104,7 +112,7 @@
                     <td>
                         {{ $permanent_address }}
                     </td>
-                </tr>
+                </tr> -->
             </tbody>
         </table>
         <div class="col-sm-12">

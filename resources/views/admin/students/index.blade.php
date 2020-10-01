@@ -36,7 +36,7 @@
                         <th>
                             Email Id
                         </th>
-                        <th>
+                        <!-- <th>
                             DOB
                         </th>
                         <th>
@@ -44,7 +44,7 @@
                         </th>
                         <th>
                             Father Phone
-                        </th>
+                        </th> -->
                         <th>
                             School
                         </th>
@@ -68,7 +68,7 @@
                             <td>
                                 {{ $student->emailId ?? '' }}
                             </td>
-                            <td>
+                            <!-- <td>
                                 {{ $student->studentDOB ?? '' }}
                             </td>
                             <td>
@@ -76,7 +76,7 @@
                             </td>
                             <td>
                                 {{ $student->fatherPhone ?? '' }}
-                            </td>
+                            </td> -->
                             <td>
                                 {{ $student->school_name ?? '' }}
                             </td>
