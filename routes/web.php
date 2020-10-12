@@ -39,6 +39,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('schools/assign-teacher',['as'=>'schools.assignTeachersPost','uses'=>'SchoolsController@assignTeacher']);
     
     Route::delete('students/destroy', 'StudentController@massDestroy')->name('students.massDestroy');
+    Route::get('students/{studentId}/correct/{lessonId}',['as'=>'students.test-report-details','uses'=>'StudentController@testReportDetails']);
+    Route::get('students/{studentId}/wrong/{lessonId}',['as'=>'students.test-report-details','uses'=>'StudentController@testReportDetails']);
     Route::resource('students', 'StudentController');
 
     
@@ -51,6 +53,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('exams/lessons-videos/{courseId}/{testId?}',['as'=>'exams.lessonVideos','uses'=>'ExamController@lessonVideos']);
     Route::get('exams/history',['as'=>'exams.history','uses'=>'ExamController@getHistory']);
     Route::get('exams/reports',['as'=>'exams.reports','uses'=>'ExamController@reports']);
+    Route::get('exams/reports/{studentId}/correct/{lessonId}',['as'=>'students.test-report-details','uses'=>'StudentController@testReportDetails']);
+    Route::get('exams/reports/{studentId}/wrong/{lessonId}',['as'=>'students.test-report-details','uses'=>'StudentController@testReportDetails']);
     Route::get('exams/exam-result/{testId?}',['as'=>'exams.examresult','uses'=>'ExamController@examResults']);
     Route::resource('exams', 'ExamController');
     Route::get('exams/take-exam/{courseId?}/{lessonId?}/{testId?}',['as'=>'exams.takeexam','uses'=>'ExamController@takeExam']);

@@ -158,6 +158,8 @@ class ExamController extends Controller
                                     ->where('id', $ansDetails->question_id)
                                     ->first();
                 $ansDetails->quesNum = $questNumber;
+                $ansDetails->lesson_id = $questionDetails->lesson_id;
+                $ansDetails->question_text = $questionDetails->question_text;
                 if($ansDetails->correct_answer == 'TRUE') {
                     $correctAnsIds[] = $ansDetails;
                     $correct_lesson_ids[] = $questionDetails->lesson_id;
@@ -173,6 +175,8 @@ class ExamController extends Controller
                                     ->where('id', $ansDetails->question_id)
                                     ->first();
                 $ansDetails->quesNum = $questNumber;
+                $ansDetails->lesson_id = $questionDetails->lesson_id;
+                $ansDetails->question_text = $questionDetails->question_text;
                 $wrongAnsIds[] = $ansDetails;
                 $wrong_lesson_ids[] = $questionDetails->lesson_id;
             }

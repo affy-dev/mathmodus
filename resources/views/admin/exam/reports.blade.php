@@ -18,8 +18,8 @@
     @foreach($allLessonTestGiven as $testData)
     <tr>
       <td>{{$allLessons[$testData]}}</td>
-      <td style="color:#00d600;font-weight: bold;">{{isset($correctAnsData[$testData]) ? $correctAnsData[$testData] : '0'}}</td>
-      <td style="color:#ff0000;font-weight: bold;">{{isset($inCorrectAnsData[$testData]) ? $inCorrectAnsData[$testData] : '0'}}</td>
+      <td style="color:#00d600;font-weight: bold;"><a href="{{url()->current()}}/{{auth()->user()->id}}/correct/{{$testData}}">{{isset($correctAnsData[$testData]) ? $correctAnsData[$testData] : '0'}}</a></td>
+      <td style="color:#ff0000;font-weight: bold;"><a href="{{url()->current()}}/{{auth()->user()->id}}/wrong/{{$testData}}"> {{isset($inCorrectAnsData[$testData]) ? $inCorrectAnsData[$testData] : '0'}}</a></td>
     </tr>
     @endforeach
     <tr>
