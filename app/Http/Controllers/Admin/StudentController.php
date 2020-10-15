@@ -391,44 +391,14 @@ class StudentController extends Controller
         
         $mapCorrIncorrWithCourse = json_encode($mapCorrIncorrWithCourse);
         //===================== End Graph by Courses ========================
-
-
-        $testHistory = StudentTestResults::where('user_id', $userId)
-        ->where('test_status', self::TEST_STATUS['COMPLETED'])
-        ->get(['wrong_lesson_ids','correct_lesson_ids']);
-        // dd($testHistory);
-        $wrong_lesson_ids = [];
-        $correct_lesson_ids = [];
-        foreach ($testHistory as $dt) {
-            $wrong_lesson_ids[] = !empty($dt->wrong_lesson_ids) ? unserialize($dt->wrong_lesson_ids) : [];
-            $correct_lesson_ids[] = !empty($dt->correct_lesson_ids) ? unserialize($dt->correct_lesson_ids) : [];
-        }
-        $filterAllCorrectBlankLessonData = array_filter($correct_lesson_ids, function($value) { return !empty($value) && $value !== ''; });
-        $finallCorrectData = [];
-        foreach ($filterAllCorrectBlankLessonData as $data) {
-            foreach ($data as $key => $dt) {
-                $finallCorrectData[] = $dt;
-            }
-        }
         
-        $filterAllInCorrectBlankLessonData = array_filter($wrong_lesson_ids, function($value) { return !empty($value) && $value !== ''; });
-        $finallInCorrectData = [];
-        foreach ($filterAllInCorrectBlankLessonData as $data) {
-            foreach ($data as $key => $dt) {
-                $finallInCorrectData[] = $dt;
-            }
-        }
-        $allLessonTestGiven = array_unique(array_merge($finallCorrectData, $finallInCorrectData));
-        $correctAnsData = array_count_values($finallCorrectData);
-        $inCorrectAnsData = array_count_values($finallInCorrectData);
         $lessons = Lessons::all(['lesson_name','id'])->toArray();
         $allLessons = [];
         foreach($lessons as $less) {
             $allLessons[$less['id']] = $less['lesson_name'];
         }
-
         
-        return view('admin.students.show', compact('name', 'userName', 'emailId', 'studentDOB', 'fatherName', 'fatherPhone', 'studentGender', 'studentBloodGroup', 'studentMothenName', 'studentMotherPhoneNo', 'present_address', 'permanent_address', 'phone_no', 'total_ans', 'correct_ans', 'wrong_ans', 'mapCorrIncorrWithCourse', 'correctAns', 'wrongAns', 'finalCorrectMapInfo', 'finalInCorrectMapInfo', 'IncorrectLessonsName', 'CorrectLessonsName', 'totalTestGiven', 'courseNames', 'examsTaken', 'correctAnsData', 'inCorrectAnsData', 'allLessonTestGiven', 'allLessons'));
+        return view('admin.students.show', compact('name', 'userName', 'emailId', 'studentDOB', 'fatherName', 'fatherPhone', 'studentGender', 'studentBloodGroup', 'studentMothenName', 'studentMotherPhoneNo', 'present_address', 'permanent_address', 'phone_no', 'total_ans', 'correct_ans', 'wrong_ans', 'mapCorrIncorrWithCourse', 'allLessons', 'examsTaken', 'courseNames', 'userId'));
     }
 
     public function destroy(Student $student)
@@ -448,52 +418,14 @@ class StudentController extends Controller
 
     public function testReportDetails(Request $request, $studentId, $lessonId)
     {
+        
         $currentUrl = url()->current();
         $checkUrl = false;
         if (strpos($currentUrl, 'correct') !== false) {
             $checkUrl = true;
         }
-        $testDetails = StudentTestResults::where('user_id', $studentId)->get();
-        $correctDetails = [];
-        $wrongAnsIds = [];
-        foreach ($testDetails as $key => $value) {
-            $correctDetails[] = unserialize($value['correctAnsIds']);
-            $wrongAnsIds[] = unserialize($value['wrongAnsIds']);
-        }
-        if($checkUrl) {
-            $asnDetails = [];
-            foreach ($correctDetails as $value) {
-                foreach ($value as $v) {
-                    $asnDetails[]=$v;
-                }
-            }
-            $correctAnsDetails=[];
-            foreach ($asnDetails as $det) {
-                if (property_exists($det, 'lesson_id') && property_exists($det, 'question_text')) {
-                    if($det->lesson_id == $lessonId) {
-                        $correctAnsDetails[] = $det;
-                    }
-                }
-            }
-        } else {
-            $asnDetails = [];
-            foreach ($wrongAnsIds as $value) {
-                foreach ($value as $v) {
-                    $asnDetails[]=$v;
-                }
-            }
-            
-            $correctAnsDetails=[];
-            foreach ($asnDetails as $det) {
-                if (property_exists($det, 'lesson_id') && property_exists($det, 'question_text')) {
-                    if($det->lesson_id == $lessonId) {
-                        $correctAnsDetails[] = $det;
-                    }
-                }
-            }  
-        }
-        
-        return view('admin.students.report-details', compact('correctAnsDetails'));
+        $testDetails = StudentTestResults::where('user_id', $studentId)->where('lessonId', $lessonId)->orderBy('id', 'DESC')->get();
+        return view('admin.students.report-details', compact('testDetails'));
     }
 
 }

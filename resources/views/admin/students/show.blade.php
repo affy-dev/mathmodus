@@ -133,47 +133,29 @@
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">Lesson Name</th>
-                    <th scope="col">Correct Answers</th>
-                    <th scope="col">Wrong Answers</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($allLessonTestGiven as $testData)
-                <tr>
-                    <td>{{$allLessons[$testData]}}</td>
-                    <td style="color:#00d600;font-weight: bold;">
-                        <a href="{{url()->current()}}/correct/{{$testData}}">{{isset($correctAnsData[$testData]) ? $correctAnsData[$testData] : '0'}}</a></td>
-                    <td style="color:#ff0000;font-weight: bold;">
-                    <a href="{{url()->current()}}/wrong/{{$testData}}"> {{isset($inCorrectAnsData[$testData]) ? $inCorrectAnsData[$testData] : '0'}}</a></td>
-                </tr>
+                @foreach($allLessons as $lessonId => $lessonName)
+                    <tr>
+                    <td><a href="{{url()->current()}}/correct/{{$lessonId}}">{{$lessonName}}</a></td>
+                    </tr>
                 @endforeach
                 <tr>
                     <td colspan="3">
-                        @if(count($allLessonTestGiven) == 0)
-                        <div style="text-align:center;color:#ff0000;font-weight: bold;">No Data Found</div>
+                        @if(count($allLessons) == 0)
+                            <div style="text-align:center;color:#ff0000;font-weight: bold;">No Data Found</div>
                         @endif
                     </td>
                 </tr>
-
             </tbody>
         </table>
     </div>
 </div>
-<?php if(count($examsTaken) > 0) { ?>
 @section('scripts')
 <script>
-const correctPercentage = ({
-            {
-                $correct_ans
-            }
-        }
-        / {{$total_ans}}) * 100;
-        const wrongPercentage = ({
-                    {
-                        $wrong_ans
-                    }
-                }
-                / {{$total_ans}}) * 100;
+        const correctPercentage = ({{$correct_ans}}/ {{$total_ans}}) * 100;
+        const wrongPercentage = ({{$wrong_ans}}/ {{$total_ans}}) * 100;
 
                 const setColors = ['#50B432', '#f34807'];
 
@@ -232,7 +214,9 @@ const correctPercentage = ({
                         thousandsSep: ' '
                     },
                     colors: setColors
-                }) Highcharts.chart('columnChartDiv', {
+                });
+                
+                Highcharts.chart('columnChartDiv', {
                     chart: {
                         type: 'column',
                         zoomType: 'y',
@@ -264,5 +248,4 @@ const correctPercentage = ({
                 });
 </script>
 @endsection
-<?php } ?>
 @endsection
