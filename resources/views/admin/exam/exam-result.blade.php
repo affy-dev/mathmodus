@@ -44,14 +44,14 @@
             </div>
         </div>
         <div class="col-sm-12">
-            <div id="resultGraph"></div>
+        <?php if(!empty($testFromLessonsTab)) { ?><div id="barChartComparison"></div><?php } ?>
         </div>
         <div class="col-sm-12">
-            <div class="accordion js-accordion">
+            <div class="accordion js-accordion" >
                 @if(count($wrongQuestionDetails) > 0)
                 <div class="accordion__item js-accordion-item">
-                    <div class="accordion-header js-accordion-header">Incorrect Answers (Click to see the details)</div>
-                    <div class="accordion-body js-accordion-body">
+                    <div class="accordion-header js-accordion-header" id="incorrect-accordian-body" style="background: #F34807;">Incorrect Answers (Click to see the details)</div>
+                    <div class="accordion-body js-accordion-body" >
                         <div class="accordion-body__contents">
                             <div class="card-body">
                                 <?php $questionCount = 0; ?>
@@ -100,8 +100,8 @@
 
                 @if(count($correctQuestionDetails) > 0)
                 <div class="accordion__item js-accordion-item">
-                    <div class="accordion-header js-accordion-header">Correct Answers (Click to see the details)</div>
-                    <div class="accordion-body js-accordion-body">
+                    <div class="accordion-header js-accordion-header" id="correct-accordian-body" style="background: #50B432;">Correct Answers (Click to see the details)</div>
+                    <div class="accordion-body js-accordion-body" >
                         <div class="accordion-body__contents">
                             <div class="card-body">
                                 <?php $questionCount = 0; ?>
@@ -328,56 +328,79 @@ $(document).ready(function() {
             })
 
 // ==============HightChart Implementation===================
+    
 
-    const correctPercentage = ({{count($correctQuestionDetails)}} / {{count($correctQuestionDetails) + count($wrongQuestionDetails)}}) * 100;
-    const wrongPercentage = ({{count($wrongQuestionDetails)}} / {{count($correctQuestionDetails) + count($wrongQuestionDetails)}}) * 100;
+    const numberOfCorrectQues = {{count($correctQuestionDetails)}};
+    const numberOfIncorrectQues = {{count($wrongQuestionDetails)}};
+    <?php if(!empty($testFromLessonsTab)) { ?>
+    const getLessonName = <?php echo $getLessonName; ?>;
+    let lessonName=''
+    if(getLessonName) {
+        lessonName = getLessonName['0']['lesson_name'];
+    }
+    <?php } ?>
+    const correctPercentage = (numberOfCorrectQues / numberOfCorrectQues + numberOfIncorrectQues) * 100;
+    const wrongPercentage = (numberOfIncorrectQues / numberOfCorrectQues + numberOfIncorrectQues) * 100;
 
         Highcharts.setOptions({
             colors: ['#f34807', '#50B432']
         });
 
-        Highcharts.chart('resultGraph', {
+        <?php if(!empty($testFromLessonsTab)) { ?>
+        //============Bar Chart Comparison
+
+        Highcharts.chart('barChartComparison', {
             chart: {
-                plotBackgroundColor: null,
-                plotBorderWidth: null,
-                plotShadow: false,
-                type: 'pie'
+                type: 'column'
             },
             title: {
-                text: 'Test Analysis'
+                text: 'Incorrect Vs Correct'
             },
-            tooltip: {
-                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</br>'
+            subtitle: {
+                text: ''
             },
-            accessibility: {
-                point: {
-                    valueSuffix: '%'
+            xAxis: {
+                categories: [
+                    lessonName
+                ],
+                crosshair: true
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Count'
                 }
             },
             plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: {
-                        enabled: true,
-                        format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                },
+                series: {
+                    point: {
+                        events: {
+                            click: function () {
+                                    if(this.color == '#f34807') {
+                                        $('#incorrect-accordian-body').click();
+                                    } else {
+                                        $('#correct-accordian-body').click();
+                                    }
+                            }
+                        }
                     }
                 }
             },
             series: [{
-                name: 'Test Result',
-                colorByPoint: true,
-                data: [{
-                    name: 'Incorrect Answers',
-                    y: wrongPercentage,
-                    sliced: true,
-                    selected: true
-                }, {
-                    name: 'Correct Answers',
-                    y: correctPercentage
-                }]
+                name: 'Incorrect Questions',
+                data: [numberOfIncorrectQues]
+
+            }, {
+                name: 'Correct Questions',
+                data: [numberOfCorrectQues]
+
             }]
         });
+        <?php } ?>
         // document ready  
     });
 

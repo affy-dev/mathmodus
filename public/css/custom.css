@@ -367,7 +367,6 @@ input[type=radio] {
 
 .accordion-header {
     padding: 1.5em 1.5em;
-    background: #000;
     color: white;
     cursor: pointer;
     font-size: 12px;

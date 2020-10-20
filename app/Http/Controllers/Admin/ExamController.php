@@ -212,6 +212,7 @@ class ExamController extends Controller
         if($testId == null && !session()->has('correctAnsIds') && !session()->has('wrongAnsIds') && !session()->has('test_status')) {
             return redirect()->route('admin.exams.history');
         }
+        $getLessonName = '';
         $getTestAnalysis = $this->getTestAnalysis($testId);
         $correctQuestionDetails = $getTestAnalysis['correctQuestionDetails'];
         $wrongQuestionDetails = $getTestAnalysis['wrongQuestionDetails'];
@@ -229,16 +230,24 @@ class ExamController extends Controller
         if((strpos(url()->previous(),'take-exam') !== false)) {
             $showBackBtn = false;
         }
+        if($testFromLessonsTab) {
+            if(count($getTestAnalysis['correctQuestionDetails']) > 0) {
+                $getLessonName = Lessons::where('id', $getTestAnalysis['correctQuestionDetails'][0]['lesson_id'])->get(['lesson_name','id']);
+            } else {
+                $getLessonName = Lessons::where('id', $getTestAnalysis['wrongQuestionDetails'][0]['lesson_id'])->get(['lesson_name','id']);
+            }
+            
+        }
         
-        return view('admin.exam.exam-result', compact('correctQuestionDetails', 'wrongQuestionDetails', 'showBackBtn', 'testFromLessonsTab'));
+        return view('admin.exam.exam-result', compact('correctQuestionDetails', 'wrongQuestionDetails', 'showBackBtn', 'testFromLessonsTab', 'getLessonName'));
     }
 
     private function getTestAnalysis($testId = null) {
         $correctAnsIds = '';
         $wrongAnsIds = '';
         $test_status = '';
-        $wrong_lesson_ids = '';
-        $correct_lesson_ids = '';
+        $wrong_lesson_ids = [];
+        $correct_lesson_ids = [];
         if( $testId != null ) {
             $testHistory = StudentTestResults::where('user_id', auth()->user()->id)
                                             ->where('test_status', self::TEST_STATUS['COMPLETED'])
