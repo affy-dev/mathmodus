@@ -17,6 +17,12 @@
                             Course Name
                         </th>
                         <th>
+                            Lesson Name
+                        </th>
+                        <th>
+                            Test Type
+                        </th>
+                        <th>
                             Exam Status
                         </th>
                         <th>
@@ -35,6 +41,12 @@
                             </td>
                             <td>
                                 {{ ucfirst($availableCourses[$test->courseId]) ?? '' }}
+                            </td>
+                            <td>
+                                {{ !empty($test->lessonId) ? ucfirst($availableLessons[$test->lessonId]) : ucfirst($availableCourses[$test->courseId]) }}
+                            </td>
+                            <td>
+                                {{ !empty($test->lessonId) ? 'Lesson Wise Test' : 'Diagnostic Test' }}
                             </td>
                             <td>
                                 <span class="btn <?php echo $test->test_status == 'completed' ? 'bg-success' : 'bg-danger' ?> btn-xs">{{ ucfirst($test->test_status) ?? '' }}</span>

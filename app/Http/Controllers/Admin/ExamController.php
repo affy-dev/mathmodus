@@ -253,10 +253,11 @@ class ExamController extends Controller
                                             ->where('test_status', self::TEST_STATUS['COMPLETED'])
                                             ->where('id', $testId)
                                             ->get();
+                                            // dd($testHistory);
             $correctAnsIds = unserialize($testHistory[0]['correctAnsIds']);
             $wrongAnsIds   = unserialize($testHistory[0]['wrongAnsIds']);
-            $wrong_lesson_ids   = unserialize($testHistory[0]['wrong_lesson_ids']);
-            $correct_lesson_ids   = unserialize($testHistory[0]['correct_lesson_ids']);
+            $wrong_lesson_ids   = !empty($testHistory[0]['wrong_lesson_ids']) ? unserialize($testHistory[0]['wrong_lesson_ids']) : [];
+            $correct_lesson_ids   = !empty($testHistory[0]['correct_lesson_ids']) ? unserialize($testHistory[0]['correct_lesson_ids']) : [];
             $test_status   = $testHistory[0]['test_status'];
             $testFromLessonsTab   = $testHistory[0]['testFromLessonsTab'];
         } else {
@@ -327,13 +328,19 @@ class ExamController extends Controller
         abort_unless(\Gate::allows('exam_history'), 403);
         $testHistory = StudentTestResults::where('user_id', auth()->user()->id)->orderBy('id', 'desc')->paginate(10);
         // dd($testHistory);
-        $courses = Courses::all();
+        $courses = Courses::get(['id', 'course_name'])->toArray();
         $availableCourses = [];
-        foreach ($courses->toArray() as $key => $value) {
+        foreach ($courses as $key => $value) {
             $availableCourses[$value['id']] = $value['course_name'];
         }
+        $lessons = Lessons::get(['id', 'lesson_name'])->toArray();
+        $availableLessons = [];
+        foreach ($lessons as $key => $lessonDetails) {
+            $availableLessons[$lessonDetails['id']] = $lessonDetails['lesson_name'];
+        }
+        // dd($availableLessons);
         $canDeleteTest = auth()->user()->can_delete_test;
-        return view('admin.exam.exam-history', compact('testHistory', 'availableCourses', 'canDeleteTest'));
+        return view('admin.exam.exam-history', compact('testHistory', 'availableCourses', 'canDeleteTest', 'availableLessons'));
     }
 
     public function deleteTest(Request $request, $testId) {

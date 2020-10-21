@@ -431,6 +431,13 @@ input[type=radio] {
     color: #353535;
 }
 
+.clickable-row {}
+
+.clickable-row:hover {
+    cursor: pointer;
+    background-color: #D98938;
+}
+
 @media screen and (max-width: 1000px) {
     .accordion {
         width: 100%;
