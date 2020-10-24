@@ -6,6 +6,7 @@ Route::get('/', 'Frontend\HomeController@index')->name('frontend.home');
 Route::get('/how-it-works', 'Frontend\HomeController@howItWorks')->name('frontend.howitworks');
 Route::get('/contact-us', 'Frontend\HomeController@contactUs')->name('frontend.contactus');
 Route::post('/post-message',['as'=>'contact-us','uses'=>'Frontend\HomeController@postMessage']);
+Route::get('/introduction', 'Frontend\HomeController@introduction')->name('frontend.introduction');
 
 // Route::redirect('/home', '/admin/exams');
 

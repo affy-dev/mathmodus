@@ -48,4 +48,7 @@ class HomeController
         Alert::success('Your payment successfull.', '');
     }
     
+    public function introduction() {
+        return view('frontend.cms.introduction');
+    }
 }
