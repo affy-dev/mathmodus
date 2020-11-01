@@ -47,7 +47,7 @@
                 @foreach($ansDetails as $ans)
                 <li>
                     <label><input type="radio" name="answerGroup_{{$quesDetails['id']}}"
-                            value="{{$ans->id}}"><span>{{$ans->answer_text}}</span></label>
+                            value="{{$ans->id}}"><span>{{strip_tags($ans->answer_text)}}</span></label>
                 </li>
                 @endforeach
                 <input type="hidden" name="questionIds[]" value="{{$quesDetails['id']}}" />

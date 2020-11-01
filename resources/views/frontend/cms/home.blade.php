@@ -7,7 +7,8 @@
     <div class="col-lg-12 col-md-12 col-sm-12">
         <div class="lms_title_center">
             <div class="lms_heading_1">
-                <h2 class="lms_heading_title">Introduction</h2>
+                <h2 class="lms_heading_title">Mathmodus</h2>
+                <p>Research based Math program. Eliminates six major reasons for student failure</p>
             </div>
             <h4><b>Instruction</b></h4>
             <ul class="list-group">
