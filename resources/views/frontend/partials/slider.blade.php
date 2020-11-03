@@ -1,5 +1,5 @@
 <div class="lms_slider">
-    <div class="lms_revslider">
+    <div class="lms_revslider" style="max-height: 412px;">
         <ul>
             <!-- SLIDE 1 -->
             <li data-transition="random-premium" data-slotamount="5" data-masterspeed="400">

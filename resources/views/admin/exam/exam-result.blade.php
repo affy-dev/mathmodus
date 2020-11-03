@@ -73,7 +73,7 @@
                                             data-lessonId="{{$wrongDetails['lesson_id']}}"
                                             data-courseId="{{$wrongDetails['courseId']}}"
                                         >
-                                            Topic Video
+                                            FOUNDATION SKILLS VIDEO
                                         </button>
                                     @endif
                                     <button type="button" class="btn btn-default video-btn" data-toggle="modal"
@@ -123,7 +123,7 @@
                                             data-lessonId="{{$correctDetails['lesson_id']}}"
                                             data-courseId="{{$correctDetails['courseId']}}"
                                         >
-                                            Topic Video
+                                            FOUNDATION SKILLS VIDEO
                                         </button>
                                     @endif
                                     <button type="button" class="btn btn-default video-btn" data-toggle="modal"
