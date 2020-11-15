@@ -251,7 +251,9 @@ $(document).ready(function() {
                     $('#lessonId').val('');
                     $('#courseId').val('');
                 }
-                $videoSrc = (checkFullLessonVideo === true) ? 'https://www.youtube.com/embed/'+ $(this).data("src") : $(this).data("src");
+                // $videoSrc = (checkFullLessonVideo === true) ? 'https://www.youtube.com/embed/'+ $(this).data("src") : $(this).data("src");
+                $videoSrc = 'https://www.youtube.com/embed/'+ $(this).data("src");
+                console.log($videoSrc);
                 if ($videoSrc == 'not_available') {
                     swal({
                         title: "Error!",
