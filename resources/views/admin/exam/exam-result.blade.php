@@ -87,8 +87,12 @@
                                         Full Lesson Video
                                     </button>
                                     <button type="button" class="btn btn-default prerequisiteBtn" data-toggle="modal"
-                                        data-text="{{json_encode($wrongDetails['topic_pre_requisite'])}}" data-target="#preRequisiteModal">
-                                        Pre-Requisuite Topic
+                                        data-text="{{json_encode($wrongDetails['topic_pre_requisite'])}}" data-target="#preRequisiteModal"
+                                        data-misc_urls="{{$wrongDetails['misc_urls']}}"
+                                        data-lessonId="{{$wrongDetails['lesson_id']}}"
+                                        data-courseId="{{$wrongDetails['courseId']}}"
+                                    >
+                                        Pre-Requisuite Lessons
                                     </button>
                                 </div>
                                 @endforeach
@@ -136,10 +140,14 @@
                                     >
                                         Full Lesson Video
                                     </button>
-                                    <!-- <button type="button" class="btn btn-default prerequisiteBtn" data-toggle="modal"
-                                        data-text="{{json_encode($correctDetails['topic_pre_requisite'])}}" data-target="#preRequisiteModal">
-                                        Pre-Requisuite Topic
-                                    </button> -->
+                                    <button type="button" class="btn btn-default prerequisiteBtn" data-toggle="modal"
+                                        data-text="{{json_encode($correctDetails['topic_pre_requisite'])}}" data-target="#preRequisiteModal"
+                                        data-misc_urls="{{$correctDetails['misc_urls']}}"
+                                        data-lessonId="{{$correctDetails['lesson_id']}}"
+                                        data-courseId="{{$correctDetails['courseId']}}"
+                                    >
+                                        Pre-Requisuite Lessons
+                                    </button>
                                 </div>
                                 @endforeach
                             </div>
@@ -207,19 +215,23 @@
 @section('scripts')
 <script>
 function openMultipleVideos(obj) {
-    const videoSrc = obj.getAttribute('data-src');
-    
+    const videoSrc = 'https://www.youtube.com/embed/' + obj.getAttribute('data-src');
     $('#videoModal').on('shown.bs.modal', function(e) {
         // $('#preRequisiteModal').modal('hide');
         // set the video src to autoplay and not to show related video. Youtube related video is like a box of chocolates... you never know what you're gonna get
         $("#video").attr('src', videoSrc + "?autoplay=1&amp;modestbranding=1&amp;showinfo=0");
-    })
-
-    // stop playing the youtube video when I close the modal
-    $('#videoModal').on('hide.bs.modal', function(e) {
-        $('#miscGroupUrl').html('');
-        // a poor man's stop video
-        $("#video").attr('src', videoSrc);
+        const misc_urls = $(this).data("misc_urls");
+        
+        if (misc_urls == 'not_available' || typeof misc_urls === "undefined") {
+            $('#miscGroupUrl').append('<p class="mb-1">No further Links attached to this lesson!</p>')
+        } else {
+            misc_urls.split(',').forEach((value) => {
+            $('#miscGroupUrl').append('<a href="' + value +
+                '" target="_blank" class="list-group-item list-group-item-action flex-column align-items-start"><p class="mb-1">' +
+                (value ? value : 'No further Links attached to this lesson') + '</p></a>')
+            })
+        }
+        
     })
 }
 
@@ -249,8 +261,9 @@ $(document).ready(function() {
                     });
                     return false;
                 }
+                
                 const misc_urls = $(this).data("misc_urls");
-                if (misc_urls == 'not_available' || misc_urls == '') {
+                if (misc_urls == 'not_available' || typeof misc_urls === "undefined") {
                     const routeUrl = "{{ route('admin.exams.takeexam') }}/"+courseId+"/"+lessonId;
                     $('#takeTestBtn').html('<a class="btn btn-warning" href="'+routeUrl+'" role="button">Want to Take Test ?</a>')
                     $('#miscGroupUrl').append('<p class="mb-1">No further Links attached to this lesson!</p>')
@@ -268,6 +281,16 @@ $(document).ready(function() {
             let content;
             $('.prerequisiteBtn').click(function() {
                 content = $(this).data("text");
+                const misc_urls = $(this).data("misc_urls");
+                const lessonId = $(this).data("lessonid");
+                const courseId = $(this).data("courseid");
+                if(lessonId) {
+                    $('#lessonId').val(lessonId);
+                    $('#courseId').val(courseId);
+                } else {
+                    $('#lessonId').val('');
+                    $('#courseId').val('');
+                }
                 if (Array.isArray(content) &&  content.length==0) {
                     swal({
                         title: "Error!",
@@ -280,7 +303,7 @@ $(document).ready(function() {
                 let finalContent = '';
                 if (content) {
                     for(let topicName in content) {
-                    	finalContent += '<button type="button" class="btn btn-warning video-btn testBtn-blue" onClick="openMultipleVideos(this)" data-toggle="modal" data-src="' + content[topicName] + '" data-target="#videoModal" style="margin-bottom: 10px;"><i class="fas fa-play"></i> '+topicName+'</button><br>';
+                    	finalContent += '<button type="button" class="btn btn-warning video-btn testBtn-blue" onClick="openMultipleVideos(this)" data-toggle="modal" data-src="' + content[topicName] + '" data-target="#videoModal" data-misc_urls="' + misc_urls + '" style="margin-bottom: 10px;"><i class="fas fa-play"></i> '+topicName+'</button><br>';
                     }
                 }
                 $('#modalContent').html(finalContent);
@@ -292,17 +315,10 @@ $(document).ready(function() {
                 $("#video").attr('src', $videoSrc + "?autoplay=1&amp;modestbranding=1&amp;showinfo=0");
             })
 
-            // stop playing the youtube video when I close the modal
-            $('#videoModal').on('hide.bs.modal', function(e) {
-                // a poor man's stop video
+            $('#videoModal').on('hidden.bs.modal', function () {
                 $("#video").attr('src', $videoSrc);
                 $('#takeTestBtn').html('')
                 $('#miscGroupUrl').html('');
-                $('#lessonId').val('');
-                $('#courseId').val('');
-            })
-
-            $('#videoModal').on('hidden.bs.modal', function () {
                 swal({
                     title: "Do you want to give test for this lesson ?",
                     icon: "warning",

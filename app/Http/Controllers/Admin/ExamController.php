@@ -19,6 +19,7 @@ use App\StudentTestResults;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use RealRashid\SweetAlert\Facades\Alert;
+use App\LessonPreRequisite;
 
 class ExamController extends Controller
 {
@@ -270,47 +271,49 @@ class ExamController extends Controller
         $wrongQuestionDetails = [];
         foreach($correctAnsIds as $correctQuestions) {
             $questDetails = Questions::where('id', $correctQuestions->question_id)->get()->toArray();
-            $lessonVideo = Topics::where('lession_id', $questDetails[0]['lesson_id'])->get()->toArray();
+            // $lessonVideo = Topics::where('lession_id', $questDetails[0]['lesson_id'])->get()->toArray();
             $fullLessonVideo = Lessons::where('id', $questDetails[0]['lesson_id'])->get()->toArray();
             $questDetails[0]['full_video_url'] = (count($fullLessonVideo) != 0) ? $fullLessonVideo['0']['video_url'] : 'not_available';
-            $questDetails[0]['video_url'] = (count($lessonVideo) != 0) ? $lessonVideo['0']['video_url'] : 'not_available';
-            $questDetails[0]['misc_urls'] = (count($lessonVideo) != 0) ? $lessonVideo['0']['misc_urls'] : 'not_available';
+            $questDetails[0]['video_url'] = (count($fullLessonVideo) != 0) ? $fullLessonVideo['0']['video_url'] : 'not_available';
+            $questDetails[0]['misc_urls'] = (count($fullLessonVideo) != 0) ? $fullLessonVideo['0']['misc_urls'] : 'not_available';
             $questDetails[0]['courseId'] = $fullLessonVideo['0']['course_id'];
             $questDetails[0]['quesNum'] = $correctQuestions->quesNum;
             // all the prerequisite topics are found here
-            $topicPreRequisite = (count($lessonVideo) != 0) ? TopicPreRequisite::where('topic_id', $lessonVideo['0']['id'])->get()->toArray() : [];
+            $topicPreRequisite = (count($fullLessonVideo) != 0) ? LessonPreRequisite::where('lession_id', $questDetails[0]['lesson_id'])->get()->toArray() : [];
             $preRequisiteIds = '';
             $topicPreRequisiteArray = [];
             foreach($topicPreRequisite as $preRequisite) {
-                $topicName = Topics::where('id', $preRequisite['pre_requisite_topic_id'])->get()->toArray();
+                $topicName = Lessons::where('id', $preRequisite['lessons_pre_requisite_id'])->get()->toArray();
                 if(!$topicName)
                     continue;
 
-                $topicPreRequisiteArray[$topicName[0]['topic_name']] = $topicName[0]['video_url'];
+                $topicPreRequisiteArray[$topicName[0]['lesson_name']] = $topicName[0]['video_url'];
             }
             $questDetails[0]['topic_pre_requisite'] = $topicPreRequisiteArray;
             $correctQuestionDetails[] = $questDetails[0];
         }
         foreach($wrongAnsIds as $wrongQuestions) {
             $questDetails = Questions::where('id', $wrongQuestions->question_id)->get()->toArray();
-            $lessonVideo = Topics::where('lession_id', $questDetails[0]['lesson_id'])->get()->toArray();
+            // $lessonVideo = Topics::where('lession_id', $questDetails[0]['lesson_id'])->get()->toArray();
             $fullLessonVideo = Lessons::where('id', $questDetails[0]['lesson_id'])->get()->toArray();
             $questDetails[0]['full_video_url'] = (count($fullLessonVideo) != 0) ? $fullLessonVideo['0']['video_url'] : 'not_available';
-            $questDetails[0]['video_url'] = (count($lessonVideo) != 0) ? $lessonVideo['0']['video_url'] : 'not_available';
-            $questDetails[0]['misc_urls'] = (count($lessonVideo) != 0) ? $lessonVideo['0']['misc_urls'] : 'not_available';
+            $questDetails[0]['video_url'] = (count($fullLessonVideo) != 0) ? $fullLessonVideo['0']['video_url'] : 'not_available';
+            $questDetails[0]['misc_urls'] = (count($fullLessonVideo) != 0) ? $fullLessonVideo['0']['misc_urls'] : 'not_available';
             $questDetails[0]['courseId'] = $fullLessonVideo['0']['course_id'];
             $questDetails[0]['quesNum'] = $wrongQuestions->quesNum;
+            // dd($questDetails);
             // all the prerequisite topics are found here
-            $topicPreRequisite = (count($lessonVideo) != 0) ? TopicPreRequisite::where('topic_id', $lessonVideo['0']['id'])->get()->toArray() : [];
+            $topicPreRequisite = (count($fullLessonVideo) != 0) ? LessonPreRequisite::where('lession_id', $questDetails[0]['lesson_id'])->get()->toArray() : [];
             $preRequisiteIds = '';
             $topicPreRequisiteArray = [];
             foreach($topicPreRequisite as $preRequisite) {
-                $topicName = Topics::where('id', $preRequisite['pre_requisite_topic_id'])->get()->toArray();
+                $topicName = Lessons::where('id', $preRequisite['lessons_pre_requisite_id'])->get()->toArray();
                 if(!$topicName)
                     continue;
-                
-                $topicPreRequisiteArray[$topicName[0]['topic_name']] = $topicName[0]['video_url'];
+
+                $topicPreRequisiteArray[$topicName[0]['lesson_name']] = $topicName[0]['video_url'];
             }
+            // dd($topicPreRequisiteArray);
             $questDetails[0]['topic_pre_requisite'] = $topicPreRequisiteArray;
             $wrongQuestionDetails[] = $questDetails[0];
         }
