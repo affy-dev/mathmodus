@@ -92,7 +92,7 @@
                                         data-lessonId="{{$wrongDetails['lesson_id']}}"
                                         data-courseId="{{$wrongDetails['courseId']}}"
                                     >
-                                        Pre-Requisuite Lessons
+                                        FOUNDATION SKILLS 
                                     </button>
                                 </div>
                                 @endforeach
@@ -146,7 +146,7 @@
                                         data-lessonId="{{$correctDetails['lesson_id']}}"
                                         data-courseId="{{$correctDetails['courseId']}}"
                                     >
-                                        Pre-Requisuite Lessons
+                                        FOUNDATION SKILLS
                                     </button>
                                 </div>
                                 @endforeach
