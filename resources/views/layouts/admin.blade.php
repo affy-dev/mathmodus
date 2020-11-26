@@ -37,33 +37,27 @@
 
 <body class="app header-fixed sidebar-fixed aside-menu-fixed pace-done sidebar-lg-show">
   
-    <header class="app-header navbar" style="background: #D98938" >
+    <header class="app-header navbar" style="background: #D98938;height: 100px;" >
         <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
             <span class="navbar-toggler-icon"></span>
         </button>
         <a class="navbar-brand" href="#">
-            <span class="navbar-brand-full" style="font-weight:bold; font-size: 22px; color:#fff">Mathmodus</span>
-            <span class="navbar-brand-minimized">P</span>
+            <span class="navbar-brand-full" style="font-weight:bold; font-size: 22px; color:#fff"><img alt="Porto" data-sticky-width="82" style="height: 100px;width: 160px;" data-sticky-height="40" src="{{ asset('frontend/images/new-logo.png') }}"> </a></span>
+            <!-- <span class="navbar-brand-minimized">P</span> -->
         </a>
-        <button class="navbar-toggler sidebar-toggler d-md-down-none" style="background:#fff" type="button" data-toggle="sidebar-lg-show">
+        <!-- <button class="navbar-toggler sidebar-toggler d-md-down-none" style="background:#fff" type="button" data-toggle="sidebar-lg-show">
             <span class="navbar-toggler-icon"></span>
         </button>
         
-        <span style="padding: 6px;border: 1px solid #deafaf;margin-left: 6px;background: #fff;border-radius: 5px;"><a href="/" title="Go to site"><i class="fas fa-th-large" aria-hidden="true"></i></a></span>
+        <span style="padding: 6px;border: 1px solid #deafaf;margin-left: 6px;background: #fff;border-radius: 5px;"><a href="/" title="Go to site"><i class="fas fa-th-large" aria-hidden="true"></i></a></span> -->
         
         <ul class="nav navbar-nav ml-auto">
-            @if(count(config('panel.available_languages', [])) > 1)
-                <li class="nav-item dropdown d-md-down-none">
-                    <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                        {{ strtoupper(app()->getLocale()) }}
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        @foreach(config('panel.available_languages') as $langLocale => $langName)
-                            <a class="dropdown-item" href="{{ url()->current() }}?change_language={{ $langLocale }}">{{ strtoupper($langLocale) }} ({{ $langName }})</a>
-                        @endforeach
-                    </div>
+            
+                <li class="nav-item dropdown d-md-down-none" style="padding-right: 35px;color: #fff;">
+                    <span style="font-size: 25px;">{{{ isset(Auth::user()->name) ? Auth::user()->name : Auth::user()->email }}}</span><br>
+                    <span>{{date("l jS \of F Y")}}</span>
                 </li>
-            @endif
+            
         </ul>
     </header>
 
@@ -72,7 +66,7 @@
         <main class="main">
 
 
-            <div style="padding-top: 20px" class="container-fluid">
+            <div style="padding-top: 20px;margin-top: 30px;" class="container-fluid">
 
                 @yield('content')
 

@@ -1,4 +1,4 @@
-<div class="sidebar">
+<div class="sidebar" style="margin-top: 45px;">
     <nav class="sidebar-nav ps ps--active-y">
 
         <ul class="nav">
@@ -140,4 +140,5 @@
         </div>
     </nav>
     <button class="sidebar-minimizer brand-minimizer" type="button"></button>
+    
 </div>

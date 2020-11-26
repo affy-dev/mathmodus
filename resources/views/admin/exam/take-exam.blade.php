@@ -86,18 +86,35 @@ function submitForm() {
     //         check = false;
     //     }
     // });
-    if (check) {
-        $('form#testForm').submit();
+
+    swal({
+        title: "Are you sure that you wish to submit this test?",
+        text: "Once submitted, you will not be able to change your answers!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    })
+    .then((willDelete) => {
+        if (willDelete) {
+            if (check) {
+            $('form#testForm').submit();
+        } else {
+            $('#sbmtBtn').prop('disabled', false);
+            $('#sbmtBtn').html('Submit Test');
+            swal({
+                title: "Error!",
+                text: "Please select one option in each question!",
+                icon: "error",
+                buttons: false,
+            });
+        }
     } else {
         $('#sbmtBtn').prop('disabled', false);
         $('#sbmtBtn').html('Submit Test');
-        swal({
-            title: "Error!",
-            text: "Please select one option in each question!",
-            icon: "error",
-            buttons: false,
-        });
+        return;
     }
+    });
+
 }
 
 
