@@ -42,7 +42,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <a class="navbar-brand" href="#">
-            <span class="navbar-brand-full" style="font-weight:bold; font-size: 22px; color:#fff"><img alt="Porto" data-sticky-width="82" style="height: 100px;width: 160px;" data-sticky-height="40" src="{{ asset('frontend/images/new-logo.png') }}"> </a></span>
+            <span class="navbar-brand-full" style="font-weight:bold; font-size: 22px; color:#fff"><img alt="Porto" data-sticky-width="82" style="height: 100px;width: 199px;margin-left: 46px;" data-sticky-height="40" src="{{ asset('frontend/images/new-logo.png') }}"> </a></span>
             <!-- <span class="navbar-brand-minimized">P</span> -->
         </a>
         <!-- <button class="navbar-toggler sidebar-toggler d-md-down-none" style="background:#fff" type="button" data-toggle="sidebar-lg-show">
