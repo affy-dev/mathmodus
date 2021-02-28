@@ -73,7 +73,7 @@
                                             data-lessonId="{{$wrongDetails['lesson_id']}}"
                                             data-courseId="{{$wrongDetails['courseId']}}"
                                         >
-                                            FOUNDATION SKILLS VIDEO
+                                            Segment Videos
                                         </button>
                                     @endif
                                     <button type="button" class="btn btn-default video-btn" data-toggle="modal"
@@ -129,7 +129,7 @@
                                             data-lessonId="{{$correctDetails['lesson_id']}}"
                                             data-courseId="{{$correctDetails['courseId']}}"
                                         >
-                                            FOUNDATION SKILLS VIDEO
+                                            Segment Videos
                                         </button>
                                     @endif
                                     <button type="button" class="btn btn-default video-btn" data-toggle="modal"
@@ -255,9 +255,9 @@ $(document).ready(function() {
                     $('#lessonId').val('');
                     $('#courseId').val('');
                 }
-                // $videoSrc = (checkFullLessonVideo === true) ? 'https://www.youtube.com/embed/'+ $(this).data("src") : $(this).data("src");
-                $videoSrc = 'https://www.youtube.com/embed/'+ $(this).data("src");
-                console.log($videoSrc);
+                $videoSrc = (checkFullLessonVideo === true) ? 'https://www.youtube.com/embed/'+ $(this).data("src") : $(this).data("src");
+                // $videoSrc = 'https://www.youtube.com/embed/'+ $(this).data("src");
+                
                 if ($videoSrc == 'not_available') {
                     swal({
                         title: "Error!",
