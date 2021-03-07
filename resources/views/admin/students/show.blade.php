@@ -115,6 +115,7 @@
                 </tr> -->
             </tbody>
         </table>
+        <div id="barChartComparison"></div>
         <div class="col-sm-12">
 
             <div id="resultGraph"></div>
@@ -135,6 +136,7 @@
                     <th scope="col">Lesson Name</th>
                 </tr>
             </thead>
+            
             <tbody>
                 @foreach($allLessons as $lessonId => $lessonName)
                     <tr>
@@ -246,6 +248,45 @@
                     },
                     series: <?php echo $mapCorrIncorrWithCourse; ?>
                 });
+
+
+                Highcharts.chart('barChartComparison', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: 'Student Average by course'
+    },
+    xAxis: {
+        categories: <?php echo json_encode($graphXAxisValues) ?>,
+        crosshair: true
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Score'
+        }
+    },
+    tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+    },
+    plotOptions: {
+        column: {
+            pointPadding: 0.2,
+            borderWidth: 0
+        }
+    },
+    series: [{
+        name: 'Score',
+        data: <?php echo json_encode($graphYAxisValues) ?>
+
+    }]
+});
 </script>
 @endsection
 @endsection

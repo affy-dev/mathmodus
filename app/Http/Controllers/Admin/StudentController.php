@@ -260,8 +260,45 @@ class StudentController extends Controller
         return redirect()->route('admin.students.index');
     }
 
+    public function getCourseName($courseId) {
+        return Courses::where('id', $courseId)->first()->course_name;
+    }
+
+    public function getAverageScoreofStudent($userId){
+        $allExams = StudentTestResults::where('user_id', $userId)
+        ->where('test_status', self::TEST_STATUS['COMPLETED'])
+        ->get();
+        $total_ans = 0;
+        $correct_ans = 0;
+        $wrong_ans = 0;
+
+        $studentAverage = [];
+        $k = 0;
+        $scoreCount=0;
+        foreach ($allExams as $key => $value) {
+            // dd($this->getCourseName($value->courseId));
+            $total_ans = $total_ans + $value->total_ans;
+            $correct_ans = $correct_ans + $value->correct_ans;
+            $wrong_ans = $wrong_ans + $value->wrong_ans;
+            // $studentAverage[$k]['name'] = $this->getCourseName($value->courseId);
+            if(isset($studentAverage[$value->courseId])) {
+                $getNumberOfTimes = $studentAverage[$value->courseId]['numberOfTimes'];
+                $studentAverage[$value->courseId]['score'] = $studentAverage[$value->courseId]['score'] + round($correct_ans / $total_ans,2);
+                $studentAverage[$value->courseId]['numberOfTimes'] = ++$getNumberOfTimes;
+            } else {
+                $studentAverage[$value->courseId]['score'] = round($correct_ans / $total_ans,2);
+                $studentAverage[$value->courseId]['numberOfTimes'] = 1;
+            }
+            
+            // $scoreCount = 0;
+            $k++;
+        }
+        return $studentAverage;
+    }
+
     public function show(Request $request, $userId )
     {
+       
         abort_unless(\Gate::allows('student_show'), 403);
         $student = \DB::table('users')
             ->join('students', function($join) use ($userId) {
@@ -397,8 +434,22 @@ class StudentController extends Controller
         foreach($lessons as $less) {
             $allLessons[$less['id']] = $less['lesson_name'];
         }
+
+
+
+        // ============= Student Score VS Course
+        $studentAverage = $this->getAverageScoreofStudent($userId);
         
-        return view('admin.students.show', compact('name', 'userName', 'emailId', 'studentDOB', 'fatherName', 'fatherPhone', 'studentGender', 'studentBloodGroup', 'studentMothenName', 'studentMotherPhoneNo', 'present_address', 'permanent_address', 'phone_no', 'total_ans', 'correct_ans', 'wrong_ans', 'mapCorrIncorrWithCourse', 'allLessons', 'examsTaken', 'courseNames', 'userId'));
+        $graphValue = [];
+        foreach ($studentAverage as $courseId => $scoreDetails) {
+            $courseName = $this->getCourseName($courseId);
+            $graphValue[$courseName] = $scoreDetails['score']/$scoreDetails['numberOfTimes'];
+        }
+        $graphXAxisValues = array_keys($graphValue);
+        $graphYAxisValues = array_values($graphValue);
+        
+        
+        return view('admin.students.show', compact('name', 'userName', 'emailId', 'studentDOB', 'fatherName', 'fatherPhone', 'studentGender', 'studentBloodGroup', 'studentMothenName', 'studentMotherPhoneNo', 'present_address', 'permanent_address', 'phone_no', 'total_ans', 'correct_ans', 'wrong_ans', 'mapCorrIncorrWithCourse', 'allLessons', 'examsTaken', 'courseNames', 'userId', 'graphXAxisValues', 'graphYAxisValues'));
     }
 
     public function destroy(Student $student)
