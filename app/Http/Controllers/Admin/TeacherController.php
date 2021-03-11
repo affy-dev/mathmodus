@@ -238,6 +238,42 @@ class TeacherController extends Controller
         return redirect()->route('admin.teachers.index');
     }
 
+    public function getCourseName($courseId) {
+        return Courses::where('id', $courseId)->first()->course_name;
+    }
+
+    public function getAverageScoreofStudent($userId){
+        $allExams = StudentTestResults::where('user_id', $userId)
+        ->where('test_status', self::TEST_STATUS['COMPLETED'])
+        ->get();
+        $total_ans = 0;
+        $correct_ans = 0;
+        $wrong_ans = 0;
+
+        $studentAverage = [];
+        $k = 0;
+        $scoreCount=0;
+        foreach ($allExams as $key => $value) {
+            // dd($this->getCourseName($value->courseId));
+            $total_ans = $total_ans + $value->total_ans;
+            $correct_ans = $correct_ans + $value->correct_ans;
+            $wrong_ans = $wrong_ans + $value->wrong_ans;
+            // $studentAverage[$k]['name'] = $this->getCourseName($value->courseId);
+            if(isset($studentAverage[$value->courseId])) {
+                $getNumberOfTimes = $studentAverage[$value->courseId]['numberOfTimes'];
+                $studentAverage[$value->courseId]['score'] = $studentAverage[$value->courseId]['score'] + round($correct_ans / $total_ans,2);
+                $studentAverage[$value->courseId]['numberOfTimes'] = ++$getNumberOfTimes;
+            } else {
+                $studentAverage[$value->courseId]['score'] = round($correct_ans / $total_ans,2);
+                $studentAverage[$value->courseId]['numberOfTimes'] = 1;
+            }
+            
+            // $scoreCount = 0;
+            $k++;
+        }
+        return $studentAverage;
+    }
+
     public function show(Request $request, $userId )
     {
         abort_unless(\Gate::allows('teachers_show'), 403);
@@ -370,7 +406,41 @@ class TeacherController extends Controller
         $mapCorrIncorrWithCourse = json_encode($mapCorrIncorrWithCourse);
         //===================== End Graph by Courses ========================
 
-        return view('admin.teachers.show', compact('name', 'email', 'dob', 'designation', 'qualification', 'gender', 'email', 'phone_no', 'address', 'joining_date', 'total_ans', 'correct_ans', 'wrong_ans', 'mapCorrIncorrWithCourse', 'correctAns', 'wrongAns', 'finalCorrectMapInfo', 'finalInCorrectMapInfo', 'IncorrectLessonsName', 'CorrectLessonsName', 'totalTestGiven', 'courseNames', 'examsTaken', 'getAllStudents'));
+        // ============= Student Score VS Course
+        $averageStudentValues = [];
+        foreach ($studentsId as $userId) {
+            $studentAverage = $this->getAverageScoreofStudent($userId);
+            $graphValue = [];
+            foreach ($studentAverage as $courseId => $scoreDetails) {
+                $courseName = $this->getCourseName($courseId);
+                $graphValue[$courseName] = $scoreDetails['score']/$scoreDetails['numberOfTimes'];
+            }
+            $averageStudentValues[$userId] = $graphValue;
+            
+        }
+
+        if(count($averageStudentValues) > 0) {
+            $addAllStudentsCourseAverage = [];
+            foreach ($averageStudentValues as $userId => $graphValue) {
+                foreach($graphValue as $key => $data) {
+                    if(isset($addAllStudentsCourseAverage[$key])) {
+                        $addAllStudentsCourseAverage[$key] = $addAllStudentsCourseAverage[$key] + $data;
+                    } else {
+                        $addAllStudentsCourseAverage[$key] = $data;
+                    }
+                }
+            }
+            
+            foreach($addAllStudentsCourseAverage as $courseName => $dt) {
+                $addAllStudentsCourseAverage[$courseName] = $dt/count($studentsId);
+            }
+            // dd($addAllStudentsCourseAverage);
+            $graphXAxisValues = array_keys($addAllStudentsCourseAverage);
+            $graphYAxisValues = array_values($addAllStudentsCourseAverage);
+        }
+
+
+        return view('admin.teachers.show', compact('name', 'email', 'dob', 'designation', 'qualification', 'gender', 'email', 'phone_no', 'address', 'joining_date', 'total_ans', 'correct_ans', 'wrong_ans', 'mapCorrIncorrWithCourse', 'correctAns', 'wrongAns', 'finalCorrectMapInfo', 'finalInCorrectMapInfo', 'IncorrectLessonsName', 'CorrectLessonsName', 'totalTestGiven', 'courseNames', 'examsTaken', 'getAllStudents', 'graphXAxisValues', 'graphYAxisValues'));
     }
 
     public function destroy(Teacher $teacher)

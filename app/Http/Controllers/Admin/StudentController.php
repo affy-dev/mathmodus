@@ -435,8 +435,6 @@ class StudentController extends Controller
             $allLessons[$less['id']] = $less['lesson_name'];
         }
 
-
-
         // ============= Student Score VS Course
         $studentAverage = $this->getAverageScoreofStudent($userId);
         
